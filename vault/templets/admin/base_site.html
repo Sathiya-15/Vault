@@ -1,0 +1,14 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | {{ 'VAULT ADMIN'}}{% endblock %}
+
+{% block branding %}
+<h1 id="site-name" style="font-family: cursive;"><a href="{% url 'admin:index' %}">VAULT ADMIN</a></h1>
+{% endblock %}
+
+<body style="background-image:url('{% static 'images/211.jpg' %}');">
+    
+</body>
+
+{% block nav-global %}{% endblock %}

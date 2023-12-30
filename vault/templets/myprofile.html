@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile</title>
+    <style>
+        body {
+            height: 100%;
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            backdrop-filter: blur(15px);
+        }
+        /* a{
+            color: aliceblue;
+        } */
+    </style>
+
+</head>
+
+<body style="background-image:url('{% static 'images/back.png'%}')">
+
+    <h2>Your Profile</h2>
+    <form action="" method="GET" name="Myprofile">
+        <input type="email" name="username" placeholder="Username" value="{{obj.username}}"><br><br>
+        <input type="text" name="firstname" placeholder="First Name" value="{{obj.firstname}}"><br><br>
+        <input type="text" name="lastname" placeholder="Last Name" value="{{lastname}}"><br><br>
+        <input type="mobilenumber" name="mobilenumber" placeholder="Mobile Number" value="{{mobilenumber}}"><br><br>
+        <a href="{% url 'forgotpassword' %}">Change Password</a>
+    
+    <!-- {% if user_profile %}
+
+    <p>Username: {{ username }}</p>
+    <p>Firstname: {{ firstname }}</p>
+    <p>Lastname: {{ lastname }}</p>
+    <p>Mobilenumber: {{ mobilenumber }}</p>
+
+    {% else %}
+    <p>No Profile Found for the Logged-in User.</p>
+
+    {% endif %} -->
+
+    </form>
+
+</body>
+</html>
