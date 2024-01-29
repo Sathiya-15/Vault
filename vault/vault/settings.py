@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
+
 import os
 from pathlib import Path
 from django.contrib.messages import constants as messages
@@ -24,11 +25,12 @@ STATIC_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-7-91s*3kpt_ga6h@bydx-mt78()ur+p&1xu-c1^f!)dx4@d@-l"
 
 # SECURITY WARNING: don't run with debug turned on in production!
+# DEBUG = True   default
 DEBUG = True
+
 APPEND_SLASH = False
 
 ALLOWED_HOSTS = []
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -40,7 +42,22 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "login", "user",
+    "rest_framework",
+    "rest_framework_simplejwt",
 ]
+
+JAZZMIN_SETTINGS = {
+    'site_title': 'Vault Admin Login',
+    'site_header': 'Vault Admin Login',
+    'welcome_sign': 'Welcome to Vault Admin Login',
+    # Add more customization options as needed
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+}
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -50,6 +67,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    # "vault.middleware.globalmiddleware",
 ]
 
 MESSAGE_TAGS = {
@@ -89,7 +107,7 @@ DATABASES = {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": "Vault",
         "USER": "postgres",
-        "PASSWORD": "postgres",
+        "PASSWORD": "123456",
         "HOST": "127.0.0.1",
         "PORT": "5432",
     }
@@ -124,11 +142,17 @@ USE_I18N = True
 
 USE_TZ = True
 
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
-
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [(os.path.join(BASE_DIR, 'static'))]
+
+
+# Media settings
+# MEDIA_ROOT = [(os.path.join(BASE_DIR, 'media'))]
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

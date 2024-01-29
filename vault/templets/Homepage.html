@@ -10,21 +10,20 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <link rel="shortcut icon" type="image/png" href="{% static 'images/icon1.png' %}">
-    
+
     <style>
         * {
-            margin: 0;
             text-decoration: none;
+            margin: 0%;
         }
 
         body {
-            height: 100%;
+            height: auto;
             background-position: center;
             background-size: cover;
             background-repeat: no-repeat;
             background-attachment: fixed;
             backdrop-filter: blur(15px);
-            /* Add any additional styles for the body here */
         }
 
         li {
@@ -41,11 +40,56 @@
             font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
         }
 
-        .myButton {
-            font-size: 100px;
+        .navbar-brand {
+            margin-top: 20px;
+            padding: 15px 45px;
+        }
+
+        #profiles li a {
+            border-radius: 50px;
+        }
+
+        .nav {
+            background-color: rgba(141, 16, 146, 255);
+        }
+
+        .sidebar {
+            height: 662px;
+            width: 200px;
+            background-color: rgba(141, 16, 146, 255);
+            text-align: center;
+            padding: 20px;
+        }
+
+        .sidebar a {
+            color: white;
+        }
+
+        .sidebar:hover {
+            translate: -100px;
+            transition: 1.00s ease;
+            flex-grow: 1;
+            content-visibility: hidden;
+        }
+
+        #logo {
+            height: 30px;
+            width: 35px;
+            display: inline-block;
+            padding-right: 5px;
         }
     </style>
-    
+
+    <script>
+        function openSidebar() {
+            document.getElementById("mySidebar").style.left = "0";
+        }
+
+        function closeSidebar() {
+            document.getElementById("mySidebar").style.left = "-250px";
+        }
+    </script>
+
 </head>
 
 {% if messages %}
@@ -55,24 +99,31 @@
 {% endfor %}
 {% endif %}
 
-<body id="bg" style="background-image:url('{% static 'images/back.png'%}')">
+<body id="bg" style="background-image:url('{% static 'images/back.png' %}')">
 
-    <nav class="navbar navbar-inverse">
+    <nav class="nav" class="navbar navbar-inverse">
         <div class="container-fluid">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="{% url 'Userhomepage' %}"> VAULT </a>
+            <div class="navbar-header" id="home">
+                <a class="navbar-brand" href="{% url 'Userhomepage' %}" style="color: aliceblue;"><img
+                        src="{% static 'images/icon.png' %}" id="logo" alt="home">VAULT</a>
             </div>
-            <ul class="nav navbar-nav">
+            <ul class="nav navbar-nav" id="profiles">
                 <li class="active"><a href="{% url 'Userhomepage' %}">Home</a></li>
                 <li class="active"><a href="{% url 'Myprofile' %}">Myprofile</a></li>
-                            class="caret"></span></a>
             </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="{% url 'Myprofile' %}"><span class="glyphicon glyphicon-user"></span>Myprofile</a></li>
-                <li><a href="{% url 'Login' %}"><span class="glyphicon glyphicon-log-in"></span>Logout</a></li>
+            <ul class="nav navbar-nav navbar-right" id="profiles">
+                <li><a href="{% url 'Myprofile' %}"><span class="glyphicon glyphicon-user"></span>&nbsp; Myprofile</a>
+                </li>
+                <li><a href="{% url 'Login' %}"><span class="glyphicon glyphicon-log-in"></span>&nbsp; Logout</a></li>
             </ul>
         </div>
     </nav>
+
+    <div class="sidebar">
+        <a href="{% url 'Userhomepage' %}">Home</a><br><br><br>
+        <a href="{% url 'Myprofile' %}">Myprofile</a><br><br><br>
+        <button onclick="closeSidebar()" class="buttonx" style="font-size: large;">X</button><br><br><br>
+    </div>
 
 </body>
 

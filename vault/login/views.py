@@ -2,9 +2,15 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 from .models import userlogin
+from django.http import HttpResponseNotAllowed
+
+
+
 
 @csrf_exempt
 def Login(request):
+    allowed_methods = ["GET", "POST"]
+
     if request.method == "GET":
         return render(request, 'Login.html')
 
@@ -17,17 +23,31 @@ def Login(request):
                 firstname = user.firstname
                 lastname = user.lastname
                 messages.success(request, f"Successfully Login [ {firstname} {lastname} ]")
-                return redirect("Userhomepage")
+                return render(request, 'Homepage.html')
 
         except userlogin.DoesNotExist:
             messages.error(request, "Invalid Username Password")
             return render(request, 'Login.html')
 
-    return render(request, 'Login')
+    return HttpResponseNotAllowed(allowed_methods)
 
 
-def Logout(request):
-    return render(request, "Login.html")
+#:::::::::::::::::::::::::::::::::::: COMMENT :::::::::::::::::::::::::::::::::::::
+
+#!!!!!!!!!!!!!!!!!!!!!! IMPORTANT   YOU WILL USE THE GET FUNCTION INSTEED THIS
+# return render(request, 'Login')  IF YOU WANT TO SEND THE RETURN RESPONSE HERE WE MENTION NEEDED.
+# ITS NOT IMPORTANT FOR FIRST TIME THIS FUNCTION RENDERING
+
+# def Logout(request):
+    # try:
+    #     user = userlogin.objects.get(firstname = firstname, lastname = lastname)
+    # userloginserializer = {
+    #     firstname : userloginserializer.firstname
+    #     lastname : userloginserializer.lastname
+    # }
+    # return render(request, "Login.html")
+
+#:::::::::::::::::::::::::::::::::::: COMMENT :::::::::::::::::::::::::::::::::::::
 
 
 @csrf_exempt

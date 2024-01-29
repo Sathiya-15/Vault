@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 {% load static %}
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/png" href="{% static 'images/icon1.png' %}">
     <title>My Profile</title>
+
     <style>
         body {
             height: 100%;
@@ -13,37 +16,63 @@
             background-repeat: no-repeat;
             background-attachment: fixed;
             backdrop-filter: blur(15px);
+            color: white;
         }
-        /* a{
-            color: aliceblue;
-        } */
-    </style>
 
+        .buttonone a {
+            text-decoration: none;
+            border-radius: 100px;
+        }
+
+        .image,
+        .content {
+            padding: 10px;
+            margin-right: 70px;
+        }
+
+        .full {
+            display: flex;
+            flex-wrap: wrap;
+        }
+    </style>
 </head>
 
-<body style="background-image:url('{% static 'images/back.png'%}')">
+{% if messages %}
+{% for message in messages %}
+{% if message.tags %}
+<script>alert("{{ message }}")</script> {% endif %}
+{% endfor %}
+{% endif %}
 
-    <h2>Your Profile</h2>
-    <form action="" method="GET" name="Myprofile">
-        <input type="email" name="username" placeholder="Username" value="{{obj.username}}"><br><br>
-        <input type="text" name="firstname" placeholder="First Name" value="{{obj.firstname}}"><br><br>
-        <input type="text" name="lastname" placeholder="Last Name" value="{{lastname}}"><br><br>
-        <input type="mobilenumber" name="mobilenumber" placeholder="Mobile Number" value="{{mobilenumber}}"><br><br>
-        <a href="{% url 'forgotpassword' %}">Change Password</a>
-    
-    <!-- {% if user_profile %}
+<body class="body" style="background-image:url('{% static 'images/back.png'%}')">
 
-    <p>Username: {{ username }}</p>
-    <p>Firstname: {{ firstname }}</p>
-    <p>Lastname: {{ lastname }}</p>
-    <p>Mobilenumber: {{ mobilenumber }}</p>
+    <form method="post" action="{% url 'profileupdate' %}" enctype="multipart/form-data">
+        {% if data %}
+        {% csrf_token %}
+        <div class="full">
 
-    {% else %}
-    <p>No Profile Found for the Logged-in User.</p>
+            <div class="image">
+                <img src="{{ data.image.url }}" alt="User Image" width="150" height="200"
+                    style="border-radius: 100px;"><br><br>
+            </div>
 
-    {% endif %} -->
+            <div class="content">
+                <input type="First Name" placeholder="First Name" name="firstname" value="{{ data.firstname }}"><br><br>
+                <input type="Last Name" placeholder="Last Name" name="lastname" value="{{ data.lastname }}"><br><br>
+                <input type="Mobile Number" placeholder="Mobile Number" name="mobilenumber"
+                    value="{{ data.mobilenumber }}"><br><br>
+                <input type="Password" placeholder="Password" name="password" value="{{ data.password }}"><br><br>
+                <input type="Username" placeholder="Username" name="username" value="{{ data.username }}"><br>
+                <p>Last Updated : {{ data.created_at }}</p>
+                <input type="file" name="imageUpload" accept="image/*" required><br><br>
+                <button class="buttonone" type="submit">UPDATE</button>
+            </div>
 
+        </div>
+        {% else %}
+        <p>No data available</p>
+        {% endif %}
     </form>
-
 </body>
+
 </html>

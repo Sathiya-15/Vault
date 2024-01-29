@@ -3,121 +3,146 @@
 <html lang="en" xmlns="http://www.w3.org/1999/html">
 
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>New Account</title>
-<link rel="shortcut icon" type="image/png" href="{% static 'images/icon1.png' %}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Account</title>
+    <link rel="shortcut icon" type="image/png" href="{% static 'images/icon1.png' %}">
 
 </head>
 
 <style>
+    * {
+        margin-top: 0%;
+        margin-bottom: 0%;
+        margin-left: 0%;
+        margin-right: 0%;
+    }
 
-*{
-margin-top:0%;
-margin-bottom:0%;
-margin-left:0%;
-margin-right:0%;
-}
+    fieldset {
+        box-shadow: 0px 0px 5px rgb(0, 0, 0),
+            0px 0px 30px rgb(0, 0, 0),
+            0px 0px 90px rgb(0, 0, 0),
+            0px 0px 180px rgb(0, 0, 0);
+        backdrop-filter: blur(15px);
+        border-radius: 10px;
+        /* background: rgba(255, 255, 255, 0.2); */
+    }
 
-fieldset
-{
-box-shadow: 0px 0px 5px rgb(0, 0, 0),
-0px 0px 30px rgb(0, 0, 0),
-0px 0px 90px rgb(0, 0, 0),
-0px 0px 180px rgb(0, 0, 0);
-backdrop-filter: blur(15px);
-border-radius: 10px;
-/* background: rgba(255, 255, 255, 0.2); */
-}
+    .forms {
+        color: white;
+        background: transparent;
+        margin-top: 0%;
+        margin-bottom: 0%;
+        margin-left: 20%;
+        margin-right: 55%;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        padding-left: 20px;
+        padding-right: 20px;
+        text-align: center;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    }
 
-.forms
-{
-color: white;
-background: transparent;
-margin-top: 0%;
-margin-bottom: 0%;
-margin-left: 20%;
-margin-right: 55%;
-padding-top: 20px;
-padding-bottom: 20px;
-padding-left: 20px;
-padding-right: 20px;
-text-align: center;
-font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-}
+    body {
+        margin-top: 30px;
+        height: 100%;
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+    }
 
-body
-{
-height: 100%;
-background-position: center;
-background-size: cover;
-background-repeat: no-repeat;
-background-attachment: fixed;
-}
+    input {
+        color: white;
+        background: transparent;
+        border: none;
+        border-bottom: 1px solid white;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    }
 
-input
-{
-border-radius: 5px;
-font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-}
+    input[type="Firstname"]::placeholder {
+        color: white;
+    }
 
-button:hover
-{
-box-shadow: 0px 0px 5px rgb(255, 0, 179),
-0px 0px 30px rgb(255, 0, 179),
-0px 0px 90px rgb(255, 0, 179),
-0px 0px 180px rgb(255, 0, 179);
-}
+    input[type="Lastname"]::placeholder {
+        color: white;
+    }
 
-button
-{
-cursor: pointer;
-color: white;
-background-color: rgb(255, 0, 179);
-border-radius: 20px;
-font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-}
+    input[type="Mobilenumber"]::placeholder {
+        color: white;
+    }
 
-legend
-{
-text-shadow: 0px 0px 10px rgb(255, 0, 179),
-0px 0px 10px rgb(255, 0, 179),
-0px 0px 10px rgb(255, 0, 179),
-0px 0px 10px rgb(255, 0, 179);
-font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-}
+    input[type="Enter 'OTP'"]::placeholder {
+        color: white;
+    }
 
+    input[type="E-Mail ID"]::placeholder {
+        color: white;
+    }
+
+    input[type="Password"]::placeholder {
+        color: white;
+    }
+
+    input[type="Retypepassword"]::placeholder {
+        color: white;
+    }
+
+    button:hover {
+        box-shadow: 0px 0px 5px rgb(255, 0, 179),
+            0px 0px 30px rgb(255, 0, 179),
+            0px 0px 90px rgb(255, 0, 179),
+            0px 0px 180px rgb(255, 0, 179);
+    }
+
+    button {
+        cursor: pointer;
+        color: white;
+        background-color: rgb(255, 0, 179);
+        border-radius: 20px;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    }
+
+    legend {
+        text-shadow: 0px 0px 10px rgb(255, 0, 179),
+            0px 0px 10px rgb(255, 0, 179),
+            0px 0px 10px rgb(255, 0, 179),
+            0px 0px 10px rgb(255, 0, 179);
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    }
 </style>
 
 {% if messages %}
 {% for message in messages%}
-{% if message.tags %}  <script>alert("{{ message }}")</script>
+{% if message.tags %}
+<script>alert("{{ message }}")</script>
 {% endif %}
 {% endfor %}
 {% endif %}
 
-<body id="bg" style="background-image:url('{% static 'images/211.jpg' %}'); background-repeat: no-repeat; margin-top: 150px;">
+<body id="bg" style="background-image:url('{% static 'images/211.jpg' %}'); background-repeat: no-repeat;">
 
-<form action="" method="POST" class="forms">
-{% csrf_token %}
-<fieldset>
-<legend> REGISTRATION </legend><br>
-<input type="FName" name="firstname" placeholder="First Name"><br><br>
-<input type="LName" name="lastname" placeholder="Last Name"><br><br>
-<!-- <label for="Mobile Number"> Mobile Number </label><br><br> -->
-<input type="Mobile number" name="mobilenumber" id="" placeholder="Mobile Number"><br><br>
-<button> Send OTP </button><br><br>
-<input type="number" name="OTP" placeholder="Enter OTP"><br><br>
-<button> Validate </button><br><br>
-<!-- <label for="Mail ID" name="username"> Mail ID or User ID </label><br><br> -->
-<input type="email" name="username" placeholder="E-Mail ID"><br><br>
-<!-- <label for="Password"> Password </label><br><br> -->
-<input type="password" name="password" placeholder="Password"><br><br>
-<!-- <label for="RetypePassword"> RetypePassword </label><br><br> -->
-<input type="password" name="retypepassword" placeholder="Retype Password"><br><br>
-<button type="submit"> Submit </button>
-</fieldset>
-</form>
+    <form action="" method="POST" class="forms">
+        {% csrf_token %}
+        <fieldset>
+            <legend> REGISTRATION </legend><br><br>
+            <input type="Firstname" name="firstname" placeholder="Firstname"><br><br><br>
+            <input type="Lastname" name="lastname" placeholder="Lastname"><br><br><br>
+            <!-- <label for="Mobile Number"> Mobile Number </label><br><br> -->
+            <input type="Mobilenumber" name="mobilenumber" id="" placeholder="Mobilenumber"><br><br><br>
+            <button> Send OTP </button><br><br>
+            <input type="Enter 'OTP'" name="OTP" placeholder="Enter 'OTP'"><br><br><br>
+            <button> Validate </button><br><br>
+            <!-- <label for="Mail ID" name="username"> Mail ID or User ID </label><br><br> -->
+            <input type="E-Mail ID" name="username" placeholder="E-Mail ID"><br><br><br>
+            <!-- <label for="Password"> Password </label><br><br> -->
+            <input type="Password" name="password" placeholder="Password"><br><br><br>
+            <!-- <label for="RetypePassword"> RetypePassword </label><br><br> -->
+            <input type="Retypepassword" name="retypepassword" placeholder="Retypepassword"><br><br><br>
+            <input type="file" id="imageUpload" name="imageUpload" accept="image/*"><br><br><br>
+            <button type="submit"> Submit </button><br><br>
+        </fieldset>
+    </form>
 
 </body>
 
