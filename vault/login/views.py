@@ -1,11 +1,24 @@
+import datetime
+
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 from .models import userlogin
 from django.http import HttpResponseNotAllowed
 
+# FOR REST_FRAMEWORK_TOKEN
+from django.conf import settings
+from rest_framework_simplejwt.tokens import AccessToken
+from rest_framework.decorators import api_view
 
 
+def token_gen(user):
+    AccessToken = {
+            "sub": user.username,
+            "iss": "localhost:8000/",
+            "iat": datetime.datetime.now()
+        }
+    return AccessToken
 
 @csrf_exempt
 def Login(request):
@@ -19,6 +32,8 @@ def Login(request):
         password = request.POST.get("password")
         try:
             user = userlogin.objects.get(username=username, password=password)
+            token_gen(user)
+            
             if user:
                 firstname = user.firstname
                 lastname = user.lastname

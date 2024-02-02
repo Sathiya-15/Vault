@@ -35,7 +35,7 @@ urlpatterns = [
     path("Mydashboard/", user_views.Mydashboard, name="Userhomepage"),
     path("Deleteuser/", user_views.Deleteuser, name="deleteuser"),
     path("Myprofile/", user_views.Profile_View, name="Myprofile"),
-    path("profileupdate/",user_views.profileupdate, name="profileupdate")
+    path("profileupdate/",user_views.profileupdate, name="profileupdate"),
 ]
 
 if settings.DEBUG:

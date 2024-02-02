@@ -1,10 +1,11 @@
 from django.db import models
 import os
-from django.utils import timezone
+from datetime import datetime
 
 
 # def filepath(filename):
 #     return os.path.join('userimages/', filename)
+
 
 class userlogin(models.Model):
     username = models.EmailField(max_length=100, null=True, blank=True)
@@ -12,8 +13,9 @@ class userlogin(models.Model):
     firstname = models.CharField(max_length=100, null=True, blank=True)
     lastname = models.CharField(max_length=100, null=True, blank=True)
     mobilenumber = models.BigIntegerField(null=True, blank=True)
-    image = models.ImageField(upload_to='userimages/', null=True, blank=True)
-    created_at = models.DateTimeField(default=timezone.now, blank=True, null=True)
+    Background_image = models.ImageField(upload_to='userimages/', null=False, blank=False)
+    Profile_image = models.ImageField(upload_to='userimages/', null=False, blank=False)
+    created_at = models.DateTimeField(default=datetime.now(), blank=True, null=True)
 
 # class emailotp(models.Model):
 #     email = models.EmailField(max_length=100, null=True, blank=True)

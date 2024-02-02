@@ -1,78 +1,129 @@
-<!DOCTYPE html>
-{% load static %}
-<html lang="en">
+        <!DOCTYPE html>
+        {% load static %}
+        <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" type="image/png" href="{% static 'images/icon1.png' %}">
-    <title>My Profile</title>
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <link rel="shortcut icon" type="image/png" href="{% static 'images/icon1.png' %}">
+            <title>My Profile</title>
 
-    <style>
-        body {
-            height: 100%;
-            background-position: center;
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-            backdrop-filter: blur(15px);
-            color: white;
-        }
+            <style>
+                @import url("https://fonts.googleapis.com/css2?family=Poppins:weight@100;200;300;400;500;600;700;800&display=swap");
+                
+            body{
+                font-family: "Poppins", sans-serif;
+                font-weight: 300;
+                margin: 0%;
+                background: fixed;
+            }
 
-        .buttonone a {
-            text-decoration: none;
-            border-radius: 100px;
-        }
+            .container{
+                margin-right: 0%;
+                height: 100vh;
+            }
 
-        .image,
-        .content {
-            padding: 10px;
-            margin-right: 70px;
-        }
+            .card{
+                width: 100vh;
+                position: relative;
+                height: 100vh;
+            }
 
-        .full {
-            display: flex;
-            flex-wrap: wrap;
-        }
-    </style>
-</head>
+            .upper{
+                height: 100px;
+            }
 
-{% if messages %}
-{% for message in messages %}
-{% if message.tags %}
-<script>alert("{{ message }}")</script> {% endif %}
-{% endfor %}
-{% endif %}
+            .upper img{
+                width: 100%;
+                height: 45vh;
+            }
 
-<body class="body" style="background-image:url('{% static 'images/back.png'%}')">
+            .profile img{
+                height: 190px;
+                width: 150px;
+                margin-top:100px;
+                margin-left:35%;
+                border-radius: 50px;
+            }
 
-    <form method="post" action="{% url 'profileupdate' %}" enctype="multipart/form-data">
-        {% if data %}
-        {% csrf_token %}
-        <div class="full">
+                .full{
+                display: flex;
+                background-color: #b66ffc;
+                }
 
-            <div class="image">
-                <img src="{{ data.image.url }}" alt="User Image" width="150" height="200"
-                    style="border-radius: 100px;"><br><br>
-            </div>
+                #sidebar {
+                    margin-left: 53.8%;
+                    background-color:white;
+                    text-align: center;
+                    height: 100%;
+                    width: 100vh;
+                    display: flex;
+                }
 
-            <div class="content">
-                <input type="First Name" placeholder="First Name" name="firstname" value="{{ data.firstname }}"><br><br>
-                <input type="Last Name" placeholder="Last Name" name="lastname" value="{{ data.lastname }}"><br><br>
-                <input type="Mobile Number" placeholder="Mobile Number" name="mobilenumber"
-                    value="{{ data.mobilenumber }}"><br><br>
-                <input type="Password" placeholder="Password" name="password" value="{{ data.password }}"><br><br>
-                <input type="Username" placeholder="Username" name="username" value="{{ data.username }}"><br>
-                <p>Last Updated : {{ data.created_at }}</p>
-                <input type="file" name="imageUpload" accept="image/*" required><br><br>
-                <button class="buttonone" type="submit">UPDATE</button>
-            </div>
+                #text{
+                    text-align: left;
+                    padding-left: 80px;
+                }
 
-        </div>
-        {% else %}
-        <p>No data available</p>
+                .content{
+                    padding-top: 20%;
+                    padding-left: 10px;
+                    color: black;
+                }
+            </style>    
+        </head>
+
+        {% if messages %}               
+        {% for message in messages %}
+        {% if message.tags %}
+        <script>alert("{{ message }}")</script> {% endif %}
+        {% endfor %}
         {% endif %}
-    </form>
-</body>
 
-</html>
+        <body class="body">
+
+            <form method="POST" action="{% url 'profileupdate' %}" enctype="multipart/form-data">
+                {% if data %}
+                {% csrf_token %}
+                <div class="full">
+                    <!-- <div class="sidebar">
+                        <a href="{% url 'Userhomepage' %}">Home</a><br><br><br>
+                        <a href="{% url 'Myprofile' %}">Myprofile</a><br><br><br>
+                    </div> -->
+                    <div class="container d-flex justify-content-center align-items-center" id="sidebar">
+                        <div class="content">
+                                <h3 style="font-family: Georgia, 'Times New Roman', Times, serif;">EDIT_PROFILE</h3>
+                                <input type="First Name" placeholder="First Name" name="firstname" value="{{ data.firstname }}"><br><br>
+                                <input type="Last Name" placeholder="Last Name" name="lastname" value="{{ data.lastname }}"><br><br>
+                                <input type="Mobile Number" placeholder="Mobile Number" name="mobilenumber"
+                                    value="{{ data.mobilenumber }}"><br><br>
+                                <input type="Password" placeholder="Password" name="password" value="{{ data.password }}"><br><br>
+                                <input type="Username" placeholder="Username" name="username" value="{{ data.username }}"><br>
+                                <p>Last Updated : {{ data.created_at }}</p>
+                                <input type="file" name="Profile_image" accept="image/*"><br><br>
+                                <input type="file" name="Background_image" accept="image/*"><br><br>
+                                <button class="buttonone" type="submit">UPDATE</button>
+                        </div>
+                        <div class="card">
+                            <div class="upper">
+                                <img src="{{ data.Background_image.url }}" class="img-fluid">
+                            </div>
+                            <div class="user text-center">
+                                <div class="profile">
+                                    <img src="{{ data.Profile_image.url }}" class="rounded-circle" width="100">
+                                </div>
+                            </div>
+                            <div class="mt-5 text-center" id="text">
+                                <h2 class="mb-0">{{ data.firstname }}&nbsp;{{ data.lastname}}</h2>
+                                <h4 style="font-weight: lighter;">{{ data.username }}</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <p>No data available</p>
+                {% endif %}
+            </form>
+        </body>
+
+        </html>

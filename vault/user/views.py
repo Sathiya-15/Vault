@@ -147,7 +147,8 @@ def profileupdate(request):
         lastname = request.POST.get("lastname")
         mobilenumber = request.POST.get("mobilenumber")
         password = request.POST.get("password")
-        imageUpload = request.FILES.get("imageUpload")
+        Background_image = request.FILES.get("Background_image")
+        Profile_image = request.FILES.get("Profile_image")
         try:
             user = userlogin.objects.get(username=username)
             if user:
@@ -156,7 +157,8 @@ def profileupdate(request):
                 user.lastname = lastname
                 user.mobilenumber = mobilenumber
                 user.password = password
-                user.image = imageUpload
+                user.Profile_image = Profile_image
+                user.Background_image = Background_image
                 user.save()
                 messages.success(request, "User Updated")
                 return render(request, "myprofile.html", {'data': user})

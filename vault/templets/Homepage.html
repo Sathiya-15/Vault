@@ -12,75 +12,63 @@
     <link rel="shortcut icon" type="image/png" href="{% static 'images/icon1.png' %}">
 
     <style>
-        * {
-            text-decoration: none;
-            margin: 0%;
-        }
-
-        body {
-            height: auto;
-            background-position: center;
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-            backdrop-filter: blur(15px);
-        }
-
-        li {
+        /* li {
             padding-left: 40px;
             margin-top: 20px;
             margin-bottom: 20px;
             list-style-type: none;
             float: left;
-        }
+        } */
 
-        li a {
+        /* li a {
             padding: 10px 30px 10px 10px;
-            color: white;
+            color:white;
+            font-weight: 800;
             font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-        }
+        } */
 
-        .navbar-brand {
+        /* .navbar-brand {
             margin-top: 20px;
             padding: 15px 45px;
-        }
+        } */
 
-        #profiles li a {
+        /* #profiles li a {
             border-radius: 50px;
-        }
+        } */
 
-        .nav {
-            background-color: rgba(141, 16, 146, 255);
-        }
+        /* .nav { */
+            /* background: radial-gradient(circle, rgba(105,75,238,1) 0%, rgba(248,0,255,1) 100%); */
+            /* background-color: #b66ffc;
+        } */
 
         .sidebar {
-            height: 662px;
-            width: 200px;
-            background-color: rgba(141, 16, 146, 255);
+            height: 100vh;
+            width: 40vh;
+            background-color:#b66ffc;
             text-align: center;
             padding: 20px;
         }
 
-        .sidebar a {
-            color: white;
+         .sidebar a {
+            color: black;
         }
 
-        .sidebar:hover {
+        /* .sidebar:hover {
             translate: -100px;
             transition: 1.00s ease;
             flex-grow: 1;
             content-visibility: hidden;
-        }
+        }  to hover the sidebar it will hidden */
 
-        #logo {
+        /* #logo {
             height: 30px;
             width: 35px;
             display: inline-block;
             padding-right: 5px;
-        }
+        } */
     </style>
 
-    <script>
+    <!-- <script>
         function openSidebar() {
             document.getElementById("mySidebar").style.left = "0";
         }
@@ -88,7 +76,7 @@
         function closeSidebar() {
             document.getElementById("mySidebar").style.left = "-250px";
         }
-    </script>
+    </script> -->
 
 </head>
 
@@ -99,12 +87,14 @@
 {% endfor %}
 {% endif %}
 
-<body id="bg" style="background-image:url('{% static 'images/back.png' %}')">
+<body>
+<!-- <body id="bg" style="background-image:url('{% static 'images/back.png' %}')"> -->
 
-    <nav class="nav" class="navbar navbar-inverse">
+
+    <!-- <nav class="nav" class="navbar navbar-inverse">
         <div class="container-fluid">
             <div class="navbar-header" id="home">
-                <a class="navbar-brand" href="{% url 'Userhomepage' %}" style="color: aliceblue;"><img
+                <a class="navbar-brand" href="{% url 'Userhomepage' %}" style="color: black; font-weight: 800;"><img
                         src="{% static 'images/icon.png' %}" id="logo" alt="home">VAULT</a>
             </div>
             <ul class="nav navbar-nav" id="profiles">
@@ -117,12 +107,12 @@
                 <li><a href="{% url 'Login' %}"><span class="glyphicon glyphicon-log-in"></span>&nbsp; Logout</a></li>
             </ul>
         </div>
-    </nav>
+    </nav> -->
 
     <div class="sidebar">
         <a href="{% url 'Userhomepage' %}">Home</a><br><br><br>
         <a href="{% url 'Myprofile' %}">Myprofile</a><br><br><br>
-        <button onclick="closeSidebar()" class="buttonx" style="font-size: large;">X</button><br><br><br>
+        <!-- <button onclick="closeSidebar()" class="buttonx" style="font-size: large;">X</button><br><br><br> -->
     </div>
 
 </body>
