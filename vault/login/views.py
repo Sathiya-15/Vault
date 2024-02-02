@@ -12,14 +12,6 @@ from rest_framework_simplejwt.tokens import AccessToken
 from rest_framework.decorators import api_view
 
 
-def token_gen(user):
-    AccessToken = {
-            "sub": user.username,
-            "iss": "localhost:8000/",
-            "iat": datetime.datetime.now()
-        }
-    return AccessToken
-
 @csrf_exempt
 def Login(request):
     allowed_methods = ["GET", "POST"]
@@ -32,7 +24,6 @@ def Login(request):
         password = request.POST.get("password")
         try:
             user = userlogin.objects.get(username=username, password=password)
-            token_gen(user)
             
             if user:
                 firstname = user.firstname

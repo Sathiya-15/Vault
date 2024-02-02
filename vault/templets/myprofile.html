@@ -46,30 +46,38 @@
                 border-radius: 50px;
             }
 
-                .full{
+            .full{
                 display: flex;
                 background-color: #b66ffc;
-                }
+            }
 
-                #sidebar {
-                    margin-left: 53.8%;
-                    background-color:white;
-                    text-align: center;
-                    height: 100%;
-                    width: 100vh;
-                    display: flex;
-                }
+            #sidebar {
+                margin-left: 53.8%;
+                background-color:white;
+                text-align: center;
+                height: 100%;
+                width: 100vh;
+                display: flex;
+            }
 
-                #text{
-                    text-align: left;
-                    padding-left: 80px;
-                }
+            #text{
+                text-align: left;
+                padding-left: 80px;
+            }
 
-                .content{
-                    padding-top: 20%;
-                    padding-left: 10px;
-                    color: black;
-                }
+            .content{
+                padding-top: 20%;
+                padding-left: 10px;
+                color: black;
+            }
+
+            #one{
+                color: black;
+                background: transparent;
+                border: none;
+                border-bottom: 1px solid black;
+                font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            }
             </style>    
         </head>
 
@@ -93,12 +101,12 @@
                     <div class="container d-flex justify-content-center align-items-center" id="sidebar">
                         <div class="content">
                                 <h3 style="font-family: Georgia, 'Times New Roman', Times, serif;">EDIT_PROFILE</h3>
-                                <input type="First Name" placeholder="First Name" name="firstname" value="{{ data.firstname }}"><br><br>
-                                <input type="Last Name" placeholder="Last Name" name="lastname" value="{{ data.lastname }}"><br><br>
-                                <input type="Mobile Number" placeholder="Mobile Number" name="mobilenumber"
+                                <input id="one" type="First Name" placeholder="First Name" name="firstname" value="{{ data.firstname }}"><br><br>
+                                <input id="one" type="Last Name" placeholder="Last Name" name="lastname" value="{{ data.lastname }}"><br><br>
+                                <input id="one" type="Mobile Number" placeholder="Mobile Number" name="mobilenumber"
                                     value="{{ data.mobilenumber }}"><br><br>
-                                <input type="Password" placeholder="Password" name="password" value="{{ data.password }}"><br><br>
-                                <input type="Username" placeholder="Username" name="username" value="{{ data.username }}"><br>
+                                <input id="one" type="Password" placeholder="Password" name="password" value="{{ data.password }}"><br><br>
+                                <input id="one" type="Username" placeholder="Username" name="username" value="{{ data.username }}"><br>
                                 <p>Last Updated : {{ data.created_at }}</p>
                                 <input type="file" name="Profile_image" accept="image/*"><br><br>
                                 <input type="file" name="Background_image" accept="image/*"><br><br>
