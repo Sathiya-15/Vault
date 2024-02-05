@@ -38,6 +38,7 @@ urlpatterns = [
     path("profileupdate/",user_views.profileupdate, name="profileupdate"),
 ]
 
+
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

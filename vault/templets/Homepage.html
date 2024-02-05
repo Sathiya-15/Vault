@@ -115,14 +115,20 @@
         <!-- <button onclick="closeSidebar()" class="buttonx" style="font-size: large;">X</button><br><br><br> -->
     </div>
 <script>
-    {% if data %}
-    var accessToken = "{{ data }}";
+    {% if access_token %}
+    {% if refresh_token %}
+    var accessToken = "{{ access_token }}";
+    var refreshtoken = "{{ refresh_token }}"
     localStorage.setItem('accessToken', accessToken);
-    if (accessToken) {
+    localStorage.setItem('refreshToken', refreshtoken);
+    if (accessToken, refreshtoken) {
         console.log('Access Token found:', accessToken);
+        console.log('Refresh Token found:', refreshtoken);
     } else {
         console.log('Access Token not found');
+        console.log('Refresh Token not found');
     }
+    {% endif %}
     {% endif %}
 </script>
 

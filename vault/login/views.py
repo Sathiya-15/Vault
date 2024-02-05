@@ -27,17 +27,18 @@ def Login(request):
                 }
 
                 # Generate tokens with custom payload
-                refresh = RefreshToken.for_user(user)
-                access_token = refresh.access_token
+                refresh_token = RefreshToken.for_user(user)
+                access_token = refresh_token.access_token
 
                 # Update the payload of the access token with the custom details
                 access_token.payload.update(user_details)
                 print("access_token:", access_token)
+                print("refresh_token:", refresh_token)
 
                 firstname = user.firstname
                 lastname = user.lastname
                 messages.success(request, f"Successfully Login [ {firstname} {lastname} ]")
-                return render(request, 'Homepage.html', {"data": access_token})
+                return render(request, 'Homepage.html', {"access_token": access_token,"refresh_token": refresh_token})
 
         except userlogin.DoesNotExist:
             messages.error(request, "Invalid Username Password")
