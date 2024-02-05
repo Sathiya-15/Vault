@@ -1,4 +1,4 @@
-import datetime
+# FOR GENERAL IMPORT
 
 from django.contrib import messages
 from django.shortcuts import render, redirect
@@ -6,10 +6,16 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import userlogin
 from django.http import HttpResponseNotAllowed
 
+
+
 # FOR REST_FRAMEWORK_TOKEN
+
 from django.conf import settings
 from rest_framework_simplejwt.tokens import AccessToken
-from rest_framework.decorators import api_view
+from vault.settings import SECRET_KEY
+from rest_framework_simplejwt.tokens import RefreshToken
+from datetime import timedelta
+from rest_framework.response import Response
 
 
 @csrf_exempt
@@ -24,12 +30,31 @@ def Login(request):
         password = request.POST.get("password")
         try:
             user = userlogin.objects.get(username=username, password=password)
-            
             if user:
+                custom_payload ={
+                    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+                    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+                    'ALGORITHM': 'HS256',
+                    'SIGNING_KEY': SECRET_KEY,
+                    'USERNAME': user.username,
+                    'id': user.id,
+                }
+                refresh = RefreshToken.for_user(user)
+                access_token = refresh.access_token
+                print(access_token)
+
+                custom_access_token = RefreshToken(refresh.get('token'))
+                print("!!!!!!!!!!!!", custom_access_token)
+
+                # access_token_payload = access_token.__dict__.get('_payload')
+                # if access_token_payload:
+                #     access_token.payload.update(custom_payload)
+                #     print("!!!!!!!!!!!!", access_token.payload.update(custom_payload))
+
                 firstname = user.firstname
                 lastname = user.lastname
                 messages.success(request, f"Successfully Login [ {firstname} {lastname} ]")
-                return render(request, 'Homepage.html')
+                return render(request, 'Homepage.html', {"data": custom_access_token})
 
         except userlogin.DoesNotExist:
             messages.error(request, "Invalid Username Password")

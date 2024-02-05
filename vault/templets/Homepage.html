@@ -114,7 +114,19 @@
         <a href="{% url 'Myprofile' %}">Myprofile</a><br><br><br>
         <!-- <button onclick="closeSidebar()" class="buttonx" style="font-size: large;">X</button><br><br><br> -->
     </div>
+<script>
+    {% if data %}
+    var accessToken = "{{ data.access_token }}";
+    localStorage.setItem('accessToken', accessToken);
+
+    if (accessToken) {
+        console.log('Access Token found:', accessToken);
+    } else {
+        console.log('Access Token not found');
+    }
+    {% endif %}
+</script>
+
 
 </body>
-
 </html>
