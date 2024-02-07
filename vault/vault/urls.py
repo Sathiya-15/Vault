@@ -25,17 +25,15 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 urlpatterns = [
-    # path("", login_view.Logout, name="Logout"),
+    path("logout/", login_view.Logout, name="Logout"),
     path("admin/", admin.site.urls),
     path("", login_view.Login, name="Login"),
-    path("Home/", user_views.Homepage, name='Home'),
-    path("MyFiles/", user_views.Myfiles, name="MyFiles"),
+    path("Deleteuser/", user_views.Deleteuser, name="Delete_User"),
+    path("Myprofile/", user_views.Profile_View, name="Myprofile"),
+    path("profileupdate/", user_views.profileupdate, name="profileupdate"),
     path("Newaccountcreation/", user_views.Createnewaccount, name="Createnewaccount"),
     path("Forgotpassword/", login_view.Forgot, name='Forgotpassword'),
     path("Mydashboard/", user_views.Mydashboard, name="Userhomepage"),
-    path("Deleteuser/", user_views.Deleteuser, name="deleteuser"),
-    path("Myprofile/", user_views.Profile_View, name="Myprofile"),
-    path("profileupdate/",user_views.profileupdate, name="profileupdate"),
 ]
 
 

@@ -38,18 +38,18 @@ def Createnewaccount(request):
                 messages.error(request, "Password and Retypepassword Should be Same")
 
     if request.method == "GET":
-        return render(request, 'Createnewaccount.html')
+        return render(request, 'Create_New_Account.html')
 
     if request.method == "DELETE":
-        return render(request, 'Createnewaccount.html')
+        return render(request, 'Create_New_Account.html')
 
-    return render(request, 'Createnewaccount.html')
+    return render(request, 'Create_New_Account.html')
 
 
 @csrf_exempt
 def Deleteuser(request):
     if request.method == "GET":
-        return render(request, 'deleteuser.html')
+        return render(request, 'Delete_User.html')
 
     if request.method == "POST":
        username = request.POST.get("username")
@@ -58,11 +58,11 @@ def Deleteuser(request):
            if user:
                user.delete()
                messages.success(request, "User Database Deleted Successfully")
-               return redirect('deleteuser')
+               return redirect('Delete_User')
 
        except userlogin.DoesNotExist:
            messages.error(request, "User Doesnot Exist")
-           return render(request, 'deleteuser.html')
+           return render(request, 'Delete_User.html')
 
 
 
@@ -125,22 +125,17 @@ def Profile_View(request):
             #     "images": images,
             # }
             # print(context)
-            return render(request, 'myprofile.html', {'data':users})
+            return render(request, 'My_Profile2.html', {'data': users})
 
         except userlogin.DoesNotExist:
             messages.error(request, "No Data in Database")
-            return render(request, 'myprofile.html')
-
-def Homepage(request):
-    return render(request, 'Homepage.html')
-
-def Myfiles(request):
-    return render(request, 'Myfiles.html')
+            return render(request, 'My_Profile2.html')
 
 def Mydashboard(request):
-    return render(request, 'Homepage.html')
+    return render(request, 'Homepage_2.html')
 
 def profileupdate(request):
+    print("!!!!!!!!!!", request)
     if request.method == "POST":
         username = request.POST.get("username")
         firstname = request.POST.get("firstname")
@@ -149,23 +144,32 @@ def profileupdate(request):
         password = request.POST.get("password")
         Background_image = request.FILES.get("Background_image")
         Profile_image = request.FILES.get("Profile_image")
+        address = request.POST.get("address")
+        city = request.POST.get("city")
+        country = request.POST.get("country")
+        # pincode = request.POST.get("pincode")
+        aboutme = request.POST.get("aboutme")
         try:
             user = userlogin.objects.get(username=username)
             if user:
                 user.username = username
                 user.firstname = firstname
                 user.lastname = lastname
-                user.mobilenumber = mobilenumber
                 user.password = password
-                user.Profile_image = Profile_image
-                user.Background_image = Background_image
+                # user.Profile_image = Profile_image
+                # user.Background_image = Background_image
+                user.address = address
+                user.city = city
+                user.country = country
+                user.mobilenumber = mobilenumber
+                user.aboutme = aboutme
                 user.save()
                 messages.success(request, "User Updated")
-                return render(request, "myprofile.html", {'data': user})
+                return redirect("Myprofile")
 
         except userlogin.DoesNotExist:
             messages.error(request, "User Does not Exist")
-            return render(request, "myprofile.html")
+            return render(request, "My_Profile2.html")
 
     # Return a response for the case where request.method is not "POST"
     return HttpResponse("Method not allowed")

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/png" href="{% static 'images/icon1.png' %}">
+    <title>My Profile</title>
+
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Poppins:weight@100;200;300;400;500;600;700;800&display=swap");
+
+        body {
+            font-family: "Poppins", sans-serif;
+            font-weight: 300;
+            margin: 0%;
+            background: fixed;
+        }
+
+        .container {
+            margin-right: 0%;
+            height: 100vh;
+        }
+
+        .card {
+            width: 100vh;
+            position: relative;
+            height: 100vh;
+        }
+
+        .upper {
+            height: 100px;
+        }
+
+        .upper img {
+            width: 100%;
+            height: 45vh;
+        }
+
+        .profile img {
+            height: 190px;
+            width: 150px;
+            margin-top: 100px;
+            margin-left: 35%;
+            border-radius: 50px;
+        }
+
+        .full {
+            display: flex;
+            background-color: #b66ffc;
+        }
+
+        #sidebar {
+            margin-left: 53.8%;
+            background-color: white;
+            text-align: center;
+            height: 100%;
+            width: 100vh;
+            display: flex;
+        }
+
+        #text {
+            text-align: left;
+            padding-left: 80px;
+        }
+
+        .content {
+            padding-top: 20%;
+            padding-left: 10px;
+            color: black;
+        }
+
+        #one {
+            color: black;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid black;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+    </style>
+</head>
+
+{% if messages %}
+{% for message in messages %}
+{% if message.tags %}
+<script>alert("{{ message }}")</script> {% endif %}
+{% endfor %}
+{% endif %}
+
+<body class="body">
+
+    <form method="POST" action="{% url 'profileupdate' %}" enctype="multipart/form-data">
+        {% if data %}
+        {% csrf_token %}
+        <div class="full">
+            <!-- <div class="sidebar">
+                        <a href="{% url 'Userhomepage' %}">Home</a><br><br><br>
+                        <a href="{% url 'Myprofile' %}">Myprofile</a><br><br><br>
+                    </div> -->
+            <div class="container d-flex justify-content-center align-items-center" id="sidebar">
+                <div class="content">
+                    <h3 style="font-family: Georgia, 'Times New Roman', Times, serif;">EDIT_PROFILE</h3>
+                    <input id="one" type="First Name" placeholder="First Name" name="firstname"
+                        value="{{ data.firstname }}"><br><br>
+                    <input id="one" type="Last Name" placeholder="Last Name" name="lastname"
+                        value="{{ data.lastname }}"><br><br>
+                    <input id="one" type="Mobile Number" placeholder="Mobile Number" name="mobilenumber"
+                        value="{{ data.mobilenumber }}"><br><br>
+                    <input id="one" type="Password" placeholder="Password" name="password"
+                        value="{{ data.password }}"><br><br>
+                    <input id="one" type="Username" placeholder="Username" name="username"
+                        value="{{ data.username }}"><br>
+                    <p>Last Updated : {{ data.created_at }}</p>
+                    <input type="file" name="Profile_image" accept="image/*"><br><br>
+                    <input type="file" name="Background_image" accept="image/*"><br><br>
+                    <button class="buttonone" type="submit">UPDATE</button>
+                </div>
+                <div class="card">
+                    <div class="upper">
+                        <img src="{{ data.Background_image.url }}" class="img-fluid">
+                    </div>
+                    <div class="user text-center">
+                        <div class="profile">
+                            <img src="{{ data.Profile_image.url }}" class="rounded-circle" width="100">
+                        </div>
+                    </div>
+                    <div class="mt-5 text-center" id="text">
+                        <h2 class="mb-0">{{ data.firstname }}&nbsp;{{ data.lastname}}</h2>
+                        <h4 style="font-weight: lighter;">{{ data.username }}</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <p>No data available</p>
+        {% endif %}
+    </form>
+</body>
+
+</html>

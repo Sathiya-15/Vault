@@ -5,7 +5,6 @@ from django.http import HttpResponseNotAllowed
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.shortcuts import render, redirect
-from vault.settings import SECRET_KEY
 from .models import userlogin
 
 @csrf_exempt
@@ -13,7 +12,7 @@ def Login(request):
     allowed_methods = ["GET", "POST"]
 
     if request.method == "GET":
-        return render(request, 'Login.html')
+        return render(request, 'Login_1.html')
 
     if request.method == "POST":
         username = request.POST.get("username")
@@ -38,7 +37,7 @@ def Login(request):
                 firstname = user.firstname
                 lastname = user.lastname
                 messages.success(request, f"Successfully Login [ {firstname} {lastname} ]")
-                return render(request, 'Homepage.html', {"access_token": access_token,"refresh_token": refresh_token})
+                return render(request, 'Homepage_2.html', {"access_token": access_token,"refresh_token": refresh_token})
 
         except userlogin.DoesNotExist:
             messages.error(request, "Invalid Username Password")
@@ -97,3 +96,6 @@ def Forgot(request):
             return render(request, 'Password_Reset.html', {'error': 'User does not exist'})
 
     return render(request, 'Password_Reset.html')
+
+def Logout(request):
+    return redirect("Login")
