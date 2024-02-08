@@ -28,12 +28,14 @@ urlpatterns = [
     path("logout/", login_view.Logout, name="Logout"),
     path("admin/", admin.site.urls),
     path("", login_view.Login, name="Login"),
-    path("Deleteuser/", user_views.Deleteuser, name="Delete_User"),
+    path("Deleteuser/<str:id>/", user_views.Deleteuser, name="Delete_User"),
     path("Myprofile/", user_views.Profile_View, name="Myprofile"),
     path("profileupdate/", user_views.profileupdate, name="profileupdate"),
     path("Newaccountcreation/", user_views.Createnewaccount, name="Createnewaccount"),
     path("Forgotpassword/", login_view.Forgot, name='Forgotpassword'),
     path("Mydashboard/", user_views.Mydashboard, name="Userhomepage"),
+    path("Users/", user_views.Users, name="Table_Users"),
+    path("createuser/",user_views.createuser,name="createuser"),
 ]
 
 

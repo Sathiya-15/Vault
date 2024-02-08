@@ -37,7 +37,7 @@ def Login(request):
                 firstname = user.firstname
                 lastname = user.lastname
                 messages.success(request, f"Successfully Login [ {firstname} {lastname} ]")
-                return render(request, 'Homepage_2.html', {"access_token": access_token,"refresh_token": refresh_token})
+                return render(request, 'Homepage_3.html', {"access_token": access_token,"refresh_token": refresh_token, "data": user})
 
         except userlogin.DoesNotExist:
             messages.error(request, "Invalid Username Password")

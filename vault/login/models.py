@@ -11,14 +11,15 @@ class userlogin(models.Model):
     firstname = models.CharField(max_length=100, null=True, blank=True)
     lastname = models.CharField(max_length=100, null=True, blank=True)
     mobilenumber = models.BigIntegerField(null=True, blank=True)
-    Background_image = models.ImageField(upload_to='userimages/', null=True, blank=True)
-    Profile_image = models.ImageField(upload_to='userimages/', null=True, blank=True)
+    Background_image = models.ImageField(upload_to='userimages/', null=True, blank=True,default='userimages/default_back.png')
+    Profile_image = models.ImageField(upload_to='userimages/', null=True, blank=True,default='userimages/default_profile.png')
     created_at = models.DateTimeField(default=datetime.now(), blank=True, null=True)
     address = models.CharField(max_length=225, null=True,blank=True)
     city = models.CharField(max_length=225, null=True,blank=True)
     country = models.CharField(max_length=225, null=True,blank=True)
     pincode = models.BigIntegerField(null=True,blank=True)
     aboutme = models.CharField(max_length=225, null=True,blank=True)
+    Role = models.CharField(max_length=225,null=True,blank=True)
 
 # class emailotp(models.Model):
 #     email = models.EmailField(max_length=100, null=True, blank=True)

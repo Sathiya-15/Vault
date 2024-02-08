@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title> Welcome | School</title>
 
     <style>
         @import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
@@ -54,8 +54,8 @@
 
         button {
             border-radius: 20px;
-            border: 1px solid #FF4B2B;
-            background-color: #FF4B2B;
+            border: 1px solid #212F5E;
+            background-color: #212F5E;
             color: #FFFFFF;
             font-size: 12px;
             font-weight: bold;
@@ -171,9 +171,10 @@
         }
 
         .overlay {
-            background: #FF416C;
-            background: -webkit-linear-gradient(to right, #FF4B2B, #FF416C);
-            background: linear-gradient(to right, #FF4B2B, #FF416C);
+            /* background: #FF416C; */
+            background: #212F5E;
+            background: -webkit-linear-gradient(to right, #212B5E, #212F5E);
+            background: linear-gradient(to right, #212B5E, #212F5E);
             background-repeat: no-repeat;
             background-size: cover;
             background-position: 0 0;
@@ -261,16 +262,28 @@
             color: #3c97bf;
             text-decoration: none;
         }
+
+        .titleone {
+            display: flex;
+        }
     </style>
 
 </head>
 
-<body>
+{% if messages %} {% for message in messages %} {% if message.tags %}
+<script>
+    alert("{{ message }}");
+</script>
+{% endif %} {% endfor %} {% endif %}
 
-    <h2>Weekly Coding Challenge #1: Sign in/up Form</h2>
+<body>
+    <div class="titleone">
+        <h2> WELCOME </h2>&ensp;&ensp;
+        <h2 style="color: #212F5E;"> VAULT </h2>
+    </div>
     <div class="container" id="container">
         <div class="form-container sign-up-container">
-            <form action="#">
+            <form action="{% url 'Createnewaccount' %}" method="POST">
                 <h1>Create Account</h1>
                 <div class="social-container">
                     <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
@@ -278,14 +291,17 @@
                     <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
                 </div>
                 <span>or use your email for registration</span>
-                <input type="text" placeholder="Name" />
-                <input type="email" placeholder="Email" />
-                <input type="password" placeholder="Password" />
+                <input type="text" placeholder="Name" name="firstname" />
+                <input type="number" placeholder="Mobilenumber" name="mobilenumber" />
+                <input type="email" placeholder="Email" name="username" />
+                <input type="password" placeholder="Password" name="password" />
+                <input type="password" placeholder="RetypePassword" name="retypepassword" />
+                <input type="">
                 <button>Sign Up</button>
             </form>
         </div>
         <div class="form-container sign-in-container">
-            <form action="#">
+            <form action="{% url 'Login' %}" method="POST">
                 <h1>Sign in</h1>
                 <div class="social-container">
                     <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
@@ -293,9 +309,9 @@
                     <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
                 </div>
                 <span>or use your account</span>
-                <input type="email" placeholder="Email" />
-                <input type="password" placeholder="Password" />
-                <a href="#">Forgot your password?</a>
+                <input type="email" name="username" placeholder="Email" />
+                <input type="password" name="password" placeholder="Password" />
+                <a href="{% url 'Forgotpassword' %}">Forgot your password?</a>
                 <button>Sign In</button>
             </form>
         </div>
@@ -307,14 +323,13 @@
                     <button class="ghost" id="signIn">Sign In</button>
                 </div>
                 <div class="overlay-panel overlay-right">
-                    <h1>Hello, Friend!</h1>
+                    <h1>Hello, Mate!</h1>
                     <p>Enter your personal details and start journey with us</p>
                     <button class="ghost" id="signUp">Sign Up</button>
                 </div>
             </div>
         </div>
     </div>
-
 
 </body>
 

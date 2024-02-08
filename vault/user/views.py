@@ -1,8 +1,9 @@
 from django.contrib import messages
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from login.models import userlogin
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
+from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from django.http import HttpResponse
 from rest_framework.response import Response
@@ -15,12 +16,12 @@ from login.serializer import userloginserializer
 def Createnewaccount(request):
     if request.method == "POST":
         firstname = request.POST.get("firstname")
-        lastname = request.POST.get("lastname")
+        # lastname = request.POST.get("lastname")
         mobilenumber = request.POST.get("mobilenumber")
         username = request.POST.get("username")
         password = request.POST.get("password")
         retypepassword = request.POST.get("retypepassword")
-        imageUpload = request.FILES.get("imageUpload")
+        # imageUpload = request.FILES.get("imageUpload")
         try:
             user = userlogin.objects.get(Q(username=username) | Q(mobilenumber=mobilenumber))
             if user:
@@ -30,8 +31,7 @@ def Createnewaccount(request):
         except userlogin.DoesNotExist:
             if password == retypepassword:
                 userlogin.objects.create(username=username, password=password,
-                                         firstname=firstname, lastname=lastname,
-                                         mobilenumber=mobilenumber,image=imageUpload)
+                                         firstname=firstname, mobilenumber=mobilenumber)
                 messages.success(request, "User Registered Successfully")
                 return redirect('Login')
             else:
@@ -46,24 +46,50 @@ def Createnewaccount(request):
     return render(request, 'Create_New_Account.html')
 
 
+# @csrf_exempt
+# def Deleteuser(request, id):
+#     print("=========>", id)
+#     if request.method == "POST":
+#         username = request.POST.get("id")
+#         try:
+#             user = userlogin.objects.get(username=username)
+#             user.delete()
+#             messages.success(request, "User Database Deleted Successfully")
+#             return redirect('Table_Users')
+#
+#         except userlogin.DoesNotExist:
+#             messages.error(request, "User Doesnot Exist")
+#             return render(request, 'Table_Users.html')
+
 @csrf_exempt
-def Deleteuser(request):
+def Deleteuser(request, id):
+    print("=========>", id)
     if request.method == "GET":
-        return render(request, 'Delete_User.html')
+        try:
+            user = get_object_or_404(userlogin, username=id)
+            user.delete()
+            messages.success(request, "User Database Deleted Successfully")
+            return redirect('Table_Users')
+        except userlogin.DoesNotExist:
+            messages.error(request, "User Does Not Exist")
+            return render(request, 'Table_Users.html')
 
-    if request.method == "POST":
-       username = request.POST.get("username")
-       try:
-           user = userlogin.objects.get(username=username)
-           if user:
-               user.delete()
-               messages.success(request, "User Database Deleted Successfully")
-               return redirect('Delete_User')
+    return HttpResponse("Invalid request method")  # Add a default response for other HTTP methods
 
-       except userlogin.DoesNotExist:
-           messages.error(request, "User Doesnot Exist")
-           return render(request, 'Delete_User.html')
-
+# def Deleteuser(request, id):
+#     print("=========>", id)
+#     if request.method == "POST":
+#         try:
+#             user = get_object_or_404(userlogin, username=id)
+#             user.delete()
+#             messages.success(request, "User deleted successfully")
+#             return HttpResponseRedirect(reverse('Table_Users'))
+#
+#         except userlogin.DoesNotExist:
+#             messages.error(request, "User does not exist")
+#             return render(request, 'Table_Users.html')
+#     else:
+#         return render(request, 'Table_Users.html')
 
 
 #::::::::::::::::::::::::::::::::::::USING SERIALIZERS IF YOU WANT THIS USE CLASS METHOD:::::::::::::::::::::::::::::::::::::
@@ -96,7 +122,7 @@ def Deleteuser(request):
 def Profile_View(request):
     if request.method == "GET":
         try:
-            users = userlogin.objects.get(id=1)
+            users = userlogin.objects.get(id=3)
             # Initialize lists to store data for all users
             # firstnames = []
             # lastnames = []
@@ -132,10 +158,9 @@ def Profile_View(request):
             return render(request, 'My_Profile2.html')
 
 def Mydashboard(request):
-    return render(request, 'Homepage_2.html')
+    return render(request, 'Homepage_3.html')
 
 def profileupdate(request):
-    print("!!!!!!!!!!", request)
     if request.method == "POST":
         username = request.POST.get("username")
         firstname = request.POST.get("firstname")
@@ -173,3 +198,41 @@ def profileupdate(request):
 
     # Return a response for the case where request.method is not "POST"
     return HttpResponse("Method not allowed")
+
+
+def Users(request):
+    try:
+        query_set = userlogin.objects.all()
+        users_data = []
+
+        for user in query_set:
+            user_data = {
+                'username': user.username,
+                'firstname': user.firstname,
+                'lastname': user.lastname,
+                'mobilenumber': user.mobilenumber
+            }
+
+            users_data.append(user_data)
+            print(user_data)
+
+        return render(request, "Table_Users.html", {"data": users_data})
+
+    except userlogin.DoesNotExist:
+        messages.error(request, "Users do not exist in the database.")
+        return render(request, 'Homepage_3.html')
+
+
+def createuser(request):
+    if request.method == "POST":
+        username = request.POST.get("username")
+        firstname = request.POST.get("firstname")
+        lastname = request.POST.get("lastname")
+        mobilenumber = request.POST.get("mobilenumber")
+        try:
+            userlogin.objects.create(username=username,firstname=firstname,lastname=lastname,mobilenumber=mobilenumber)
+            messages.success(request, "User Added Successfully")
+            return redirect("Table_Users")
+        except:
+            messages.error(request,"User does not added")
+            return redirect("Table_Users")
