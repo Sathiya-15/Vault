@@ -10,6 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <!----======== CSS ======== -->
     <link rel="stylesheet" href="style.css">
@@ -21,6 +22,19 @@
     <style>
         /* Google Font Import - Poppins */
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+
+        .table>tbody>tr>td,
+        .table>tbody>tr>th,
+        .table>tfoot>tr>td,
+        .table>tfoot>tr>th,
+        .table>thead>tr>td,
+        .table>thead>tr>th {
+            padding: 16px;
+            line-height: 1.42857143;
+            vertical-align: middle;
+            border-top: 1px solid #ddd;
+        }
 
         * {
             margin: 0;
@@ -430,7 +444,7 @@
 {% endif %} {% endfor %} {% endif %}
 
 <body>
-    {% if data %} {% csrf_token %}
+    {% csrf_token %}
     <nav class="sidebar close">
         <header>
             <div class="image-text">
@@ -547,8 +561,9 @@
                     </thead>
                     <tbody>
                         <form action="{% url 'Update_User' %}" method="post">
+                            {% if admindata %}
                             {% csrf_token %}
-                            {% for data in data %}
+                            {% for data in admindata %}
                             <tr>
                                 <td>{{ forloop.counter }}</td>
                                 <td><input type="text" value="{{ data.username}}"></td>
@@ -557,17 +572,16 @@
                                 <td><input type="text" value="{{ data.mobilenumber}}"></td>
                                 <td>
                                     <select id="Role" name="Role">
-                                        <option value="Superadmin" {% if data.Role=='Superadmin' %}selected{% endif
-                                            %}>
+                                        <option value="Superadmin">
                                             Superadmin
                                         </option>
-                                        <option value="Admin" {% if data.Role=='Admin' %}selected{% endif %}>
+                                        <option value="Admin">
                                             Admin
                                         </option>
-                                        <option value="Teacher" {% if data.Role=='Teacher' %}selected{% endif %}>
+                                        <option value="Teacher">
                                             Teacher
                                         </option>
-                                        <option value="Student" {% if data.Role=='Student' %}selected{% endif %}>
+                                        <option value="Student">
                                             Student
                                         </option>
                                     </select>
@@ -596,7 +610,9 @@
                                         <option value="Student">Student</option>
                                     </select></td>
                                 <td><button>
-                                        <span class="glyphicon glyphicon-ok"></span>
+                                        <span class="glyphicon glyphicon-ok">&emsp;<button type="reset"><i
+                                                    class="material-icons"
+                                                    style="font-weight: 24px; text-align: center;">&#xe14c;</i></button></span>
                                     </button></td>
                             </tr>
                         </form>

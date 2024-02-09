@@ -3,6 +3,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from login.models import userlogin
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from django.http import HttpResponse
@@ -181,7 +183,16 @@ def Profile_View(request):
             messages.error(request, "No Data in Database")
             return render(request, 'My_Profile2.html')
 
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def Mydashboard(request):
+    print("Request=======>:", request)
+    user_details = {
+        'username': request.user.username,
+        'id': request.user.id,
+        'Role': request.user.Role,
+    }
     return render(request, 'Homepage_3.html')
 
 def profileupdate(request):
@@ -224,7 +235,15 @@ def profileupdate(request):
     return HttpResponse("Method not allowed")
 
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def Users(request):
+    print("Request=======>:", request)
+    user_details = {
+        'username': request.user.username,
+        'id': request.user.id,
+        'Role': request.user.Role,
+    }
     try:
         query_set = userlogin.objects.all()
         users_data = []
@@ -241,7 +260,7 @@ def Users(request):
             users_data.append(user_data)
             print(user_data)
 
-        return render(request, "Dash_Board_Users.html", {"data": users_data})
+        return render(request, "Dash_Board_Users.html", {"admindata": users_data})
 
     except userlogin.DoesNotExist:
         messages.error(request, "Users do not exist in the database.")
@@ -255,9 +274,12 @@ def createuser(request):
         lastname = request.POST.get("lastname")
         mobilenumber = request.POST.get("mobilenumber")
         try:
+            user = userlogin.objects.get(Q(username=username) | Q(mobilenumber=mobilenumber))
+            if user:
+                messages.error(request, "User Already Exist")
+                return redirect("Table_Users")
+
+        except:
             userlogin.objects.create(username=username,firstname=firstname,lastname=lastname,mobilenumber=mobilenumber)
             messages.success(request, "User Added Successfully")
-            return redirect("Table_Users")
-        except:
-            messages.error(request,"User does not added")
             return redirect("Table_Users")

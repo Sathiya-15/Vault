@@ -23,6 +23,7 @@ def Login(request):
                 user_details = {
                     'username': user.username,
                     'id': user.id,
+                    'Role': user.Role,
                 }
 
                 # Generate tokens with custom payload

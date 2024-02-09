@@ -509,6 +509,32 @@
     }
     {% endif %}
     {% endif %}
+
+    const token = localStorage.getItem('accessToken');
+    const refreshToken = localStorage.getItem('refreshToken');
+
+    const baseUrl = "{% url 'Table_Users' %}";
+
+
+    // Example of making an API request with the token
+    const apiUrl = `${baseUrl}Table_Users`;
+    fetch(apiUrl, {
+        method: 'GET',
+        headers: {
+            Authorization: `Bearer ${token}`,
+            // Include other headers as needed
+        },
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            // Handle the API response data
+            console.log(data);
+        })
+        .catch((error) => {
+            // Handle errors
+            console.error('Error:', error);
+        });
+
 </script>
 
 </html>
