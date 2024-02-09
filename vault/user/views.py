@@ -76,6 +76,30 @@ def Deleteuser(request, id):
 
     return HttpResponse("Invalid request method")  # Add a default response for other HTTP methods
 
+def Updateuser(request):
+    print("......",request)
+    username = request.POST.get("username")
+    firstname = request.POST.get("firstname")
+    lastname = request.POST.get("lastname")
+    mobilenumber = request.POST.get("mobilenumber")
+    Role = request.POST.get("Role")
+    print("========>", request)
+    if request.method == "POST":
+        try:
+            user = userlogin.objects.get(username=username)
+            user.username = username
+            user.firstname = firstname
+            user.lastname = lastname
+            user.mobilenumber = mobilenumber
+            user.Role = Role
+            user.save()
+            return redirect("Table_Users")
+
+        except:
+            messages.error(request, "User Not Found")
+            return redirect("Table_Users")
+
+
 # def Deleteuser(request, id):
 #     print("=========>", id)
 #     if request.method == "POST":
@@ -122,7 +146,7 @@ def Deleteuser(request, id):
 def Profile_View(request):
     if request.method == "GET":
         try:
-            users = userlogin.objects.get(id=3)
+            users = userlogin.objects.get(id=1)
             # Initialize lists to store data for all users
             # firstnames = []
             # lastnames = []
@@ -210,17 +234,18 @@ def Users(request):
                 'username': user.username,
                 'firstname': user.firstname,
                 'lastname': user.lastname,
-                'mobilenumber': user.mobilenumber
+                'mobilenumber': user.mobilenumber,
+                'Role': user.Role,
             }
 
             users_data.append(user_data)
             print(user_data)
 
-        return render(request, "Table_Users.html", {"data": users_data})
+        return render(request, "Dash_Board_Users.html", {"data": users_data})
 
     except userlogin.DoesNotExist:
         messages.error(request, "Users do not exist in the database.")
-        return render(request, 'Homepage_3.html')
+        return render(request, 'Dash_Board_Users.html')
 
 
 def createuser(request):

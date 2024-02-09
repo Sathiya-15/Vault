@@ -9,8 +9,12 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <!-- <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script> -->
 
+
+
     <title>Users_Table</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
         h1 {
             font-size: 30px;
             color: #fff;
@@ -114,10 +118,15 @@
             -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
         }
 
-        input,
+        input {
+            border: none;
+            background: transparent;
+        }
+
         button {
             border: none;
             background: transparent;
+            padding-left: 0px;
         }
 
         i {
@@ -127,6 +136,20 @@
         span {
             color: green;
             font-size: 19px;
+        }
+
+        #Role {
+            background: transparent;
+            border: none;
+        }
+
+        option {
+            background: black;
+        }
+
+        #pencil {
+            font-size: 17px;
+            color: purple;
         }
     </style>
 </head>
@@ -155,23 +178,31 @@
         <div class="tbl-content">
             <table cellpadding="0" cellspacing="0" border="0">
                 <tbody>
-                    {% for data in data %}
-                    <tr>
-                        <td>{{ forloop.counter }}</td>
-                        <td><input type="text" value="{{ data.username}}"></td>
-                        <td><input type="text" value="{{ data.firstname}}"></td>
-                        <td><input type="text" value="{{ data.lastname}}"></td>
-                        <td><input type="text" value="{{ data.mobilenumber}}"></td>
-                        <td><select id="Role" name="Role">
-                                <option value="Superadmin">Superadmin</option>
-                                <option value="Admin">Admin</option>
-                                <option value="Teacher">Teacher</option>
-                                <option value="Student">Student</option>
-                            </select></td>
-                        <td><a href="{% url 'Delete_User' id=data.username %}"><i style="font-size:24px"
-                                    class="fa">&#xf1f8;</i>
-                        </td></a>
-                    </tr>
+                    <form action="{% url 'Update_User' %}" method="post">
+                        {% csrf_token %}
+                        {% for data in data %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td><input type="text" value="{{ data.username}}"></td>
+                            <td><input type="text" value="{{ data.firstname}}"></td>
+                            <td><input type="text" value="{{ data.lastname}}"></td>
+                            <td><input type="text" value="{{ data.mobilenumber}}"></td>
+                            <td><select id="Role" name="Role">
+                                    <option value="Superadmin">
+                                        Superadmin</option>
+                                    <option value="Admin">Admin</option>
+                                    <option value="Teacher">Teacher
+                                    </option>
+                                    <option value="Student">Student
+                                    </option>
+                                </select></td>
+                            <td><a href="{% url 'Delete_User' id=data.username %}"><i style="font-size:22px"
+                                        class="fa">&#xf1f8;</i></a>&emsp;&emsp;<button type="submit" id="pencil"
+                                    class="glyphicon glyphicon-pencil"></button>
+                                </button>
+                            </td>
+                        </tr>
+                    </form>
                     {% endfor %}
                     <form action="{% url 'createuser' %}" method="post">
                         {% csrf_token %}
@@ -217,7 +248,7 @@
     <div class="made-with-love">
         Made with
         <i>♥</i> by
-        <a target="_blank" href="https://codepen.io/nikhil8krishnan">Sathiya Narayanan M</a>
+        <a target="_blank" href="https://www.instagram.com/v.e.d.h.a_15?igsh=MzNlNGNkZWQ4Mg==">Sathiya Narayanan M</a>
     </div>
 
     <script>

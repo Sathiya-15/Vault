@@ -279,9 +279,9 @@
 <body>
     <div class="titleone">
         <h2> WELCOME </h2>&ensp;&ensp;
-        <h2 style="color: #212F5E;"> VAULT </h2>
+        <h2 style="color: #212F5E;"> LOGIN </h2>
     </div>
-    <div class="container" id="container">
+    <div class="container" id="container" style="background:fixed;">
         <div class="form-container sign-up-container">
             <form action="{% url 'Createnewaccount' %}" method="POST">
                 <h1>Create Account</h1>
@@ -296,7 +296,6 @@
                 <input type="email" placeholder="Email" name="username" />
                 <input type="password" placeholder="Password" name="password" />
                 <input type="password" placeholder="RetypePassword" name="retypepassword" />
-                <input type="">
                 <button>Sign Up</button>
             </form>
         </div>
@@ -330,7 +329,6 @@
             </div>
         </div>
     </div>
-
 </body>
 
 <script>

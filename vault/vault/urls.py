@@ -35,7 +35,8 @@ urlpatterns = [
     path("Forgotpassword/", login_view.Forgot, name='Forgotpassword'),
     path("Mydashboard/", user_views.Mydashboard, name="Userhomepage"),
     path("Users/", user_views.Users, name="Table_Users"),
-    path("createuser/",user_views.createuser,name="createuser"),
+    path("createuser/", user_views.createuser,name="createuser"),
+    path("UpdateUser/", user_views.Updateuser, name="Update_User"),
 ]
 
 
