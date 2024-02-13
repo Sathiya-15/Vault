@@ -1,3 +1,4 @@
+import jwt
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from login.models import userlogin
@@ -241,65 +242,61 @@ def Users(request):
     print("headers=======>:", headers)
     authorization_header = request.headers.get('Authorization')
     print("authorization_header:========>", authorization_header)
-
+    print("SECRET_KEY:", settings.SECRET_KEY)
     try:
         decoded_token = jwt.decode(authorization_header, settings.SECRET_KEY, algorithms=['HS256'])
+        print("decoded_token:=============>>", decoded_token)
         username = decoded_token.get('username', None)
         user_id = decoded_token.get('user_id', None)
         Role = decoded_token.get('Role', None)
         print("username:=====================>", username)
-        print("username:=====================>", Role)
+        print("Role:=====================>", Role)
+        print("user_id:=====================>", user_id)
+
+        if Role == 'Superadmin':
+            print("!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+            try:
+                query_set = userlogin.objects.all()
+                users_data = []
+                for user in query_set:
+                    user_data = {
+                        'username': user.username,
+                        'firstname': user.firstname,
+                        'lastname': user.lastname,
+                        'mobilenumber': user.mobilenumber,
+                        'Role': user.Role,
+                    }
+                    users_data.append(user_data)
+                    print(user_data)
+                    return render(request, "Dash_Board_Users.html", {"admindata": users_data})
+
+            except userlogin.DoesNotExist:
+                messages.error(request, "Users do not exist in the database.")
+                return render(request, 'Dash_Board_Users.html')
+
+        if Role == 'Teacher':
+            try:
+                query_set = userlogin.objects.filter(Role=['Student', 'Student-Leader'])
+                users_data = []
+                for user in query_set:
+                    user_data = {
+                        'username': user.username,
+                        'firstname': user.firstname,
+                        'lastname': user.lastname,
+                        'mobilenumber': user.mobilenumber,
+                        'Role': user.Role,
+                    }
+                    users_data.append(user_data)
+                    print(user_data)
+
+                return render(request, "Dash_Board_Users.html", {"teacherdata": users_data})
+
+            except userlogin.DoesNotExist:
+                messages.error(request, "Users do not exist in the database.")
+                return render(request, 'Dash_Board_Users.html')
 
     except:
         print("Token Not Available")
-
-    try:
-        query_set = userlogin.objects.all()
-        users_data = []
-
-        for user in query_set:
-            user_data = {
-                'username': user.username,
-                'firstname': user.firstname,
-                'lastname': user.lastname,
-                'mobilenumber': user.mobilenumber,
-                'Role': user.Role,
-            }
-            users_data.append(user_data)
-            print(user_data)
-
-        return render(request, "Dash_Board_Users.html", {"admindata": users_data})
-
-    except userlogin.DoesNotExist:
-        messages.error(request, "Users do not exist in the database.")
-        return render(request, 'Dash_Board_Users.html')
-
-
-# def Users(request):
-#     headers = request.headers
-#     print("headers=======>:", headers)
-#     authorization_header = request.headers.get('Authorization')
-#     print("authorization_header:========>", authorization_header)
-#     try:
-#         query_set = userlogin.objects.filter(Role=['Student', 'Student-Leader'])
-#         users_data = []
-#         for user in query_set:
-#             user_data = {
-#                 'username': user.username,
-#                 'firstname': user.firstname,
-#                 'lastname': user.lastname,
-#                 'mobilenumber': user.mobilenumber,
-#                 'Role': user.Role,
-#             }
-#             users_data.append(user_data)
-#             print(user_data)
-#
-#         return render(request, "Dash_Board_Users.html", {"teacherdata": users_data})
-#
-#     except userlogin.DoesNotExist:
-#         messages.error(request, "Users do not exist in the database.")
-#         return render(request, 'Dash_Board_Users.html')
-
 
 def createuser(request):
     if request.method == "POST":
