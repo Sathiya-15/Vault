@@ -65,7 +65,6 @@ def Createnewaccount(request):
 
 @csrf_exempt
 def Deleteuser(request, id):
-    print("=========>", id)
     if request.method == "GET":
         try:
             user = get_object_or_404(userlogin, username=id)
@@ -79,7 +78,7 @@ def Deleteuser(request, id):
     return HttpResponse("Invalid request method")  # Add a default response for other HTTP methods
 
 def Updateuser(request):
-    print("......",request)
+    print("......", request)
     username = request.POST.get("username")
     firstname = request.POST.get("firstname")
     lastname = request.POST.get("lastname")
@@ -235,15 +234,14 @@ def profileupdate(request):
     return HttpResponse("Method not allowed")
 
 
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
+# @api_view(['GET'])
+# @permission_classes([IsAuthenticated])
 def Users(request):
-    print("Request=======>:", request)
-    user_details = {
-        'username': request.user.username,
-        'id': request.user.id,
-        'Role': request.user.Role,
-    }
+    headers = request.headers
+    print("headers=======>:", headers)
+    authorization_header = request.headers.get('Authorization')
+    print("authorization_header:========>",authorization_header)
+
     try:
         query_set = userlogin.objects.all()
         users_data = []
@@ -256,7 +254,6 @@ def Users(request):
                 'mobilenumber': user.mobilenumber,
                 'Role': user.Role,
             }
-
             users_data.append(user_data)
             print(user_data)
 
@@ -273,6 +270,7 @@ def createuser(request):
         firstname = request.POST.get("firstname")
         lastname = request.POST.get("lastname")
         mobilenumber = request.POST.get("mobilenumber")
+        Role = request.POST.get("Role")
         try:
             user = userlogin.objects.get(Q(username=username) | Q(mobilenumber=mobilenumber))
             if user:
@@ -280,6 +278,17 @@ def createuser(request):
                 return redirect("Table_Users")
 
         except:
-            userlogin.objects.create(username=username,firstname=firstname,lastname=lastname,mobilenumber=mobilenumber)
+            userlogin.objects.create(username=username,firstname=firstname,lastname=lastname,mobilenumber=mobilenumber,Role=Role)
             messages.success(request, "User Added Successfully")
             return redirect("Table_Users")
+
+def list_profile(request,id):
+    print("id========>:", id)
+    if request.method == "GET":
+        try:
+            user = userlogin.objects.get(username=id)
+            return render(request, 'My_Profile2.html', {'data': user})
+
+        except userlogin.DoesNotExist:
+            messages.error(request, "No Data in Database")
+            return render(request, 'My_Profile2.html')

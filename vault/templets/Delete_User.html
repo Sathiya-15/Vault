@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/png" href="{% static 'images/icon2.png' %}">
     <title>Delete User</title>
 </head>
 
@@ -15,11 +17,12 @@
 {% endif %}
 
 <body>
-<h3>Delete User</h3>
+    <h3>Delete User</h3>
     <form action="" method="POST" name="deleteuser">
         {% csrf_token %}
         <input type="text" name="username" placeholder="username">
         <button type="submit">Submit</button>
     </form>
 </body>
+
 </html>

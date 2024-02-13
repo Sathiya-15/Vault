@@ -37,6 +37,7 @@ urlpatterns = [
     path("Users/", user_views.Users, name="Table_Users"),
     path("createuser/", user_views.createuser,name="createuser"),
     path("UpdateUser/", user_views.Updateuser, name="Update_User"),
+    path("listuser/<str:id>/", user_views.list_profile, name="list_profile"),
 ]
 
 

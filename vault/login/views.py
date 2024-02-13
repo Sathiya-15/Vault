@@ -67,10 +67,10 @@ def Login(request):
 @csrf_exempt
 def Forgot(request):
     if request.method == "GET":
-        return render(request, 'Password_Reset.html')
+        return render(request, 'Password_Reset_2.html')
 
     if request.method == "DELETE":
-        return render(request, 'Password_Reset.html')
+        return render(request, 'Password_Reset_2.html')
 
     if request.method == "POST":
         username = request.POST.get("username")
@@ -90,13 +90,13 @@ def Forgot(request):
 
                else:
                    messages.error(request, "Password doesn't Match")
-                   return render(request, 'Password_Reset.html', {'error': 'Passwords do not match'})
+                   return render(request, 'Password_Reset_2.html', {'error': 'Passwords do not match'})
 
         except userlogin.DoesNotExist:
             messages.error(request, "User does not Exist")
             return render(request, 'Password_Reset.html', {'error': 'User does not exist'})
 
-    return render(request, 'Password_Reset.html')
+    return render(request, 'Password_Reset_2.html')
 
 def Logout(request):
     return redirect("Login")

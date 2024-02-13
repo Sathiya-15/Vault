@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="style.css">
     <!----===== Boxicons CSS ===== -->
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="shortcut icon" type="image/png" href="{% static 'images/icon1.png' %}" />
+    <link rel="shortcut icon" type="image/png" href="{% static 'images/icon2.png' %}" />
 
     <title>Dashboard</title>
     <style>
@@ -566,22 +566,22 @@
                             {% for data in admindata %}
                             <tr>
                                 <td>{{ forloop.counter }}</td>
-                                <td><input type="text" value="{{ data.username}}"></td>
-                                <td><input type="text" value="{{ data.firstname}}"></td>
-                                <td><input type="text" value="{{ data.lastname}}"></td>
-                                <td><input type="text" value="{{ data.mobilenumber}}"></td>
+                                <td><a style="cursor: pointer;" href="{% url 'list_profile' id=data.username %}"><input type="text" name="username" value="{{ data.username}}"></a></td>
+                                <td><input type="text" name="firstname" value="{{ data.firstname}}"></td>
+                                <td><input type="text" name="lastname" value="{{ data.lastname}}"></td>
+                                <td><input type="text" name="mobilenumber" value="{{ data.mobilenumber}}"></td>
                                 <td>
                                     <select id="Role" name="Role">
-                                        <option value="Superadmin">
+                                        <option value="Superadmin" {% if data.Role == 'Superadmin' %}selected{% endif %}>
                                             Superadmin
                                         </option>
-                                        <option value="Admin">
+                                        <option value="Admin" {% if data.Role == 'Admin' %}selected{% endif %}>
                                             Admin
                                         </option>
-                                        <option value="Teacher">
+                                        <option value="Teacher" {% if data.Role == 'Teacher' %}selected{% endif %}>
                                             Teacher
                                         </option>
-                                        <option value="Student">
+                                        <option value="Student" {% if data.Role == 'Student' %}selected{% endif %}>
                                             Student
                                         </option>
                                     </select>
@@ -621,7 +621,6 @@
             </div>
         </div>
     </section>
-
 
     <script src="script.js"></script>
 

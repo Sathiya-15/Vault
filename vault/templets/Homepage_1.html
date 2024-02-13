@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <link rel="shortcut icon" type="image/png" href="{% static 'images/icon1.png' %}">
+    <link rel="shortcut icon" type="image/png" href="{% static 'images/icon2.png' %}">
 
     <style>
         /* li {
@@ -37,19 +37,19 @@
         } */
 
         /* .nav { */
-            /* background: radial-gradient(circle, rgba(105,75,238,1) 0%, rgba(248,0,255,1) 100%); */
-            /* background-color: #b66ffc;
+        /* background: radial-gradient(circle, rgba(105,75,238,1) 0%, rgba(248,0,255,1) 100%); */
+        /* background-color: #b66ffc;
         } */
 
         .sidebar {
             height: 100vh;
             width: 40vh;
-            background-color:#b66ffc;
+            background-color: #b66ffc;
             text-align: center;
             padding: 20px;
         }
 
-         .sidebar a {
+        .sidebar a {
             color: black;
         }
 
@@ -88,7 +88,7 @@
 {% endif %}
 
 <body>
-<!-- <body id="bg" style="background-image:url('{% static 'images/back.png' %}')"> -->
+    <!-- <body id="bg" style="background-image:url('{% static 'images/back.png' %}')"> -->
 
 
     <!-- <nav class="nav" class="navbar navbar-inverse">
@@ -114,23 +114,24 @@
         <a href="{% url 'Myprofile' %}">Myprofile</a><br><br><br>
         <!-- <button onclick="closeSidebar()" class="buttonx" style="font-size: large;">X</button><br><br><br> -->
     </div>
-<script>
-    {% if access_token %}
-    {% if refresh_token %}
-    var accessToken = "{{ access_token }}";
-    var refreshtoken = "{{ refresh_token }}"
-    localStorage.setItem('accessToken', accessToken);
-    localStorage.setItem('refreshToken', refreshtoken);
-    if (accessToken, refreshtoken) {
-        console.log('Access Token found:', accessToken);
-        console.log('Refresh Token found:', refreshtoken);
-    } else {
-        console.log('Access Token not found');
-        console.log('Refresh Token not found');
-    }
-    {% endif %}
-    {% endif %}
-</script>
+    <script>
+        {% if access_token %}
+        {% if refresh_token %}
+        var accessToken = "{{ access_token }}";
+        var refreshtoken = "{{ refresh_token }}"
+        localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('refreshToken', refreshtoken);
+        if (accessToken, refreshtoken) {
+            console.log('Access Token found:', accessToken);
+            console.log('Refresh Token found:', refreshtoken);
+        } else {
+            console.log('Access Token not found');
+            console.log('Refresh Token not found');
+        }
+        {% endif %}
+        {% endif %}
+    </script>
 
 </body>
+
 </html>
