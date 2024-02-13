@@ -18,12 +18,10 @@ from login.serializer import userloginserializer
 def Createnewaccount(request):
     if request.method == "POST":
         firstname = request.POST.get("firstname")
-        # lastname = request.POST.get("lastname")
         mobilenumber = request.POST.get("mobilenumber")
         username = request.POST.get("username")
         password = request.POST.get("password")
         retypepassword = request.POST.get("retypepassword")
-        # imageUpload = request.FILES.get("imageUpload")
         try:
             user = userlogin.objects.get(Q(username=username) | Q(mobilenumber=mobilenumber))
             if user:
@@ -63,6 +61,7 @@ def Createnewaccount(request):
 #             messages.error(request, "User Doesnot Exist")
 #             return render(request, 'Table_Users.html')
 
+
 @csrf_exempt
 def Deleteuser(request, id):
     if request.method == "GET":
@@ -77,8 +76,8 @@ def Deleteuser(request, id):
 
     return HttpResponse("Invalid request method")  # Add a default response for other HTTP methods
 
+
 def Updateuser(request):
-    print("......", request)
     username = request.POST.get("username")
     firstname = request.POST.get("firstname")
     lastname = request.POST.get("lastname")
@@ -194,6 +193,7 @@ def Mydashboard(request):
     }
     return render(request, 'Homepage_3.html')
 
+
 def profileupdate(request):
     if request.method == "POST":
         username = request.POST.get("username")
@@ -206,7 +206,6 @@ def profileupdate(request):
         address = request.POST.get("address")
         city = request.POST.get("city")
         country = request.POST.get("country")
-        # pincode = request.POST.get("pincode")
         aboutme = request.POST.get("aboutme")
         try:
             user = userlogin.objects.get(username=username)
@@ -234,13 +233,25 @@ def profileupdate(request):
     return HttpResponse("Method not allowed")
 
 
+from vault import settings
 # @api_view(['GET'])
 # @permission_classes([IsAuthenticated])
 def Users(request):
     headers = request.headers
     print("headers=======>:", headers)
     authorization_header = request.headers.get('Authorization')
-    print("authorization_header:========>",authorization_header)
+    print("authorization_header:========>", authorization_header)
+
+    try:
+        decoded_token = jwt.decode(authorization_header, settings.SECRET_KEY, algorithms=['HS256'])
+        username = decoded_token.get('username', None)
+        user_id = decoded_token.get('user_id', None)
+        Role = decoded_token.get('Role', None)
+        print("username:=====================>", username)
+        print("username:=====================>", Role)
+
+    except:
+        print("Token Not Available")
 
     try:
         query_set = userlogin.objects.all()
@@ -264,6 +275,32 @@ def Users(request):
         return render(request, 'Dash_Board_Users.html')
 
 
+# def Users(request):
+#     headers = request.headers
+#     print("headers=======>:", headers)
+#     authorization_header = request.headers.get('Authorization')
+#     print("authorization_header:========>", authorization_header)
+#     try:
+#         query_set = userlogin.objects.filter(Role=['Student', 'Student-Leader'])
+#         users_data = []
+#         for user in query_set:
+#             user_data = {
+#                 'username': user.username,
+#                 'firstname': user.firstname,
+#                 'lastname': user.lastname,
+#                 'mobilenumber': user.mobilenumber,
+#                 'Role': user.Role,
+#             }
+#             users_data.append(user_data)
+#             print(user_data)
+#
+#         return render(request, "Dash_Board_Users.html", {"teacherdata": users_data})
+#
+#     except userlogin.DoesNotExist:
+#         messages.error(request, "Users do not exist in the database.")
+#         return render(request, 'Dash_Board_Users.html')
+
+
 def createuser(request):
     if request.method == "POST":
         username = request.POST.get("username")
@@ -282,7 +319,8 @@ def createuser(request):
             messages.success(request, "User Added Successfully")
             return redirect("Table_Users")
 
-def list_profile(request,id):
+
+def list_profile(request, id):
     print("id========>:", id)
     if request.method == "GET":
         try:
