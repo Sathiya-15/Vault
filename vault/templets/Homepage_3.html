@@ -353,20 +353,20 @@
 {% endif %} {% endfor %} {% endif %}
 
 <body>
-    {% if data %} {% csrf_token %}
     <nav class="sidebar close">
         <header>
             <div class="image-text">
                 <!-- <span class="image">
                     <img src="logo.png" alt="">
                 </span> -->
-
+                
+                {% if data %} {% csrf_token %}
                 <div class="text logo-text">
                     <span class="name">{{data.username}}</span>
-                    <span class="profession">Web developer</span>
+                    <span class="profession">{{data.Role}}</span>
                 </div>
             </div>
-
+            {% endif %}
             <i class='bx bx-chevron-right toggle'></i>
         </header>
 
@@ -380,16 +380,17 @@
 
                 <ul class="menu-links">
                     <li class="nav-link">
-                        <a id="TableUsers" href="{% url 'Table_Users' %}">
+                        <a href="{% url 'Table_Users' %}">
                             <i class='bx bx-home-alt icon'></i>
                             <span class="text nav-text">Dashboard</span>
                         </a>
+                        
                     </li>
 
                     <li class="nav-link">
                         <a href="#">
                             <i class='bx bx-bar-chart-alt-2 icon'></i>
-                            <span class="text nav-text">Revenue</span>
+                            <span class="text nav-text">Leaderboards</span>
                         </a>
                     </li>
 
@@ -401,9 +402,9 @@
                     </li>
 
                     <li class="nav-link">
-                        <a href="#">
+                        <a href="{% url 'attendence' %}">
                             <i class='bx bx-pie-chart-alt icon'></i>
-                            <span class="text nav-text">Analytics</span>
+                            <span class="text nav-text">Attendence</span>
                         </a>
                     </li>
 
@@ -417,7 +418,7 @@
                     <li class="nav-link">
                         <a href="#">
                             <i class='bx bx-wallet icon'></i>
-                            <span class="text nav-text">Wallets</span>
+                            <span class="text nav-text">Fees</span>
                         </a>
                     </li>
 
@@ -456,13 +457,176 @@
     </nav>
 
     <section class="home">
-        <div class="text">Dashboard</div>
+        <div class="text">Welcome !</div>
+        <img style="margin-left: 400px; margin-top: 30px;" src="{% static 'images/Custom.png' %}" alt="CRM" width="600" height="600">
     </section>
 
-    {% else %}
-    <p>No data available</p>
+    {% if admindata %}
+    <section class="home">
+        <div class="text">Dashboard - User's<br><br>
+            <div style="background-color: white; border-radius: 25px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            border-collapse: collapse; /* Optional: Remove border spacing between cells */
+            width: 100%;">
+                <h3 style="padding: 20px;">User's Table</h3><br>
+                <table class="table" style="display: flexbox;
+            overflow: auto; width: 100%; padding: 10px; height: 100%;">
+                    <thead>
+                        <tr>
+                            <th>S.No</th>
+                            <th>Username</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Mobilenumber</th>
+                            <th>Role</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <form action="{% url 'Update_User' %}" method="post">
+                            {% for data in admindata %}
+                            {% csrf_token %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td><a style="cursor: pointer;" href="{% url 'list_profile' id=data.username %}"><input type="text" name="username" value="{{ data.username}}"></a></td>
+                                <td><input type="text" name="firstname" value="{{ data.firstname}}"></td>
+                                <td><input type="text" name="lastname" value="{{ data.lastname}}"></td>
+                                <td><input type="text" name="mobilenumber" value="{{ data.mobilenumber}}"></td>
+                                <td>
+                                    <select id="Role" name="Role">
+                                        <option value="Superadmin" {% if data.Role == 'Superadmin' %}selected{% endif %}>
+                                            Superadmin
+                                        </option>
+                                        <option value="Admin" {% if data.Role == 'Admin' %}selected{% endif %}>
+                                            Admin
+                                        </option>
+                                        <option value="Teacher" {% if data.Role == 'Teacher' %}selected{% endif %}>
+                                            Teacher
+                                        </option>
+                                        <option value="Student" {% if data.Role == 'Student' %}selected{% endif %}>
+                                            Student
+                                        </option>
+                                    </select>
+                                </td>
+                                <td><a href="{% url 'Delete_User' id=data.username %}"><i style="font-size:22px"
+                                            class="fa">&#xf1f8;</i></a>&emsp;&emsp;<button type="submit" id="pencil"
+                                        class="glyphicon glyphicon-pencil"></button>
+                                    </button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </form>
+                        <form action="{% url 'createuser' %}" method="post">
+                            {% csrf_token %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td><input type="text" name="username" placeholder="New Username"></td>
+                                <td><input type="text" name="firstname" placeholder="New Firstname"></td>
+                                <td><input type="text" name="lastname" placeholder="New Lastname"></td>
+                                <td><input type="text" name="mobilenumber" placeholder="New Mobilenumber"></td>
+                                <td><select id="Role" name="Role">
+                                        <option value="Default">Default</option>
+                                        <option value="Superadmin">Superadmin</option>
+                                        <option value="Admin">Admin</option>
+                                        <option value="Teacher">Teacher</option>
+                                        <option value="Student">Student</option>
+                                    </select></td>
+                                <td><button>
+                                        <span class="glyphicon glyphicon-ok">&emsp;<button type="reset"><i
+                                                    class="material-icons"
+                                                    style="font-weight: 24px; text-align: center;">&#xe14c;</i></button></span>
+                                    </button></td>
+                            </tr>
+                        </form>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    {% elif teacherdata %}
+    <section class="home">
+        <div class="text">Student - Table<br><br>
+            <div style="background-color: white; border-radius: 25px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            border-collapse: collapse; /* Optional: Remove border spacing between cells */
+            width: 100%;">
+                <h3 style="padding: 20px;">Student's Table</h3><br>
+                <table class="table" style="display: flexbox;
+            overflow: auto; width: 100%; padding: 10px; height: 100%;">
+                    <thead>
+                        <tr>
+                            <th>S.No</th>
+                            <th>Username</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Mobilenumber</th>
+                            <th>Role</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <form action="{% url 'Update_User' %}" method="post">
+                        {% for data in teacherdata %}
+                            {% csrf_token %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td><a style="cursor: pointer;" href="{% url 'list_profile' id=data.username %}"><input type="text" name="username" value="{{ data.username}}"></a></td>
+                                <td><input type="text" name="firstname" value="{{ data.firstname}}"></td>
+                                <td><input type="text" name="lastname" value="{{ data.lastname}}"></td>
+                                <td><input type="text" name="mobilenumber" value="{{ data.mobilenumber}}"></td>
+                                <td>
+                                    <select id="Role" name="Role">
+                                        <option value="Superadmin" {% if data.Role == 'Superadmin' %}selected{% endif %}>
+                                            Superadmin
+                                        </option>
+                                        <option value="Admin" {% if data.Role == 'Admin' %}selected{% endif %}>
+                                            Admin
+                                        </option>
+                                        <option value="Teacher" {% if data.Role == 'Teacher' %}selected{% endif %}>
+                                            Teacher
+                                        </option>
+                                        <option value="Student" {% if data.Role == 'Student' %}selected{% endif %}>
+                                            Student
+                                        </option>
+                                    </select>
+                                </td>
+                                <td><a href="{% url 'Delete_User' id=data.username %}"><i style="font-size:22px"
+                                            class="fa">&#xf1f8;</i></a>&emsp;&emsp;<button type="submit" id="pencil"
+                                        class="glyphicon glyphicon-pencil"></button>
+                                    </button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </form>
+
+                        <form action="{% url 'createuser' %}" method="post">
+                            {% csrf_token %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td><input type="text" name="username" placeholder="New Username"></td>
+                                <td><input type="text" name="firstname" placeholder="New Firstname"></td>
+                                <td><input type="text" name="lastname" placeholder="New Lastname"></td>
+                                <td><input type="text" name="mobilenumber" placeholder="New Mobilenumber"></td>
+                                <td><select id="Role" name="Role">
+                                        <option value="Student">Student</option>
+                                        <option value="Student-CO-Ordinator">Student - CO-Ordinator</option>
+                                        <option value="Student-Leader">Student - Leader</option>
+                                    </select></td>
+                                <td><button>
+                                        <span class="glyphicon glyphicon-ok">&emsp;<button type="reset"><i
+                                                    class="material-icons"
+                                                    style="font-weight: 24px; text-align: center;">&#xe14c;</i></button></span>
+                                    </button></td>
+                            </tr>
+                        </form>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
     {% endif %}
-</body>
+
+
+    
 <script>
     const body = document.querySelector('body'),
         sidebar = body.querySelector('nav'),
@@ -470,7 +634,6 @@
         searchBtn = body.querySelector(".search-box"),
         modeSwitch = body.querySelector(".toggle-switch"),
         modeText = body.querySelector(".mode-text");
-
 
     toggle.addEventListener("click", () => {
         sidebar.classList.toggle("close");
@@ -507,26 +670,34 @@
     {% endif %}
     {% endif %}
 
-    const token = sessionStorage.getItem('accessToken');
 
-    fetch('http://127.0.0.1:8000/', {
-        method: 'GET',
-        headers:{
-            'Authorization': token,
-        },
-    })
-    .then(response => {
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    }
-    return response.json();
-  })
-  .then(data => {
-    console.log(data);
-  })
-  .catch(error => {
-    console.error('Error:', error);
-  });
+    var accessToken = sessionStorage.getItem('accessToken');
+
+// var xhr = new XMLHttpRequest();
+// xhr.open('GET', "{% url 'Table_Users' %}", true);
+// xhr.setRequestHeader('Authorization', accessToken);
+
+function makeApiRequest() {
+    fetch("{% url 'Table_Users' %}", {
+            headers: {
+                'Authorization': accessToken,
+            }
+        })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    // return response.json();
+                    console.log("response",response);
+                })
+                // .then(data => {
+                //     document.getElementById('result').innerHTML = JSON.stringify(data);
+                // })
+                .catch(error => {
+                    console.error('There was a problem with the fetch operation:', error);
+                });
+        }
+        makeApiRequest()
 
 function logout() {
   sessionStorage.removeItem('accessToken');
@@ -535,5 +706,5 @@ function logout() {
 document.getElementById('logoutButton').addEventListener('click', logout);
 
 </script>
-
+</body>
 </html>

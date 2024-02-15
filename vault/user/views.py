@@ -1,4 +1,5 @@
 import jwt
+from vault import settings
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from login.models import userlogin
@@ -75,7 +76,7 @@ def Deleteuser(request, id):
             messages.error(request, "User Does Not Exist")
             return render(request, 'Table_Users.html')
 
-    return HttpResponse("Invalid request method")  # Add a default response for other HTTP methods
+    return HttpResponse("Invalid request method")
 
 
 def Updateuser(request):
@@ -117,7 +118,7 @@ def Updateuser(request):
 #         return render(request, 'Table_Users.html')
 
 
-#::::::::::::::::::::::::::::::::::::USING SERIALIZERS IF YOU WANT THIS USE CLASS METHOD:::::::::::::::::::::::::::::::::::::
+#::::::::::::::::::::::::::::::::::::USING SERIALIZERS YOU NEED CLASS METHOD:::::::::::::::::::::::::::::::::::::
 #
 # def Profile_View(request):
 #     if request.method == "GET":
@@ -141,14 +142,16 @@ def Updateuser(request):
 #             messages.error(request, "No Data in Database")
 #             return render(request, 'myprofile.html')
 #
-#::::::::::::::::::::::::::::::::::::USING SERIALIZERS IF YOU WANT THIS USE CLASS METHOD:::::::::::::::::::::::::::::::::::::
+#::::::::::::::::::::::::::::::::::::USING SERIALIZERS IF YOU WANT THIS USE CLASS METHOD::::::::::::::::::::::::
 
 
+
+# @api_view(['GET'])
+# @permission_classes([IsAuthenticated])
 def Profile_View(request):
     if request.method == "GET":
         try:
             users = userlogin.objects.get(id=1)
-            # Initialize lists to store data for all users
             # firstnames = []
             # lastnames = []
             # mobilenumbers = []
@@ -183,8 +186,7 @@ def Profile_View(request):
             return render(request, 'My_Profile2.html')
 
 
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
+
 def Mydashboard(request):
     print("Request=======>:", request)
     user_details = {
@@ -193,6 +195,7 @@ def Mydashboard(request):
         'Role': request.user.Role,
     }
     return render(request, 'Homepage_3.html')
+
 
 
 def profileupdate(request):
@@ -230,32 +233,31 @@ def profileupdate(request):
             messages.error(request, "User Does not Exist")
             return render(request, "My_Profile2.html")
 
-    # Return a response for the case where request.method is not "POST"
     return HttpResponse("Method not allowed")
 
 
-from vault import settings
+
 # @api_view(['GET'])
 # @permission_classes([IsAuthenticated])
 def Users(request):
     headers = request.headers
-    print("headers=======>:", headers)
+    print("headers=======================>:", headers)
     authorization_header = request.headers.get('Authorization')
-    print("authorization_header:========>", authorization_header)
+    print("authorization_header:=========>", authorization_header)
     print("SECRET_KEY:", settings.SECRET_KEY)
-    try:
-        decoded_token = jwt.decode(authorization_header, settings.SECRET_KEY, algorithms=['HS256'])
-        print("decoded_token:=============>>", decoded_token)
-        username = decoded_token.get('username', None)
-        user_id = decoded_token.get('user_id', None)
-        Role = decoded_token.get('Role', None)
-        print("username:=====================>", username)
-        print("Role:=====================>", Role)
-        print("user_id:=====================>", user_id)
 
-        if Role == 'Superadmin':
-            print("!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-            try:
+    try:
+        if authorization_header:
+            decoded_token = jwt.decode(authorization_header, settings.SECRET_KEY, algorithms=['HS256'])
+            print("decoded_token:================>", decoded_token)
+            username = decoded_token.get('username', None)
+            user_id = decoded_token.get('user_id', None)
+            Role = decoded_token.get('Role', None)
+            print("username:=====================>", username)
+            print("Role:=========================>", Role)
+            print("user_id:======================>", user_id)
+
+            if Role == 'Superadmin':
                 query_set = userlogin.objects.all()
                 users_data = []
                 for user in query_set:
@@ -267,16 +269,11 @@ def Users(request):
                         'Role': user.Role,
                     }
                     users_data.append(user_data)
-                    print(user_data)
-                    return render(request, "Dash_Board_Users.html", {"admindata": users_data})
+                    print("user_data:====================>", user_data)
+                return render(request, "Homepage_3.html", {"admindata": users_data})
 
-            except userlogin.DoesNotExist:
-                messages.error(request, "Users do not exist in the database.")
-                return render(request, 'Dash_Board_Users.html')
-
-        if Role == 'Teacher':
-            try:
-                query_set = userlogin.objects.filter(Role=['Student', 'Student-Leader'])
+            elif Role == 'Teacher':
+                query_set = userlogin.objects.filter(Role__in=['Student', 'Student-Leader', 'Student-CO-Ordinator'])
                 users_data = []
                 for user in query_set:
                     user_data = {
@@ -287,16 +284,33 @@ def Users(request):
                         'Role': user.Role,
                     }
                     users_data.append(user_data)
-                    print(user_data)
+                    print("user_data:====================>", user_data)
+                return render(request, "Homepage_3.html", {"teacherdata": users_data})
 
-                return render(request, "Dash_Board_Users.html", {"teacherdata": users_data})
+        else:
+            return render(request, "Homepage_3.html")
 
-            except userlogin.DoesNotExist:
-                messages.error(request, "Users do not exist in the database.")
-                return render(request, 'Dash_Board_Users.html')
+    except userlogin.DoesNotExist:
+        messages.error(request, "Users do not exist in the database.")
+        return render(request, "Homepage_3.html")
 
-    except:
-        print("Token Not Available")
+
+def attendence(request):
+    if request.method == "GET":
+        return render(request, "Dash.html")
+
+    if request.method == "POST":
+        log_in_at = request.POST.get("login_at")
+        try:
+            user = userlogin.objects.get(id=1)
+            if user:
+                attendance = attendence.objects.create(userlogin=user, log_in_at=log_in_at)
+                print("attendance:=============>", attendance)
+                return render(request, "Dash.html", {"attendance": attendance})
+        except:
+            messages.error(request, "User Not Found")
+            return render(request, "Dash.html")
+
 
 def createuser(request):
     if request.method == "POST":

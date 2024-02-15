@@ -116,7 +116,7 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8000",  # Replace with the actual origin of your frontend
+    "http://localhost:8000",
 ]
 
 MESSAGE_TAGS = {

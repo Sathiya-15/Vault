@@ -25,19 +25,22 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 urlpatterns = [
-    path("logout/", login_view.Logout, name="Logout"),
-    path("admin/", admin.site.urls),
-    path("", login_view.Login, name="Login"),
-    path("Deleteuser/<str:id>/", user_views.Deleteuser, name="Delete_User"),
-    path("Myprofile/", user_views.Profile_View, name="Myprofile"),
-    path("profileupdate/", user_views.profileupdate, name="profileupdate"),
-    path("Newaccountcreation/", user_views.Createnewaccount, name="Createnewaccount"),
-    path("Forgotpassword/", login_view.Forgot, name='Forgotpassword'),
-    path("Mydashboard/", user_views.Mydashboard, name="Userhomepage"),
-    path("Users/", user_views.Users, name="Table_Users"),
-    path("createuser/", user_views.createuser,name="createuser"),
+    path("Logout/", login_view.Logout, name="Logout"),
+    path("Admin/", admin.site.urls),
+    path("", login_view.Login),
+    path("LoggedInUser/", login_view.loguser, name="Login"),
+    path("DeleteUser/<str:id>/", user_views.Deleteuser, name="Delete_User"),
+    path("MyProfile/", user_views.Profile_View, name="Myprofile"),
+    path("ProfileUpdate/", user_views.profileupdate, name="profileupdate"),
+    path("NewAccountCreation/", user_views.Createnewaccount, name="Createnewaccount"),
+    path("ForgotPassword/", login_view.Forgot, name='Forgotpassword'),
+    path("MyDashBoard/", user_views.Mydashboard, name="Userhomepage"),
+    path("DashBoard/", user_views.Users, name="Table_Users"),
+    # path("dash/", user_views.sathya, name="sathya"),
+    path("CreateUser/", user_views.createuser, name="createuser"),
     path("UpdateUser/", user_views.Updateuser, name="Update_User"),
-    path("listuser/<str:id>/", user_views.list_profile, name="list_profile"),
+    path("UserView/<str:id>/", user_views.list_profile, name="list_profile"),
+    path("Attendence/", user_views.attendence, name="attendence"),
 ]
 
 

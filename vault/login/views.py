@@ -9,11 +9,13 @@ from .models import userlogin
 
 @csrf_exempt
 def Login(request):
-    allowed_methods = ["GET", "POST"]
-
     if request.method == "GET":
         return render(request, 'Login_1.html')
 
+
+
+@csrf_exempt
+def loguser(request):
     if request.method == "POST":
         username = request.POST.get("username")
         password = request.POST.get("password")
@@ -26,11 +28,9 @@ def Login(request):
                     'Role': user.Role,
                 }
 
-                # Generate tokens with custom payload
                 refresh_token = RefreshToken.for_user(user)
                 access_token = refresh_token.access_token
 
-                # Update the payload of the access token with the custom details
                 access_token.payload.update(user_details)
                 print("access_token:", access_token)
                 print("refresh_token:", refresh_token)
@@ -38,7 +38,7 @@ def Login(request):
                 firstname = user.firstname
                 lastname = user.lastname
                 messages.success(request, f"Successfully Login [ {firstname} {lastname} ]")
-                return render(request, 'Homepage_3.html', {"access_token": access_token,"refresh_token": refresh_token, "data": user})
+                return render(request, 'Homepage_3.html', {"access_token": access_token, "refresh_token": refresh_token, "data": user})
 
         except userlogin.DoesNotExist:
             messages.error(request, "Invalid Username Password")

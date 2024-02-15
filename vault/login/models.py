@@ -21,6 +21,11 @@ class userlogin(models.Model):
     aboutme = models.CharField(max_length=225, null=True,blank=True)
     Role = models.CharField(max_length=225,null=True,blank=True)
 
+class attendence(models.Model):
+    userlogin = models.ForeignKey(userlogin, on_delete=models.CASCADE)
+    log_in_at = models.TimeField(null=False, blank=False)
+    log_out_at = models.TimeField(null=False, blank=False)
+
 # class emailotp(models.Model):
 #     email = models.EmailField(max_length=100, null=True, blank=True)
 #     otp = models.CharField(max_length=6, null=True, blank=True)
