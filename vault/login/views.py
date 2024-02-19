@@ -13,37 +13,38 @@ def Login(request):
         return render(request, 'Login_1.html')
 
 
-
+from django.contrib.auth import authenticate
 @csrf_exempt
 def loguser(request):
     if request.method == "POST":
         username = request.POST.get("username")
         password = request.POST.get("password")
         try:
-            user = userlogin.objects.get(username=username, password=password)
-            if user:
+            user = authenticate(username=username, password=password)
+            userparam = userlogin.objects.get(username=username)
+            print("useruseruser", user)
+            if userparam:
                 user_details = {
-                    'username': user.username,
-                    'id': user.id,
-                    'Role': user.Role,
+                    'username': userparam.username,
+                    'id': userparam.id,
+                    'Role': userparam.Role,
                 }
 
-                refresh_token = RefreshToken.for_user(user)
+                refresh_token = RefreshToken.for_user(userparam)
                 access_token = refresh_token.access_token
 
                 access_token.payload.update(user_details)
                 print("access_token:", access_token)
                 print("refresh_token:", refresh_token)
 
-                firstname = user.firstname
-                lastname = user.lastname
+                firstname = userparam.firstname
+                lastname = userparam.lastname
                 messages.success(request, f"Successfully Login [ {firstname} {lastname} ]")
                 return render(request, 'Homepage_3.html', {"access_token": access_token, "refresh_token": refresh_token, "data": user})
 
         except userlogin.DoesNotExist:
             messages.error(request, "Invalid Username Password")
 
-    return HttpResponseNotAllowed(allowed_methods)
 
 
 #:::::::::::::::::::::::::::::::::::: COMMENT :::::::::::::::::::::::::::::::::::::

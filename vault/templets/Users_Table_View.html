@@ -7,6 +7,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
 
     <!-- ======== CSS ======== -->
     <link rel="stylesheet" href="style.css">
@@ -339,7 +340,7 @@
         }
 
         .sidebar.close~.home {
-            left: 90px;
+            left: 78px;
             height: 100vh;
             width: calc(100% - 78px);
         }
@@ -473,7 +474,7 @@
 
                 <ul class="menu-links">
                     <li class="nav-link">
-                        <a href="/Users_Table_View/" onclick="getProtectedData()">
+                        <a href="/DashBoard/" onclick="getProtectedData()">
                             <i class='bx bx-home-alt icon'></i>
                             <span class="text nav-text">Dashboard</span>
                         </a>
@@ -549,27 +550,7 @@
 
     </nav>
 
-    <section class="home">
-        <div class="text">Welcome !</div>
-        <img style="margin-left: 400px; margin-top: 30px;" src="{% static 'images/Custom.png' %}" alt="CRM" width="600"
-            height="600"><br><br>
-        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Placeat distinctio tempore porro ea ullam ut sit
-            vero enim ab eaque libero deserunt sint a, dicta odit doloremque ducimus officia earum!</p><br><br>
-        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Placeat distinctio tempore porro ea ullam ut sit
-            vero enim ab eaque libero deserunt sint a, dicta odit doloremque ducimus officia earum!</p><br><br>
-        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Placeat distinctio tempore porro ea ullam ut sit
-            vero enim ab eaque libero deserunt sint a, dicta odit doloremque ducimus officia earum!</p><br><br>
-        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Placeat distinctio tempore porro ea ullam ut sit
-            vero enim ab eaque libero deserunt sint a, dicta odit doloremque ducimus officia earum!</p><br><br>
-        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Placeat distinctio tempore porro ea ullam ut sit
-            vero enim ab eaque libero deserunt sint a, dicta odit doloremque ducimus officia earum!</p><br><br>
-
-        <footer style="background-color: #18191a; height: 100%;">
-            <p style="color: white;">qwertyuiopzhjksdfhjkwertyuiozxcvbnm</p>
-        </footer>
-    </section>
-
-    <!-- {% if admindata %}
+    {% if admindata %}
     <section class="home">
         <div class="text">Superadmin's - Data<br><br>
             <div style="background-color: white; border-radius: 25px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
@@ -655,6 +636,7 @@ overflow: auto; width: 100%; padding: 10px; height: 100%;">
     {% elif teacherdata %}
     <section class="home">
         <div class="text">Teacher's - Data<br><br>
+            <a href="{% url 'Userhomepage' %}" style="font-size: large; text-decoration: none;"><i class='bx bx-home-alt icon' style="color: #707070;"></i> Home</a>
             <div style="background-color: white; border-radius: 25px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
 border-collapse: collapse; /* Optional: Remove border spacing between cells */
 width: 100%;">
@@ -730,7 +712,7 @@ overflow: auto; width: 100%; padding: 10px; height: 100%;">
             </div>
         </div>
     </section>
-    {% endif %} -->
+    {% endif %}
 
 
     <script>

@@ -28,14 +28,18 @@ STATIC_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = "django-insecure-7-91s*3kpt_ga6h@bydx-mt78()ur+p&1xu-c1^f!)dx4@d@-l"
 
+
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = True   default
 DEBUG = True
 
+
 APPEND_SLASH = False
+
 
 ALLOWED_HOSTS = []
 # Application definition
+
 
 INSTALLED_APPS = [
     "jazzmin",
@@ -52,12 +56,14 @@ INSTALLED_APPS = [
     #"rest_framework.authtoken"  for django provided the default auth tabels by this packages.
 ]
 
+
 JAZZMIN_SETTINGS = {
     'site_title': 'Vault Admin Login',
     'site_header': 'Vault Admin Login',
     'welcome_sign': 'Welcome to Vault Admin Login',
     # Add more customization options as needed
 }
+
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
@@ -74,11 +80,6 @@ SIMPLE_JWT = {
     "iss": "http://localhost:8000",
 }
 
-# REST_FRAMEWORK = {
-#     'DEFAULT_AUTHENTICATION_CLASSES': (
-#         'rest_framework_simplejwt.authentication.JWTAuthentication',
-#     ),
-# }
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -91,17 +92,6 @@ REST_FRAMEWORK = {
     ),
 }
 
-# REST_FRAMEWORK = {
-#     'DEFAULT_PERMISSION_CLASSES': [
-#         'rest_framework.permissions.IsAuthenticated',
-#         ],
-#     'DEFAULT_AUTHENTICATION_CLASSES': [
-#         'rest_framework_simplejwt.authentication.JWTAuthentication',
-#         'rest_framework.authentication.BasicAuthentication',  # enables simple command line authentication
-#         'rest_framework.authentication.SessionAuthentication',
-#         'rest_framework.authentication.TokenAuthentication',
-#     ],
-# }
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -161,6 +151,9 @@ DATABASES = {
         "PORT": "5432",
     }
 }
+
+AUTH_USER_MODEL = 'login.userlogin'
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
