@@ -252,6 +252,7 @@ def Users(request):
                         }
                         users_data.append(user_data)
                         print("user_data:====================>", user_data)
+                        # print("users_data:====================>", users_data)
                     return render(request, "Users_Table_View.html", {"admindata": users_data})
 
 
@@ -282,7 +283,7 @@ def Users(request):
 
 
 
-@login_required
+# @login_required
 def attendence(request):
     if request.method == "GET":
         return render(request, "Attendence.html")
