@@ -473,7 +473,7 @@
 
                 <ul class="menu-links">
                     <li class="nav-link">
-                        <a href="/Users_Table_View/" onclick="getProtectedData()">
+                        <a href="{% url 'Table_Users' %}?next={{ request.path }}">
                             <i class='bx bx-home-alt icon'></i>
                             <span class="text nav-text">Dashboard</span>
                         </a>
@@ -481,9 +481,9 @@
                     </li>
 
                     <li class="nav-link">
-                        <a href="#">
+                        <a href="{% url 'books' %}?books={{ request.path }}">
                             <i class='bx bx-bar-chart-alt-2 icon'></i>
-                            <span class="text nav-text">Leaderboards</span>
+                            <span class="text nav-text">Books</span>
                         </a>
                     </li>
 
@@ -495,7 +495,7 @@
                     </li>
 
                     <li class="nav-link">
-                        <a href="{% url 'attendence' %}">
+                        <a href="{% url 'attendence' %}?attendence={{ request.path }}">
                             <i class='bx bx-pie-chart-alt icon'></i>
                             <span class="text nav-text">Attendence</span>
                         </a>
@@ -553,7 +553,7 @@
         <div class="text">Welcome !</div>
         <img style="margin-left: 400px; margin-top: 30px;" src="{% static 'images/Custom.png' %}" alt="CRM" width="600"
             height="600"><br><br>
-        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Placeat distinctio tempore porro ea ullam ut sit
+        <!-- <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Placeat distinctio tempore porro ea ullam ut sit
             vero enim ab eaque libero deserunt sint a, dicta odit doloremque ducimus officia earum!</p><br><br>
         <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Placeat distinctio tempore porro ea ullam ut sit
             vero enim ab eaque libero deserunt sint a, dicta odit doloremque ducimus officia earum!</p><br><br>
@@ -562,11 +562,11 @@
         <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Placeat distinctio tempore porro ea ullam ut sit
             vero enim ab eaque libero deserunt sint a, dicta odit doloremque ducimus officia earum!</p><br><br>
         <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Placeat distinctio tempore porro ea ullam ut sit
-            vero enim ab eaque libero deserunt sint a, dicta odit doloremque ducimus officia earum!</p><br><br>
+            vero enim ab eaque libero deserunt sint a, dicta odit doloremque ducimus officia earum!</p><br><br> -->
 
-        <footer style="background-color: #18191a; height: 100%;">
+        <!-- <footer style="background-color: #18191a; height: 100%;">
             <p style="color: white;">qwertyuiopzhjksdfhjkwertyuiozxcvbnm</p>
-        </footer>
+        </footer> -->
     </section>
 
     <!-- {% if admindata %}

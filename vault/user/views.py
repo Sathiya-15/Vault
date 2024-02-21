@@ -1,5 +1,6 @@
 import jwt
 from vault import settings
+import urllib.parse
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from login.models import userlogin
@@ -7,6 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from django.http import HttpResponse
@@ -48,21 +50,6 @@ def Createnewaccount(request):
     return render(request, 'Create_New_Account.html')
 
 
-# @csrf_exempt
-# def Deleteuser(request, id):
-#     print("=========>", id)
-#     if request.method == "POST":
-#         username = request.POST.get("id")
-#         try:
-#             user = userlogin.objects.get(username=username)
-#             user.delete()
-#             messages.success(request, "User Database Deleted Successfully")
-#             return redirect('Table_Users')
-#
-#         except userlogin.DoesNotExist:
-#             messages.error(request, "User Doesnot Exist")
-#             return render(request, 'Table_Users.html')
-
 
 @csrf_exempt
 def Deleteuser(request, id):
@@ -77,6 +64,7 @@ def Deleteuser(request, id):
             return render(request, 'Table_Users.html')
 
     return HttpResponse("Invalid request method")
+
 
 
 def Updateuser(request):
@@ -101,21 +89,6 @@ def Updateuser(request):
             messages.error(request, "User Not Found")
             return redirect("Table_Users")
 
-
-# def Deleteuser(request, id):
-#     print("=========>", id)
-#     if request.method == "POST":
-#         try:
-#             user = get_object_or_404(userlogin, username=id)
-#             user.delete()
-#             messages.success(request, "User deleted successfully")
-#             return HttpResponseRedirect(reverse('Table_Users'))
-#
-#         except userlogin.DoesNotExist:
-#             messages.error(request, "User does not exist")
-#             return render(request, 'Table_Users.html')
-#     else:
-#         return render(request, 'Table_Users.html')
 
 
 #::::::::::::::::::::::::::::::::::::USING SERIALIZERS YOU NEED CLASS METHOD:::::::::::::::::::::::::::::::::::::
@@ -150,8 +123,11 @@ def Updateuser(request):
 # @permission_classes([IsAuthenticated])
 def Profile_View(request):
     if request.method == "GET":
+        cookieToken = request.session.get("cookieToken")
+        print("cookieToken========================>", cookieToken)
         try:
-            users = userlogin.objects.get(id=1)
+            username, id, Role = cookieToken
+            users = userlogin.objects.get(id=id)
             # firstnames = []
             # lastnames = []
             # mobilenumbers = []
@@ -188,12 +164,6 @@ def Profile_View(request):
 
 
 def Mydashboard(request):
-    print("Request=======>:", request)
-    # user_details = {
-    #     'username': request.user.username,
-    #     'id': request.user.id,
-    #     'Role': request.user.Role,
-    # }
     return render(request, 'Homepage_3.html')
 
 
@@ -237,82 +207,82 @@ def profileupdate(request):
 
 
 
-from django.contrib.auth.decorators import login_required
-@login_required
 # @api_view(['GET'])
-# @permission_classes([IsAuthenticated])
+# @login_required
+@permission_classes([IsAuthenticated])
 def Users(request):
-    headers = request.headers
-    print("request", request)
-    print("request.user", request.user)
-    print("headers=======================>:", headers)
-    authorization_header = request.headers.get('Authorization')
-    print("authorization_header:=========>", authorization_header)
-    print("SECRET_KEY:", settings.SECRET_KEY)
+    print("User authenticated:", request.user.is_authenticated)
+    if request.method == "GET":
+        headers = request.headers
+        cookieToken = request.session.get("cookieToken")
+        if cookieToken:
+            print("cookieToken===================>:", cookieToken)
+            username, id, Role = cookieToken
 
-    try:
-        # if authorization_header:
-        #     decoded_token = jwt.decode(authorization_header, settings.SECRET_KEY, algorithms=['HS256'])
-        #     print("decoded_token:================>", decoded_token)
-        #     username = decoded_token.get('username', None)
-        #     user_id = decoded_token.get('user_id', None)
-        #     Role = decoded_token.get('Role', None)
-        #     print("username:=====================>", username)
-        #     print("Role:=========================>", Role)
-        #     print("user_id:======================>", user_id)
-        #
-        #     if Role == 'Superadmin':
-        # query_set = userlogin.objects.all()
-        # users_data = []
-        # for user in query_set:
-        #     user_data = {
-        #         'username': user.username,
-        #         'firstname': user.firstname,
-        #         'lastname': user.lastname,
-        #         'mobilenumber': user.mobilenumber,
-        #         'Role': user.Role,
-        #     }
-        #     users_data.append(user_data)
-        #     print("user_data:====================>", user_data)
-        # return render(request, "Users_Table_View.html", {"admindata": users_data})
+            print("username_in_session===========>", username)
+            print("Role_in_session===============>", Role)
+            print("id_in_session=================>", id)
 
-        query_set = userlogin.objects.filter(Role__in=['Student', 'Student-Leader', 'Student-CO-Ordinator'])
-        users_data = []
-        for user in query_set:
-            user_data = {
-                'username': user.username,
-                'firstname': user.firstname,
-                'lastname': user.lastname,
-                'mobilenumber': user.mobilenumber,
-                'Role': user.Role,
-            }
-            users_data.append(user_data)
-            print("user_data:====================>", user_data)
-        return render(request, "Users_Table_View.html", {"teacherdata": users_data})
+            print("request=======================>", request)
+            print("request.user==================>", request.user)
+            print("headers=======================>", headers)
 
-        #     elif Role == 'Teacher':
-        #         query_set = userlogin.objects.filter(Role__in=['Student', 'Student-Leader', 'Student-CO-Ordinator'])
-        #         users_data = []
-        #         for user in query_set:
-        #             user_data = {
-        #                 'username': user.username,
-        #                 'firstname': user.firstname,
-        #                 'lastname': user.lastname,
-        #                 'mobilenumber': user.mobilenumber,
-        #                 'Role': user.Role,
-        #             }
-        #             users_data.append(user_data)
-        #             print("user_data:====================>", user_data)
-        #         return render(request, "Users_Table_View.html", {"teacherdata": users_data})
-        #
-        # else:
-        #     return render(request, "Users_Table_View.html")
+            authorization_header = request.headers.get('Authorization')
+            print("authorization_header===========>", authorization_header)
 
-    except userlogin.DoesNotExist:
-        messages.error(request, "Users do not exist in the database.")
-        return render(request, "Users_Table_View.html")
+            # encoded_value = request.COOKIES.get('Vault_Cookie', '')
+            # decoded_value = urllib.parse.unquote(encoded_value)
+            # print("encoded_value:======================>", encoded_value)
+            # print("decoded_value:======================>", decoded_value)
+
+            try:
+                if Role == 'Superadmin':
+                    query_set = userlogin.objects.all()
+                    total_value = query_set.count()
+                    print("No_of_count====================>", total_value)
+                    print("query_set======================>", query_set)
+                    users_data = []
+                    for user in query_set:
+                        user_data = {
+                            'username': user.username,
+                            'firstname': user.firstname,
+                            'lastname': user.lastname,
+                            'mobilenumber': user.mobilenumber,
+                            'Role': user.Role,
+                        }
+                        users_data.append(user_data)
+                        print("user_data:====================>", user_data)
+                    return render(request, "Users_Table_View.html", {"admindata": users_data})
 
 
+                elif Role == 'Teacher':
+                    query_set = userlogin.objects.filter(Role__in=['Student', 'Student-Leader', 'Student-CO-Ordinator'])
+                    users_data = []
+                    for user in query_set:
+                        user_data = {
+                            'username': user.username,
+                            'firstname': user.firstname,
+                            'lastname': user.lastname,
+                            'mobilenumber': user.mobilenumber,
+                            'Role': user.Role,
+                        }
+                        users_data.append(user_data)
+                        print("user_data:====================>", user_data)
+                    return render(request, "Users_Table_View.html", {"teacherdata": users_data})
+
+                else:
+                    return render(request, "Users_Table_View.html")
+
+            except userlogin.DoesNotExist:
+                messages.error(request, "Users do not exist in the database.")
+                return render(request, "Users_Table_View.html")
+
+        else:
+            return render(request, "404Errorpage.html")
+
+
+
+@login_required
 def attendence(request):
     if request.method == "GET":
         return render(request, "Attendence.html")
@@ -330,6 +300,7 @@ def attendence(request):
             return render(request, "Attendence.html")
 
 
+
 def createuser(request):
     if request.method == "POST":
         username = request.POST.get("username")
@@ -344,9 +315,10 @@ def createuser(request):
                 return redirect("Table_Users")
 
         except:
-            userlogin.objects.create(username=username,firstname=firstname,lastname=lastname,mobilenumber=mobilenumber,Role=Role)
+            userlogin.objects.create(username=username, firstname=firstname, lastname=lastname, mobilenumber=mobilenumber, Role=Role)
             messages.success(request, "User Added Successfully")
             return redirect("Table_Users")
+
 
 
 def list_profile(request, id):
@@ -359,3 +331,9 @@ def list_profile(request, id):
         except userlogin.DoesNotExist:
             messages.error(request, "No Data in Database")
             return render(request, 'My_Profile2.html')
+
+
+
+def books(request):
+    if request.method == "GET":
+        return render(request, "Books.html")

@@ -6,6 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.shortcuts import render, redirect
 from .models import userlogin
+from django.contrib.auth import authenticate, login, logout
 
 @csrf_exempt
 def Login(request):
@@ -13,7 +14,7 @@ def Login(request):
         return render(request, 'Login_1.html')
 
 
-from django.contrib.auth import authenticate
+
 @csrf_exempt
 def loguser(request):
     if request.method == "POST":
@@ -30,6 +31,8 @@ def loguser(request):
                     'Role': userparam.Role,
                 }
 
+                request.session['cookieToken'] = userparam.username, userparam.id, userparam.Role
+
                 refresh_token = RefreshToken.for_user(userparam)
                 access_token = refresh_token.access_token
 
@@ -40,7 +43,8 @@ def loguser(request):
                 firstname = userparam.firstname
                 lastname = userparam.lastname
                 messages.success(request, f"Successfully Login [ {firstname} {lastname} ]")
-                return render(request, 'Homepage_3.html', {"access_token": access_token, "refresh_token": refresh_token, "data": user})
+                # return render(request, 'Homepage_3.html', {"access_token": access_token, "refresh_token": refresh_token, "data": user})
+                return redirect('Userhomepage')
 
         except userlogin.DoesNotExist:
             messages.error(request, "Invalid Username Password")
@@ -62,7 +66,8 @@ def loguser(request):
     # }
     # return render(request, "Login.html")
 
-#:::::::::::::::::::::::::::::::::::: COMMENT :::::::::::::::::::::::::::::::::::::
+#:::::::::::::::::::::::::::::::::::: COMMENT ::::::::::::::::::::::::::::::::::::::
+
 
 
 @csrf_exempt
@@ -99,5 +104,8 @@ def Forgot(request):
 
     return render(request, 'Password_Reset_2.html')
 
+
+
 def Logout(request):
-    return redirect("Login")
+    logout(request)
+    return redirect('Login')

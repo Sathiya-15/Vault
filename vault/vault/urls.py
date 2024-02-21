@@ -23,6 +23,8 @@ from login import views as login_view
 
 from django.conf.urls.static import static
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
+
 
 urlpatterns = [
     path("Logout/", login_view.Logout, name="Logout"),
@@ -36,11 +38,11 @@ urlpatterns = [
     path("ForgotPassword/", login_view.Forgot, name='Forgotpassword'),
     path("MyDashBoard/", user_views.Mydashboard, name="Userhomepage"),
     path("Users_Table_View/", user_views.Users, name="Table_Users"),
-    # path("dash/", user_views.sathya, name="sathya"),
     path("CreateUser/", user_views.createuser, name="createuser"),
     path("UpdateUser/", user_views.Updateuser, name="Update_User"),
     path("UserView/<str:id>/", user_views.list_profile, name="list_profile"),
     path("Attendence/", user_views.attendence, name="attendence"),
+    path("books/", user_views.books, name="books"),
 ]
 
 

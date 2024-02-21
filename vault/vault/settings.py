@@ -81,6 +81,8 @@ SIMPLE_JWT = {
 }
 
 
+
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.SessionAuthentication',  # For session-based authentication
@@ -93,6 +95,12 @@ REST_FRAMEWORK = {
 }
 
 
+
+LOGIN_URL = '/'
+LOGIN_REDIRECT_URL = 'MyDashBoard/'
+
+
+
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -101,13 +109,17 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "corsheaders.middleware.CorsMiddleware",
+    # "corsheaders.middleware.CorsMiddleware",
     # "vault.middleware.globalmiddleware",
 ]
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8000",
-]
+
+
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:8000",
+# ]
+
+
 
 MESSAGE_TAGS = {
         messages.DEBUG: 'alert-secondary',
@@ -117,25 +129,16 @@ MESSAGE_TAGS = {
         messages.ERROR: 'alert-danger',
  }
 
+
+
 ROOT_URLCONF = "vault.urls"
 
-TEMPLATES = [
-    {
-        "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [(os.path.join(BASE_DIR, "templets"))],
-        "APP_DIRS": True,
-        "OPTIONS": {
-            "context_processors": [
-                "django.template.context_processors.debug",
-                "django.template.context_processors.request",
-                "django.contrib.auth.context_processors.auth",
-                "django.contrib.messages.context_processors.messages",
-            ],
-        },
-    },
-]
 
 WSGI_APPLICATION = "vault.wsgi.application"
+
+
+
+############################## FOR DATABASE CONFIG ###############################
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
@@ -152,7 +155,19 @@ DATABASES = {
     }
 }
 
+############################## FOR DATABASE CONFIG ###############################
+
+
+######################## FOR DEFAULT AUTH CONFIG #################################
+
 AUTH_USER_MODEL = 'login.userlogin'
+SESSION_COOKIE_AGE = 1800
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+SESSION_COOKIE_NAME = 'Vault_Cookie'
+
+######################## FOR DEFAULT AUTH CONFIG #################################
+
 
 
 # Password validation
@@ -173,6 +188,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
+
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
@@ -185,6 +202,9 @@ USE_I18N = True
 USE_TZ = True
 
 
+
+########################### STATIC AND MEDAI CONTROL ###################################
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 STATIC_URL = '/static/'
@@ -195,6 +215,27 @@ STATICFILES_DIRS = [(os.path.join(BASE_DIR, 'static'))]
 # MEDIA_ROOT = [(os.path.join(BASE_DIR, 'media'))]
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
+
+TEMPLATES = [
+    {
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [(os.path.join(BASE_DIR, "templets"))],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
+            ],
+        },
+    },
+]
+
+########################### STATIC AND MEDAI CONTROL ###################################
+
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
