@@ -275,7 +275,7 @@ def Users(request):
 
 
                     print("user_data:====================>", page)
-                    return render(request, "Users_Table_View.html", {"admindata": page, "users_data": users_data})
+                    return render(request, "Users_Table_View.html", {"admindata": page})
 
 
                 elif Role == 'Teacher':
@@ -290,10 +290,25 @@ def Users(request):
                             'Role': user.Role,
                         }
                         users_data.append(user_data)
-                        print("user_data:====================>", user_data)
-                    return render(request, "Users_Table_View.html", {"teacherdata": users_data})
+                    print("user_data:====================>", user_data)
+                    items_perpage = 5
+                    paginator = Paginator(users_data, items_perpage)
+
+                    page_count = paginator.num_pages
+                    print("PAGE_COUNT====================>", page_count)
+
+                    page_number = request.GET.get("page", 1)
+                    print("page_number=====================>", page_number)
+                    page = paginator.get_page(page_number)
+
+                    print("Page number:", page.number)
+                    print("Items on this page:", page.object_list)
+
+                    print("user_data:====================>", page)
+                    return render(request, "Users_Table_View.html", {"teacherdata": page})
 
                 else:
+                    messages.error(request, "No Data Found")
                     return render(request, "Users_Table_View.html")
 
             except userlogin.DoesNotExist:

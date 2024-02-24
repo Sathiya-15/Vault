@@ -8,6 +8,7 @@ from django.shortcuts import render, redirect
 from .models import userlogin
 from django.contrib.auth import authenticate, login, logout
 
+
 @csrf_exempt
 def Login(request):
     if request.method == "GET":

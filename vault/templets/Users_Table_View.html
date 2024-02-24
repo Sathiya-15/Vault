@@ -552,6 +552,7 @@
     {% if admindata %}
     <section class="home">
         <div class="text">Superadmin's - Data<br><br>
+            <a href="{% url 'Userhomepage' %}" style="font-size: large; text-decoration: none;"><i class='bx bx-home-alt icon' style="color: #707070;"></i> Home</a>
             <div style="background-color: white; border-radius: 25px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
         border-collapse: collapse;
         width: 100%;">
@@ -628,32 +629,31 @@
                                         <option value="Student-CO-Ordinator">Student - CO-Ordinator</option>
                                         <option value="Student-Leader">Student - Leader</option>
                                     </select></td>
-                                    <td><button>
-                                        <span class="glyphicon glyphicon-ok">&emsp;<button type="reset"><i
-                                            class="material-icons"
-                                            style="font-weight: 24px; text-align: center;">&#xe14c;</i></button></span>
-                                        </button></td>
-                                    </tr>
-                                    <nav style="font-size: medium; padding-left: 20px;" aria-label="Page navigation">
-                                        <ul class="pagination">
-                                          <li>
-                                            <a href="#" aria-label="Previous">
-                                              <span style="font-size: medium;" aria-hidden="true">&laquo;</span>
-                                            </a>
-                                          </li>
-                                          {% for page_number in admindata.paginator.page_range %}
-                                          <li><a href="?page={{ page_number }}">{{ page_number }}</a></li>
-                                          {% endfor %}
-                                          <li style="font-size: medium;">
-                                            <a href="#" aria-label="Next">
-                                              <span style="font-size: medium;" aria-hidden="true">&raquo;</span>
-                                            </a>
-                                          </li>
-                                        </ul>
-                                      </nav>
+                                <td><button>
+                                        <span class="glyphicon glyphicon-ok">&emsp;<button type="reset"><i class="material-icons"
+                                                    style="font-weight: 24px; text-align: center;">&#xe14c;</i></button></span>
+                                    </button></td>
+                            </tr>
+                            <nav style="font-size: medium; padding-left: 20px;" aria-label="Page navigation">
+                                <ul class="pagination">
+                                    <li>
+                                        <a href="#" aria-label="Previous">
+                                            <span style="font-size: medium;" aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                    {% for page_number in admindata.paginator.page_range %}
+                                    <li><a href="?page={{ page_number }}">{{ page_number }}</a></li>
+                                    {% endfor %}
+                                    <li style="font-size: medium;">
+                                        <a href="#" aria-label="Next">
+                                            <span style="font-size: medium;" aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
                         </form>
-                    </tbody>
-                </table>
+                        </tbody>
+                        </table>
             </div>
         </div>
     </section>
@@ -665,7 +665,7 @@
             <div style="background-color: white; border-radius: 25px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
 border-collapse: collapse;
 width: 100%;">
-                <h3 style="padding: 20px;">Student's Table</h3><br>
+                <h3 style="padding: 20px;">Student's Table</h3>
                 <table class="table" style="display: flexbox;
 overflow: auto; width: 100%; padding: 10px; height: 100%;">
                     <thead>
@@ -681,7 +681,7 @@ overflow: auto; width: 100%; padding: 10px; height: 100%;">
                     </thead>
                     <tbody>
                         <form action="{% url 'Update_User' %}" method="post">
-                            {% for data in teacherdata %}
+                            {% for data in teacherdata.object_list %}
                             {% csrf_token %}
                             <tr>
                                 <td>{{ forloop.counter }}</td>
@@ -711,7 +711,6 @@ overflow: auto; width: 100%; padding: 10px; height: 100%;">
                             </tr>
                             {% endfor %}
                         </form>
-
                         <form action="{% url 'createuser' %}" method="post">
                             {% csrf_token %}
                             <tr>
@@ -721,25 +720,42 @@ overflow: auto; width: 100%; padding: 10px; height: 100%;">
                                 <td><input style="text-align: center;" type="text" name="lastname" placeholder="New Lastname"></td>
                                 <td><input style="text-align: center;" type="text" name="mobilenumber" placeholder="New Mobilenumber"></td>
                                 <td><select style="text-align: center;" id="Role" name="Role">
-                                        <option value="Student">Student</option>
-                                        <option value="Student-CO-Ordinator">Student - CO-Ordinator</option>
-                                        <option value="Student-Leader">Student - Leader</option>
-                                    </select></td>
+                                    <option value="Student">Student</option>
+                                    <option value="Student-CO-Ordinator">Student - CO-Ordinator</option>
+                                    <option value="Student-Leader">Student - Leader</option>
+                                </select></td>
                                 <td><button>
-                                        <span class="glyphicon glyphicon-ok">&emsp;<button type="reset"><i
-                                                    class="material-icons"
-                                                    style="font-weight: 24px; text-align: center;">&#xe14c;</i></button></span>
+                                    <span class="glyphicon glyphicon-ok">&emsp;<button type="reset"><i
+                                        class="material-icons"
+                                        style="font-weight: 24px; text-align: center;">&#xe14c;</i></button></span>
                                     </button></td>
-                            </tr>
-                        </form>
-                    </tbody>
-                </table>
+                                </tr>
+                                <nav style="font-size: medium; padding-left: 20px;" aria-label="Page navigation">
+                                    <ul class="pagination">
+                                      <li>
+                                        <a href="#" aria-label="Previous">
+                                          <span style="font-size: medium;" aria-hidden="true">&laquo;</span>
+                                        </a>
+                                      </li>
+                                      {% for page_number in teacherdata.paginator.page_range %}
+                                      <li><a href="?page={{ page_number }}">{{ page_number }}</a></li>
+                                      {% endfor %}
+                                      <li style="font-size: medium;">
+                                        <a href="#" aria-label="Next">
+                                          <span style="font-size: medium;" aria-hidden="true">&raquo;</span>
+                                        </a>
+                                      </li>
+                                    </ul>
+                                  </nav>
+                            </form>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
-    </section>
-    {% endif %}
-
-
+        </section>
+        {% endif %}
+        
+        
     <script>
         const body = document.querySelector('body'),
             sidebar = body.querySelector('nav'),
