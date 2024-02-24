@@ -12,6 +12,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from django.http import HttpResponse
+from django.core.paginator import Paginator
 from rest_framework.response import Response
 from login.serializer import userloginserializer
 
@@ -68,6 +69,11 @@ def Deleteuser(request, id):
 
 
 def Updateuser(request):
+    print("Request=======================>", request)
+    Body = request.body
+    print("Body==========================>", Body)
+    headers = request.headers
+    print("Headers=======================>", headers)
     username = request.POST.get("username")
     firstname = request.POST.get("firstname")
     lastname = request.POST.get("lastname")
@@ -88,6 +94,7 @@ def Updateuser(request):
         except:
             messages.error(request, "User Not Found")
             return redirect("Table_Users")
+
 
 
 
@@ -207,6 +214,7 @@ def profileupdate(request):
 
 
 
+
 # @api_view(['GET'])
 # @login_required
 @permission_classes([IsAuthenticated])
@@ -216,7 +224,7 @@ def Users(request):
         headers = request.headers
         cookieToken = request.session.get("cookieToken")
         if cookieToken:
-            print("cookieToken===================>:", cookieToken)
+            print("cookieToken===================>", cookieToken)
             username, id, Role = cookieToken
 
             print("username_in_session===========>", username)
@@ -237,7 +245,7 @@ def Users(request):
 
             try:
                 if Role == 'Superadmin':
-                    query_set = userlogin.objects.all()
+                    query_set = userlogin.objects.all().order_by('id')
                     total_value = query_set.count()
                     print("No_of_count====================>", total_value)
                     print("query_set======================>", query_set)
@@ -251,9 +259,23 @@ def Users(request):
                             'Role': user.Role,
                         }
                         users_data.append(user_data)
-                        print("user_data:====================>", user_data)
-                        # print("users_data:====================>", users_data)
-                    return render(request, "Users_Table_View.html", {"admindata": users_data})
+                    print("users_data:====================>", users_data)
+
+                    items_perpage = 5
+                    paginator = Paginator(users_data, items_perpage)
+
+                    page_count = paginator.num_pages
+                    print("PAGE_COUNT====================>", page_count)
+
+                    page_number = request.GET.get("page", 1)
+                    print("page_number=====================>", page_number)
+                    page = paginator.get_page(page_number)
+                    print("Page number:", page.number)
+                    print("Items on this page:", page.object_list)
+
+
+                    print("user_data:====================>", page)
+                    return render(request, "Users_Table_View.html", {"admindata": page, "users_data": users_data})
 
 
                 elif Role == 'Teacher':

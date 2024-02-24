@@ -451,8 +451,8 @@
         <header>
             <div class="image-text">
                 <!-- <span class="image">
-<img src="logo.png" alt="">
-</span> -->
+                <img src="logo.png" alt="">
+                </span> -->
 
                 {% if data %} {% csrf_token %}
                 <div class="text logo-text">
@@ -466,7 +466,6 @@
 
         <div class="menu-bar">
             <div class="menu">
-
                 <li class="search-box">
                     <i class='bx bx-search icon'></i>
                     <input type="text" placeholder="Search...">
@@ -554,11 +553,11 @@
     <section class="home">
         <div class="text">Superadmin's - Data<br><br>
             <div style="background-color: white; border-radius: 25px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-border-collapse: collapse;
-width: 100%;">
-                <h3 style="padding: 20px;">User's Table</h3><br>
+        border-collapse: collapse;
+        width: 100%;">
+                <h3 style="padding: 20px;">User's Table</h3>
                 <table class="table" style="display: flexbox;
-overflow: auto; width: 100%; padding: 10px; height: 100%;">
+        overflow: auto; width: 100%; padding: 10px; height: 100%;">
                     <thead>
                         <tr>
                             <th>S.No</th>
@@ -571,18 +570,18 @@ overflow: auto; width: 100%; padding: 10px; height: 100%;">
                         </tr>
                     </thead>
                     <tbody>
-                        <form action="{% url 'Update_User' %}" method="post">
-                            {% for data in admindata %}
+                        <form method="post">
+                            {% for data in admindata.object_list %}
                             {% csrf_token %}
                             <tr>
                                 <td>{{ forloop.counter }}</td>
-                                <td><a style="cursor: pointer;" href="{% url 'list_profile' id=data.username %}"><input
+                                <td><a style="cursor: pointer; text-align: center;" href="{% url 'list_profile' id=data.username %}"><input
                                             type="text" name="username" value="{{ data.username}}"></a></td>
-                                <td><input type="text" name="firstname" value="{{ data.firstname}}"></td>
-                                <td><input type="text" name="lastname" value="{{ data.lastname}}"></td>
-                                <td><input type="text" name="mobilenumber" value="{{ data.mobilenumber}}"></td>
+                                <td><input style="text-align: center;" type="text" name="firstname" value="{{ data.firstname}}"></td>
+                                <td><input style="text-align: center;" type="text" name="lastname" value="{{ data.lastname}}"></td>
+                                <td><input style="text-align: center;" type="text" name="mobilenumber" value="{{ data.mobilenumber}}"></td>
                                 <td>
-                                    <select id="Role" name="Role">
+                                    <select style="text-align: center;" id="Role" name="Role">
                                         <option value="Superadmin" {% if data.Role == 'Superadmin' %}selected{% endif %}>
                                             Superadmin
                                         </option>
@@ -595,37 +594,63 @@ overflow: auto; width: 100%; padding: 10px; height: 100%;">
                                         <option value="Student" {% if data.Role == 'Student' %}selected{% endif %}>
                                             Student
                                         </option>
+                                        <option value="Student - CO-Ordinator" {% if data.Role == 'Student-CO-Ordinator' %}selected{% endif %}>
+                                            Student - CO-Ordinator
+                                        </option>
+                                        <option value="Student - Leader" {% if data.Role == 'Student-Leader' %}selected{% endif %}>
+                                            Student - Leader
+                                        </option>
                                     </select>
                                 </td>
                                 <td><a href="{% url 'Delete_User' id=data.username %}"><i style="font-size:22px"
-                                            class="fa">&#xf1f8;</i></a>&emsp;&emsp;<button type="submit" id="pencil"
+                                            class="fa">&#xf1f8;</i></a>&emsp;&emsp;<button onclick="submit(data)" type="submit" id="pencil"
                                         class="glyphicon glyphicon-pencil"></button>
                                     </button>
                                 </td>
                             </tr>
                             {% endfor %}
+
                         </form>
                         <form action="{% url 'createuser' %}" method="post">
                             {% csrf_token %}
                             <tr>
                                 <td>{{ forloop.counter }}</td>
-                                <td><input type="text" name="username" placeholder="New Username"></td>
-                                <td><input type="text" name="firstname" placeholder="New Firstname"></td>
-                                <td><input type="text" name="lastname" placeholder="New Lastname"></td>
-                                <td><input type="text" name="mobilenumber" placeholder="New Mobilenumber"></td>
-                                <td><select id="Role" name="Role">
+                                <td><input style="text-align: center;" type="text" name="username" placeholder="New Username"></td>
+                                <td><input style="text-align: center;" type="text" name="firstname" placeholder="New Firstname"></td>
+                                <td><input style="text-align: center;" type="text" name="lastname" placeholder="New Lastname"></td>
+                                <td><input style="text-align: center;" type="text" name="mobilenumber" placeholder="New Mobilenumber"></td>
+                                <td><select style="text-align: center;" id="Role" name="Role">
                                         <option value="Default">Default</option>
                                         <option value="Superadmin">Superadmin</option>
                                         <option value="Admin">Admin</option>
                                         <option value="Teacher">Teacher</option>
                                         <option value="Student">Student</option>
+                                        <option value="Student-CO-Ordinator">Student - CO-Ordinator</option>
+                                        <option value="Student-Leader">Student - Leader</option>
                                     </select></td>
-                                <td><button>
+                                    <td><button>
                                         <span class="glyphicon glyphicon-ok">&emsp;<button type="reset"><i
-                                                    class="material-icons"
-                                                    style="font-weight: 24px; text-align: center;">&#xe14c;</i></button></span>
-                                    </button></td>
-                            </tr>
+                                            class="material-icons"
+                                            style="font-weight: 24px; text-align: center;">&#xe14c;</i></button></span>
+                                        </button></td>
+                                    </tr>
+                                    <nav style="font-size: medium; padding-left: 20px;" aria-label="Page navigation">
+                                        <ul class="pagination">
+                                          <li>
+                                            <a href="#" aria-label="Previous">
+                                              <span style="font-size: medium;" aria-hidden="true">&laquo;</span>
+                                            </a>
+                                          </li>
+                                          {% for page_number in admindata.paginator.page_range %}
+                                          <li><a href="?page={{ page_number }}">{{ page_number }}</a></li>
+                                          {% endfor %}
+                                          <li style="font-size: medium;">
+                                            <a href="#" aria-label="Next">
+                                              <span style="font-size: medium;" aria-hidden="true">&raquo;</span>
+                                            </a>
+                                          </li>
+                                        </ul>
+                                      </nav>
                         </form>
                     </tbody>
                 </table>
@@ -660,13 +685,13 @@ overflow: auto; width: 100%; padding: 10px; height: 100%;">
                             {% csrf_token %}
                             <tr>
                                 <td>{{ forloop.counter }}</td>
-                                <td><a style="cursor: pointer;" href="{% url 'list_profile' id=data.username %}"><input
+                                <td><a style="cursor: pointer; text-align: center;" href="{% url 'list_profile' id=data.username %}"><input
                                             type="text" name="username" value="{{ data.username}}"></a></td>
-                                <td><input type="text" name="firstname" value="{{ data.firstname}}"></td>
-                                <td><input type="text" name="lastname" value="{{ data.lastname}}"></td>
-                                <td><input type="text" name="mobilenumber" value="{{ data.mobilenumber}}"></td>
+                                <td><input style="text-align: center;" type="text" name="firstname" value="{{ data.firstname}}"></td>
+                                <td><input style="text-align: center;" type="text" name="lastname" value="{{ data.lastname}}"></td>
+                                <td><input style="text-align: center;" type="text" name="mobilenumber" value="{{ data.mobilenumber}}"></td>
                                 <td>
-                                    <select id="Role" name="Role">
+                                    <select style="text-align: center;" id="Role" name="Role">
                                         <option value="Student" {% if data.Role == 'Student' %}selected{% endif %}>
                                             Student
                                         </option>
@@ -691,11 +716,11 @@ overflow: auto; width: 100%; padding: 10px; height: 100%;">
                             {% csrf_token %}
                             <tr>
                                 <td>{{ forloop.counter }}</td>
-                                <td><input type="text" name="username" placeholder="New Username"></td>
-                                <td><input type="text" name="firstname" placeholder="New Firstname"></td>
-                                <td><input type="text" name="lastname" placeholder="New Lastname"></td>
-                                <td><input type="text" name="mobilenumber" placeholder="New Mobilenumber"></td>
-                                <td><select id="Role" name="Role">
+                                <td><input style="text-align: center;" type="text" name="username" placeholder="New Username"></td>
+                                <td><input style="text-align: center;" type="text" name="firstname" placeholder="New Firstname"></td>
+                                <td><input style="text-align: center;" type="text" name="lastname" placeholder="New Lastname"></td>
+                                <td><input style="text-align: center;" type="text" name="mobilenumber" placeholder="New Mobilenumber"></td>
+                                <td><select style="text-align: center;" id="Role" name="Role">
                                         <option value="Student">Student</option>
                                         <option value="Student-CO-Ordinator">Student - CO-Ordinator</option>
                                         <option value="Student-Leader">Student - Leader</option>
@@ -780,6 +805,11 @@ overflow: auto; width: 100%; padding: 10px; height: 100%;">
             sessionStorage.removeItem('refreshToken');
         }
         document.getElementById('logoutButton').addEventListener('click', logout);
+
+
+        function sumbit(data){
+            console.log(data)
+        }
 
     </script>
 </body>
