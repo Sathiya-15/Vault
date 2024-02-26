@@ -43,6 +43,7 @@ urlpatterns = [
     path("UserView/<str:id>/", user_views.list_profile, name="list_profile"),
     path("Attendence/", user_views.attendence, name="attendence"),
     path("books/", user_views.books, name="books"),
+    path("Search_Box/", user_views.search_box, name="search_box"),
 ]
 
 

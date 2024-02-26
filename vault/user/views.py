@@ -372,6 +372,26 @@ def list_profile(request, id):
 
 
 
+
 def books(request):
     if request.method == "GET":
         return render(request, "Books.html")
+
+
+
+def search_box(request):
+    print("???????????????????????????????????????????", request)
+    if request.method == "POST":
+        username = request.POST.get("username")
+        firstname = request.POST.get("username")
+        lastname = request.POST.get("username")
+        mobilenumber = request.POST.get("username")
+        Role = request.POST.get("Role")
+        print(username)
+        print(firstname)
+        print(lastname)
+        print(mobilenumber)
+        print(Role)
+        user = userlogin.objects.filter(username=username, firstname=firstname, lastname=lastname, mobilenumber=mobilenumber, Role=Role)
+        print(user)
+        return render(request, "Users_Table_View.html", context=user)

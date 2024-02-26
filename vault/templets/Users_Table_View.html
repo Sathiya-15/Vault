@@ -337,6 +337,7 @@
             font-weight: 500;
             color: var(--text-color);
             padding: 12px 60px;
+            padding-bottom: 35px;
         }
 
         .sidebar.close~.home {
@@ -569,6 +570,17 @@
                             <th>Role</th>
                             <th></th>
                         </tr>
+                        <form action="{% url 'search_box' %}" method="post">
+                            {% csrf_token %}
+                            <th></th>
+                            <th><input name="username" style="text-align: center; border: 1px solid  #ccc; padding: 5px; border-radius: 5px;" type="search" placeholder="Search"></th>
+                            <th><input name="firstname" style="text-align: center; border: 1px solid  #ccc; padding: 5px; border-radius: 5px;" type="search" placeholder="Search"></th>
+                            <th><input name="lastname" style="text-align: center; border: 1px solid #ccc; padding: 5px; border-radius: 5px;" type="search" placeholder="Search"></th>
+                            <th><input name="mobilenumber" style="text-align: center; border: 1px solid  #ccc; padding: 5px; border-radius: 5px;" type="search" placeholder="Search"></th>
+                            <th><input name="Role" style="text-align: center; border: 1px solid  #ccc; padding: 5px; border-radius: 5px;" type="search" placeholder="Search"></th>
+                            <!-- <th><button style="border: 1px solid #18191a; color: #707070; background-color: skyblue; font-size: small; border-radius: 5px; padding: 5px;" type="submit">Search</button></th> -->
+                            <th><button type="submit"><i class="fa fa-search" style="font-size:25px; color: blue;"></i></button></th>
+                        </form>
                     </thead>
                     <tbody>
                         <form method="post">
@@ -630,9 +642,8 @@
                                         <option value="Student-Leader">Student - Leader</option>
                                     </select></td>
                                 <td><button>
-                                        <span class="glyphicon glyphicon-ok">&emsp;<button type="reset"><i class="material-icons"
-                                                    style="font-weight: 24px; text-align: center;">&#xe14c;</i></button></span>
-                                    </button></td>
+                                        <span class="glyphicon glyphicon-ok"></span></button>&emsp;&emsp;<button type="reset"><span class="fa fa-close" style="font-size:25px;color: red;"></span></button>
+                                </td>
                             </tr>
                             <nav style="font-size: medium; padding-left: 20px;" aria-label="Page navigation">
                                 <ul class="pagination">
@@ -720,34 +731,33 @@ overflow: auto; width: 100%; padding: 10px; height: 100%;">
                                 <td><input style="text-align: center;" type="text" name="lastname" placeholder="New Lastname"></td>
                                 <td><input style="text-align: center;" type="text" name="mobilenumber" placeholder="New Mobilenumber"></td>
                                 <td><select style="text-align: center;" id="Role" name="Role">
-                                    <option value="Student">Student</option>
-                                    <option value="Student-CO-Ordinator">Student - CO-Ordinator</option>
-                                    <option value="Student-Leader">Student - Leader</option>
-                                </select></td>
-                                <td><button>
-                                    <span class="glyphicon glyphicon-ok">&emsp;<button type="reset"><i
-                                        class="material-icons"
-                                        style="font-weight: 24px; text-align: center;">&#xe14c;</i></button></span>
-                                    </button></td>
-                                </tr>
-                                <nav style="font-size: medium; padding-left: 20px;" aria-label="Page navigation">
-                                    <ul class="pagination">
-                                      <li>
+                                        <option value="Student">Student</option>
+                                        <option value="Student-CO-Ordinator">Student - CO-Ordinator</option>
+                                        <option value="Student-Leader">Student - Leader</option>
+                                    </select></td>
+                                    <td><button>
+                                            <span class="glyphicon glyphicon-ok"></span></button>&emsp;&emsp;<button type="reset"><span class="fa fa-close"
+                                                style="font-size:25px;color: red;"></span></button>
+                                    </td>
+                            </tr>
+                            <nav style="font-size: medium; padding-left: 20px;" aria-label="Page navigation">
+                                <ul class="pagination">
+                                    <li>
                                         <a href="#" aria-label="Previous">
-                                          <span style="font-size: medium;" aria-hidden="true">&laquo;</span>
+                                            <span style="font-size: medium;" aria-hidden="true">&laquo;</span>
                                         </a>
-                                      </li>
-                                      {% for page_number in teacherdata.paginator.page_range %}
-                                      <li><a href="?page={{ page_number }}">{{ page_number }}</a></li>
-                                      {% endfor %}
-                                      <li style="font-size: medium;">
+                                    </li>
+                                    {% for page_number in teacherdata.paginator.page_range %}
+                                    <li><a href="?page={{ page_number }}">{{ page_number }}</a></li>
+                                    {% endfor %}
+                                    <li style="font-size: medium;">
                                         <a href="#" aria-label="Next">
-                                          <span style="font-size: medium;" aria-hidden="true">&raquo;</span>
+                                            <span style="font-size: medium;" aria-hidden="true">&raquo;</span>
                                         </a>
-                                      </li>
-                                    </ul>
-                                  </nav>
-                            </form>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </form>
                         </tbody>
                     </table>
                 </div>
