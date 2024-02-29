@@ -570,22 +570,33 @@
                             <th>Role</th>
                             <th></th>
                         </tr>
-                        <form action="{% url 'search_box' %}" method="post">
-                            {% csrf_token %}
-                            <th></th>
-                            <th><input name="username" style="text-align: center; border: 1px solid  #ccc; padding: 5px; border-radius: 5px;" type="search" placeholder="Search"></th>
-                            <th><input name="firstname" style="text-align: center; border: 1px solid  #ccc; padding: 5px; border-radius: 5px;" type="search" placeholder="Search"></th>
-                            <th><input name="lastname" style="text-align: center; border: 1px solid #ccc; padding: 5px; border-radius: 5px;" type="search" placeholder="Search"></th>
-                            <th><input name="mobilenumber" style="text-align: center; border: 1px solid  #ccc; padding: 5px; border-radius: 5px;" type="search" placeholder="Search"></th>
-                            <th><input name="Role" style="text-align: center; border: 1px solid  #ccc; padding: 5px; border-radius: 5px;" type="search" placeholder="Search"></th>
-                            <!-- <th><button style="border: 1px solid #18191a; color: #707070; background-color: skyblue; font-size: small; border-radius: 5px; padding: 5px;" type="submit">Search</button></th> -->
-                            <th><button type="submit"><i class="fa fa-search" style="font-size:25px; color: blue;"></i></button></th>
-                        </form>
+                        <tr>
+                            <form action="{% url 'search_box' %}" method="post">
+                                {% csrf_token %}
+                                <th></th>
+                                <th><input name="username"
+                                        style="text-align: center; border: 1px solid  #ccc; padding: 5px; border-radius: 5px;" type="search"
+                                        placeholder="Search"></th>
+                                <th><input name="firstname"
+                                        style="text-align: center; border: 1px solid  #ccc; padding: 5px; border-radius: 5px;" type="search"
+                                        placeholder="Search"></th>
+                                <th><input name="lastname" style="text-align: center; border: 1px solid #ccc; padding: 5px; border-radius: 5px;"
+                                        type="search" placeholder="Search"></th>
+                                <th><input name="mobilenumber"
+                                        style="text-align: center; border: 1px solid  #ccc; padding: 5px; border-radius: 5px;" type="search"
+                                        placeholder="Search"></th>
+                                <th><input name="Role" style="text-align: center; border: 1px solid  #ccc; padding: 5px; border-radius: 5px;"
+                                        type="search" placeholder="Search"></th>
+                                <!-- <th><button style="border: 1px solid #18191a; color: #707070; background-color: skyblue; font-size: small; border-radius: 5px; padding: 5px;" type="submit">Search</button></th> -->
+                                <th><button type="submit"><i class="fa fa-search" style="font-size:25px; color: blue;"></i></button></th>
+                            </form>
+                        </tr>
                     </thead>
                     <tbody>
                         <form method="post">
-                            {% for data in admindata.object_list %}
                             {% csrf_token %}
+                            {% if admindata %}
+                            {% for data in admindata.object_list %}
                             <tr>
                                 <td>{{ forloop.counter }}</td>
                                 <td><a style="cursor: pointer; text-align: center;" href="{% url 'list_profile' id=data.username %}"><input
@@ -622,7 +633,7 @@
                                 </td>
                             </tr>
                             {% endfor %}
-
+                            {% endif %}
                         </form>
                         <form action="{% url 'createuser' %}" method="post">
                             {% csrf_token %}
@@ -688,6 +699,30 @@ overflow: auto; width: 100%; padding: 10px; height: 100%;">
                             <th>Mobilenumber</th>
                             <th>Role</th>
                             <th></th>
+                        </tr>
+                        <tr>
+                            <form action="{% url 'search_box' %}" method="post">
+                                {% csrf_token %}
+                                <th></th>
+                                <th><input name="username"
+                                        style="text-align: center; border: 1px solid  #ccc; padding: 5px; border-radius: 5px;"
+                                        type="search" placeholder="Search"></th>
+                                <th><input name="firstname"
+                                        style="text-align: center; border: 1px solid  #ccc; padding: 5px; border-radius: 5px;"
+                                        type="search" placeholder="Search"></th>
+                                <th><input name="lastname"
+                                        style="text-align: center; border: 1px solid #ccc; padding: 5px; border-radius: 5px;"
+                                        type="search" placeholder="Search"></th>
+                                <th><input name="mobilenumber"
+                                        style="text-align: center; border: 1px solid  #ccc; padding: 5px; border-radius: 5px;"
+                                        type="search" placeholder="Search"></th>
+                                <th><input name="Role"
+                                        style="text-align: center; border: 1px solid  #ccc; padding: 5px; border-radius: 5px;"
+                                        type="search" placeholder="Search"></th>
+                                <!-- <th><button style="border: 1px solid #18191a; color: #707070; background-color: skyblue; font-size: small; border-radius: 5px; padding: 5px;" type="submit">Search</button></th> -->
+                                <th><button type="submit"><i class="fa fa-search"
+                                            style="font-size:25px; color: blue;"></i></button></th>
+                            </form>
                         </tr>
                     </thead>
                     <tbody>
@@ -762,8 +797,297 @@ overflow: auto; width: 100%; padding: 10px; height: 100%;">
                     </table>
                 </div>
             </div>
-        </section>
-        {% endif %}
+    </section>
+
+    {% elif search_results_admindata %}
+    <section class="home">
+            <div class="text">Superadmin's - Data<br><br>
+                <a href="{% url 'Userhomepage' %}" style="font-size: large; text-decoration: none;"><i
+                        class='bx bx-home-alt icon' style="color: #707070;"></i> Home</a>
+                <div style="background-color: white; border-radius: 25px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+                border-collapse: collapse;
+                width: 100%;">
+                    <h3 style="padding: 20px;">User's Table</h3>
+                    <table class="table" style="display: flexbox;
+                overflow: auto; width: 100%; padding: 10px; height: 100%;">
+                        <thead>
+                            <tr>
+                                <th>S.No</th>
+                                <th>Username</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Mobilenumber</th>
+                                <th>Role</th>
+                                <th></th>
+                            </tr>
+                            <tr>
+                                <form action="{% url 'search_box' %}" method="post">
+                                    {% csrf_token %}
+                                    <th></th>
+                                    <th><input name="username"
+                                            style="text-align: center; border: 1px solid  #ccc; padding: 5px; border-radius: 5px;"
+                                            type="search" placeholder="Search"></th>
+                                    <th><input name="firstname"
+                                            style="text-align: center; border: 1px solid  #ccc; padding: 5px; border-radius: 5px;"
+                                            type="search" placeholder="Search"></th>
+                                    <th><input name="lastname"
+                                            style="text-align: center; border: 1px solid #ccc; padding: 5px; border-radius: 5px;"
+                                            type="search" placeholder="Search"></th>
+                                    <th><input name="mobilenumber"
+                                            style="text-align: center; border: 1px solid  #ccc; padding: 5px; border-radius: 5px;"
+                                            type="search" placeholder="Search"></th>
+                                    <th><input name="Role"
+                                            style="text-align: center; border: 1px solid  #ccc; padding: 5px; border-radius: 5px;"
+                                            type="search" placeholder="Search"></th>
+                                    <!-- <th><button style="border: 1px solid #18191a; color: #707070; background-color: skyblue; font-size: small; border-radius: 5px; padding: 5px;" type="submit">Search</button></th> -->
+                                    <th><button type="submit"><i class="fa fa-search"
+                                                style="font-size:25px; color: blue;"></i></button></th>
+                                </form>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <form method="post">
+                                {% csrf_token %}
+                                {% if search_results_admindata %}
+                                {% for data in search_results_admindata.object_list %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td><a style="cursor: pointer; text-align: center;"
+                                            href="{% url 'list_profile' id=data.username %}"><input type="text" name="username"
+                                                value="{{ data.username}}"></a></td>
+                                    <td><input style="text-align: center;" type="text" name="firstname"
+                                            value="{{ data.firstname}}"></td>
+                                    <td><input style="text-align: center;" type="text" name="lastname"
+                                            value="{{ data.lastname}}"></td>
+                                    <td><input style="text-align: center;" type="text" name="mobilenumber"
+                                            value="{{ data.mobilenumber}}"></td>
+                                    <td>
+                                        <select style="text-align: center;" id="Role" name="Role">
+                                            <option value="Superadmin" {% if data.Role == 'Superadmin' %}selected{% endif %}>
+                                                Superadmin
+                                            </option>
+                                            <option value="Admin" {% if data.Role == 'Admin' %}selected{% endif %}>
+                                                Admin
+                                            </option>
+                                            <option value="Teacher" {% if data.Role == 'Teacher' %}selected{% endif %}>
+                                                Teacher
+                                            </option>
+                                            <option value="Student" {% if data.Role == 'Student' %}selected{% endif %}>
+                                                Student
+                                            </option>
+                                            <option value="Student - CO-Ordinator" {% if data.Role == 'Student-CO-Ordinator' %}selected{% endif %}>
+                                                Student - CO-Ordinator
+                                            </option>
+                                            <option value="Student - Leader" {% if data.Role == 'Student-Leader' %}selected{% endif %}>
+                                                Student - Leader
+                                            </option>
+                                        </select>
+                                    </td>
+                                    <td><a href="{% url 'Delete_User' id=data.username %}"><i style="font-size:22px"
+                                                class="fa">&#xf1f8;</i></a>&emsp;&emsp;<button onclick="submit(data)"
+                                            type="submit" id="pencil" class="glyphicon glyphicon-pencil"></button>
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                {% endif %}
+                            </form>
+                            <form action="{% url 'createuser' %}" method="post">
+                                {% csrf_token %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td><input style="text-align: center;" type="text" name="username"
+                                            placeholder="New Username"></td>
+                                    <td><input style="text-align: center;" type="text" name="firstname"
+                                            placeholder="New Firstname"></td>
+                                    <td><input style="text-align: center;" type="text" name="lastname"
+                                            placeholder="New Lastname"></td>
+                                    <td><input style="text-align: center;" type="text" name="mobilenumber"
+                                            placeholder="New Mobilenumber"></td>
+                                    <td><select style="text-align: center;" id="Role" name="Role">
+                                            <option value="Default">Default</option>
+                                            <option value="Superadmin">Superadmin</option>
+                                            <option value="Admin">Admin</option>
+                                            <option value="Teacher">Teacher</option>
+                                            <option value="Student">Student</option>
+                                            <option value="Student-CO-Ordinator">Student - CO-Ordinator</option>
+                                            <option value="Student-Leader">Student - Leader</option>
+                                        </select></td>
+                                    <td><button>
+                                            <span class="glyphicon glyphicon-ok"></span></button>&emsp;&emsp;<button
+                                            type="reset"><span class="fa fa-close"
+                                                style="font-size:25px;color: red;"></span></button>
+                                    </td>
+                                </tr>
+                                <nav style="font-size: medium; padding-left: 20px;" aria-label="Page navigation">
+                                    <ul class="pagination">
+                                        <li>
+                                            <a href="#" aria-label="Previous">
+                                                <span style="font-size: medium;" aria-hidden="true">&laquo;</span>
+                                            </a>
+                                        </li>
+                                        {% for page_number in search_results_admindata.paginator.page_range %}
+                                        <li><a href="?page={{ page_number }}">{{ page_number }}</a></li>
+                                        {% endfor %}
+                                        <li style="font-size: medium;">
+                                            <a href="#" aria-label="Next">
+                                                <span style="font-size: medium;" aria-hidden="true">&raquo;</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </form>
+                        </tbody>
+                    </table>
+            </div>
+        </div>
+    </section>
+
+    {% elif search_results_teacher %}
+    <section class="home">
+            <div class="text">Teacher's - Data<br><br>
+                <a href="{% url 'Userhomepage' %}" style="font-size: large; text-decoration: none;"><i
+                        class='bx bx-home-alt icon' style="color: #707070;"></i> Home</a>
+                <div style="background-color: white; border-radius: 25px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+                border-collapse: collapse;
+                width: 100%;">
+                    <h3 style="padding: 20px;">Student's Table</h3>
+                    <table class="table" style="display: flexbox;
+                overflow: auto; width: 100%; padding: 10px; height: 100%;">
+                        <thead>
+                            <tr>
+                                <th>S.No</th>
+                                <th>Username</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Mobilenumber</th>
+                                <th>Role</th>
+                                <th></th>
+                            </tr>
+                            <tr>
+                                <form action="{% url 'search_box' %}" method="post">
+                                    {% csrf_token %}
+                                    <th></th>
+                                    <th><input name="username"
+                                            style="text-align: center; border: 1px solid  #ccc; padding: 5px; border-radius: 5px;"
+                                            type="search" placeholder="Search"></th>
+                                    <th><input name="firstname"
+                                            style="text-align: center; border: 1px solid  #ccc; padding: 5px; border-radius: 5px;"
+                                            type="search" placeholder="Search"></th>
+                                    <th><input name="lastname"
+                                            style="text-align: center; border: 1px solid #ccc; padding: 5px; border-radius: 5px;"
+                                            type="search" placeholder="Search"></th>
+                                    <th><input name="mobilenumber"
+                                            style="text-align: center; border: 1px solid  #ccc; padding: 5px; border-radius: 5px;"
+                                            type="search" placeholder="Search"></th>
+                                    <th><input name="Role"
+                                            style="text-align: center; border: 1px solid  #ccc; padding: 5px; border-radius: 5px;"
+                                            type="search" placeholder="Search"></th>
+                                    <!-- <th><button style="border: 1px solid #18191a; color: #707070; background-color: skyblue; font-size: small; border-radius: 5px; padding: 5px;" type="submit">Search</button></th> -->
+                                    <th><button type="submit"><i class="fa fa-search"
+                                                style="font-size:25px; color: blue;"></i></button></th>
+                                </form>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <form method="post">
+                                {% csrf_token %}
+                                {% if search_results_teacher %}
+                                {% for data in search_results_teacher.object_list %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td><a style="cursor: pointer; text-align: center;"
+                                            href="{% url 'list_profile' id=data.username %}"><input type="text" name="username"
+                                                value="{{ data.username}}"></a></td>
+                                    <td><input style="text-align: center;" type="text" name="firstname"
+                                            value="{{ data.firstname}}"></td>
+                                    <td><input style="text-align: center;" type="text" name="lastname"
+                                            value="{{ data.lastname}}"></td>
+                                    <td><input style="text-align: center;" type="text" name="mobilenumber"
+                                            value="{{ data.mobilenumber}}"></td>
+                                    <td>
+                                        <select style="text-align: center;" id="Role" name="Role">
+                                            <option value="Superadmin" {% if data.Role == 'Superadmin' %}selected{% endif %}>
+                                                Superadmin
+                                            </option>
+                                            <option value="Admin" {% if data.Role == 'Admin' %}selected{% endif %}>
+                                                Admin
+                                            </option>
+                                            <option value="Teacher" {% if data.Role == 'Teacher' %}selected{% endif %}>
+                                                Teacher
+                                            </option>
+                                            <option value="Student" {% if data.Role == 'Student' %}selected{% endif %}>
+                                                Student
+                                            </option>
+                                            <option value="Student - CO-Ordinator" {% if data.Role == 'Student-CO-Ordinator' %}selected{% endif %}>
+                                                Student - CO-Ordinator
+                                            </option>
+                                            <option value="Student - Leader" {% if data.Role == 'Student-Leader' %}selected{% endif %}>
+                                                Student - Leader
+                                            </option>
+                                        </select>
+                                    </td>
+                                    <td><a href="{% url 'Delete_User' id=data.username %}"><i style="font-size:22px"
+                                                class="fa">&#xf1f8;</i></a>&emsp;&emsp;<button onclick="submit(data)"
+                                            type="submit" id="pencil" class="glyphicon glyphicon-pencil"></button>
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                {% endif %}
+                            </form>
+                            <form action="{% url 'createuser' %}" method="post">
+                                {% csrf_token %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td><input style="text-align: center;" type="text" name="username"
+                                            placeholder="New Username"></td>
+                                    <td><input style="text-align: center;" type="text" name="firstname"
+                                            placeholder="New Firstname"></td>
+                                    <td><input style="text-align: center;" type="text" name="lastname"
+                                            placeholder="New Lastname"></td>
+                                    <td><input style="text-align: center;" type="text" name="mobilenumber"
+                                            placeholder="New Mobilenumber"></td>
+                                    <td><select style="text-align: center;" id="Role" name="Role">
+                                            <option value="Default">Default</option>
+                                            <option value="Superadmin">Superadmin</option>
+                                            <option value="Admin">Admin</option>
+                                            <option value="Teacher">Teacher</option>
+                                            <option value="Student">Student</option>
+                                            <option value="Student-CO-Ordinator">Student - CO-Ordinator</option>
+                                            <option value="Student-Leader">Student - Leader</option>
+                                        </select></td>
+                                    <td><button>
+                                            <span class="glyphicon glyphicon-ok"></span></button>&emsp;&emsp;<button
+                                            type="reset"><span class="fa fa-close"
+                                                style="font-size:25px;color: red;"></span></button>
+                                    </td>
+                                </tr>
+                                <nav style="font-size: medium; padding-left: 20px;" aria-label="Page navigation">
+                                    <ul class="pagination">
+                                        <li>
+                                            <a href="#" aria-label="Previous">
+                                                <span style="font-size: medium;" aria-hidden="true">&laquo;</span>
+                                            </a>
+                                        </li>
+                                        {% for page_number in search_results_teacher.paginator.page_range %}
+                                        <li><a href="?page={{ page_number }}">{{ page_number }}</a></li>
+                                        {% endfor %}
+                                        <li style="font-size: medium;">
+                                            <a href="#" aria-label="Next">
+                                                <span style="font-size: medium;" aria-hidden="true">&raquo;</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </form>
+                        </tbody>
+                    </table>
+            </div>
+        </div>
+    </section>
+
+    {% endif %}
         
         
     <script>
@@ -832,12 +1156,12 @@ overflow: auto; width: 100%; padding: 10px; height: 100%;">
         }
         document.getElementById('logoutButton').addEventListener('click', logout);
 
-
         function sumbit(data){
             console.log(data)
         }
 
     </script>
+    
 </body>
 
 </html>
