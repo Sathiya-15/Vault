@@ -135,6 +135,7 @@ def Profile_View(request):
         try:
             username, id, Role = cookieToken
             users = userlogin.objects.get(id=id)
+            print("USERS==========================>", users)
             # firstnames = []
             # lastnames = []
             # mobilenumbers = []
@@ -267,7 +268,7 @@ def Users(request):
                     page_count = paginator.num_pages
                     print("PAGE_COUNT====================>", page_count)
 
-                    page_number = request.GET.get("page", 1)
+                    page_number = request.GET.get("page")
                     print("page_number===================>", page_number)
                     page = paginator.get_page(page_number)
                     print("Page number:", page.number)
@@ -320,10 +321,23 @@ def Users(request):
 
 
 
-# @login_required
 def attendence(request):
     if request.method == "GET":
-        return render(request, "Attendence.html")
+        cookieToken = request.session.get("cookieToken")
+        print("cookieToken====================>",cookieToken)
+        username , id, Role = cookieToken
+        query_set = userlogin.objects.get(id=id)
+        image = query_set.Profile_image
+        print(image)
+        print("query_set======================>", query_set)
+        # user_data = []
+        # for data in query_set:
+        #     user = {
+        #         'username': data.username,
+        #         'Profile_image': data.Profile_image,
+        #     }
+        #     user_data.append(user)
+        return render(request, "Attendence.html", {"data": query_set})
 
     if request.method == "POST":
         log_in_at = request.POST.get("login_at")
@@ -372,7 +386,6 @@ def list_profile(request, id):
 
 
 
-
 def books(request):
     if request.method == "GET":
         return render(request, "Books.html")
@@ -380,18 +393,28 @@ def books(request):
 
 
 def search_box(request):
+    page_number = request.GET.get("page")
+    print("REQUEST============================================>", request)
     if request.method == 'POST':
         headers = request.headers
         cookieToken = request.session.get("cookieToken")
         print("Headers================================>", headers)
         if cookieToken:
-            username , id , Role = cookieToken
+            username, id, Role = cookieToken
             if Role == "Superadmin":
                 username = request.POST.get('username')
                 firstname = request.POST.get('firstname')
                 lastname = request.POST.get('lastname')
                 mobilenumber = request.POST.get('mobilenumber')
                 Role = request.POST.get('Role')
+
+                Searched_List = {
+                    'username': username,
+                    'firstname': firstname,
+                    'lastname': lastname,
+                    'mobilenumber': mobilenumber,
+                    'Role' : Role,
+                }
 
                 searched_query = Q(username__icontains=username) & \
                                Q(firstname__icontains=firstname) & \
@@ -401,36 +424,46 @@ def search_box(request):
 
                 print("searched_query================>", searched_query)
 
-                searched_results = userlogin.objects.filter(searched_query)
-                print("Search_Results================>", searched_results)
-                users_data = []
+                is_empty_query = all(value == '' for field, value in searched_query.children)
 
-                for data in searched_results:
-                    user_data = {
-                        'username': data.username,
-                        'firstname': data.firstname,
-                        'lastname': data.lastname,
-                        'mobilenumber': data.mobilenumber,
-                        'Role': data.Role,
-                    }
-                    users_data.append(user_data)
-                print("Search_Results================>", users_data)
 
-                items_perpage = 5
-                paginator = Paginator(users_data, items_perpage)
+                if is_empty_query:
+                    print("++++++++++++++++++++++++++++++++++++++++++", is_empty_query)
+                    return redirect("Table_Users")
 
-                page_count = paginator.num_pages
-                print("PAGE_COUNT====================>", page_count)
+                else:
+                    searched_results = userlogin.objects.filter(searched_query)
+                    print("Search_Results================>", searched_results)
+                    users_data = []
 
-                page_number = request.GET.get("page")
-                print("page_number===================>", page_number)
-                page = paginator.get_page(page_number)
-                print("Page number:", page.number)
-                print("Items on this page:", page.object_list)
+                    for data in searched_results:
+                        user_data = {
+                            'username': data.username,
+                            'firstname': data.firstname,
+                            'lastname': data.lastname,
+                            'mobilenumber': data.mobilenumber,
+                            'Role': data.Role,
+                        }
+                        users_data.append(user_data)
 
-                print("user_data:====================>", page)
+                    print("Search_Results================>", users_data)
 
-                return render(request, 'Users_Table_View.html', {'search_results_admindata': page})
+                    items_perpage = 10
+                    paginator = Paginator(users_data, items_perpage)
+
+                    page_count = paginator.num_pages
+                    print("PAGE_COUNT====================>", page_count)
+
+                    page_number = request.GET.get("page")
+                    print("page_number===================>", page_number)
+                    page = paginator.get_page(page_number)
+                    print("Page number:", page.number)
+                    print("Items on this page:", page.object_list)
+
+                    print("user_data:====================>", page)
+
+                    return render(request, 'Users_Table_View.html', {'search_results_admindata': page , 'Searched_List':Searched_List })
+
 
             elif Role == "Teacher":
                 username = request.POST.get('username')
@@ -439,48 +472,72 @@ def search_box(request):
                 mobilenumber = request.POST.get('mobilenumber')
                 Role = request.POST.get('Role')
 
+                Searched_List = {
+                    'username': username,
+                    'firstname': firstname,
+                    'lastname': lastname,
+                    'mobilenumber': mobilenumber,
+                    'Role': Role,
+                }
+
                 searched_query = Q(username__icontains=username) & \
                                  Q(firstname__icontains=firstname) & \
                                  Q(lastname__icontains=lastname) & \
                                  Q(mobilenumber__icontains=mobilenumber) & \
-                                 Q(Role__iexact=Role)
+                                 Q(Role__icontains=Role)
 
                 print("searched_query================>", searched_query)
-                searched_results = userlogin.objects.filter(searched_query).userlogin.objects.filter(Role__in=['Student', 'Student-Leader', 'Student-CO-Ordinator'])
-                print("RAW_QUERY=====================>", searched_results.query)
-                print("Search_Results================>", searched_results)
-                users_data = []
-                for data in searched_results:
-                    user_data = {
-                        'username': data.username,
-                        'firstname': data.firstname,
-                        'lastname': data.lastname,
-                        'mobilenumber': data.mobilenumber,
-                        'Role': data.Role,
-                    }
-                    users_data.append(user_data)
 
-                print("Search_Results================>", users_data)
+                printed_Statement = searched_query.children
+                print("printed_Statement=============>", printed_Statement)
 
-                items_perpage = 5
-                paginator = Paginator(users_data, items_perpage)
 
-                page_count = paginator.num_pages
-                print("PAGE_COUNT====================>", page_count)
+                is_empty_query = all(value == '' for field, value in searched_query.children)
 
-                page_number = request.GET.get("page", 1)
-                print("page_number===================>", page_number)
-                page = paginator.get_page(page_number)
-                print("Page number:", page.number)
-                print("Items on this page:", page.object_list)
+                if is_empty_query:
+                    print("+++++++++++++++++++++++++++++++++++++++++++++++", is_empty_query)
+                    return redirect("Table_Users")
 
-                print("user_data:====================>", page)
+                else:
+                    searched_results = userlogin.objects.filter(searched_query, Role__in=['Student', 'Student-Leader',
+                                                                                          'Student-CO-Ordinator'])
 
-                return render(request, 'Users_Table_View.html', {'search_results_teacher': page})
+                    if not searched_results:
+                        messages.error(request, "Please Search the Value as Given")
+                        return redirect("Table_Users")
 
-                # else:
-                #     messages.error(request, "Please Select the Role as Given")
-                #     return redirect("Table_Users")
+                        # searched_results = userlogin.objects.filter(searched_query).userlogin.objects.filter(Role__in=['Student', 'Student-Leader', 'Student-CO-Ordinator'])
+
+                    print("RAW_QUERY=====================>", searched_results.query)
+                    print("Search_Results================>", searched_results)
+                    users_data = []
+                    for data in searched_results:
+                        user_data = {
+                            'username': data.username,
+                            'firstname': data.firstname,
+                            'lastname': data.lastname,
+                            'mobilenumber': data.mobilenumber,
+                            'Role': data.Role,
+                        }
+                        users_data.append(user_data)
+
+                    print("Search_Results================>", users_data)
+
+                    items_perpage = 5
+                    paginator = Paginator(users_data, items_perpage)
+
+                    page_count = paginator.num_pages
+                    print("PAGE_COUNT====================>", page_count)
+
+                    page_number = request.GET.get("page")
+                    print("page_number===================>", page_number)
+                    page = paginator.get_page(page_number)
+                    print("Page number:", page.number)
+                    print("Items on this page:", page.object_list)
+
+                    print("user_data:====================>", page)
+
+                    return render(request, 'Users_Table_View.html', {'search_results_teacher': page ,'Searched_List':Searched_List})
 
         else:
             return render(request, '404Errorpage.html')

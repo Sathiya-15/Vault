@@ -1,6 +1,6 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
-{%load static%}
 
 
 <head>
@@ -453,21 +453,29 @@
             </div>
         </div>
     </nav>
-
+    {% if data %}
     <section class="home">
         <div class="text">Mark - Attendence<br><br>
-            <a href="{% url 'Userhomepage' %}" style="font-size: large; text-decoration: none;"><i class='bx bx-home-alt icon' style="color: #707070;"></i> Home</a><br><br>
-            <div style="background-color: white; border-radius: 100px;">
-                <form action="{% url 'attendence' %}">
-                    <button type="button" style="border-radius: 100px; border: none; margin: 20px;"><a
-                        onclick="captureDateTime()"></a>Login</button>
-                </form>
+            <a href="{% url 'Userhomepage' %}" style="font-size: large; text-decoration: none;"><i
+                    class='bx bx-home-alt icon' style="color: #707070;"></i> Home</a><br><br>
+            <div style="background-color: white; border-radius: 100px; display: flex;">
+                <div>
+                    <img src="{{ data.Profile_image.url }}" alt="User-Image" style="width: 200px;height: 250px; border-radius: 100px;padding: 20px;">
+                </div>
+                <div>
+                    <a href="{% url 'Myprofile' %}">{{ data.firstname }} {{ data.lastname }}</a>
+                    <form action="{% url 'attendence' %}">
+                        <button type="button" style="border-radius: 100px; border: none; margin: 20px;"><a
+                                onclick="captureDateTime()"></a>Login</button>
+                    </form>
+                </div>
                 {% if attendance %}
-                <p>{{ attendance.log_in_at }}</p>
+                <p>login at : {{ attendance.log_in_at }}</p>
                 {% endif %}
             </div>
         </div>
     </section>
+    {% endif %}
 
     <script>
         const body = document.querySelector('body'),

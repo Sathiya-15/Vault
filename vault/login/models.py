@@ -12,7 +12,7 @@ class userlogin(AbstractUser):
     firstname = models.CharField(max_length=100, null=True, blank=True)
     lastname = models.CharField(max_length=100, null=True, blank=True)
     mobilenumber = models.BigIntegerField(null=True, blank=True)
-    Background_image = models.ImageField(upload_to='userimages/', null=True, blank=True,default='userimages/default_back.png')
+    Background_image = models.ImageField(upload_to='userimages/', null=True, blank=True, default='userimages/default_back.png')
     Profile_image = models.ImageField(upload_to='userimages/', null=True, blank=True, default='userimages/default_profile.png')
     created_at = models.DateTimeField(default=datetime.now(), blank=True, null=True)
     address = models.CharField(max_length=225, null=True,blank=True)
