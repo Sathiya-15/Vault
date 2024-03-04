@@ -413,7 +413,8 @@ def search_box(request):
                     'firstname': firstname,
                     'lastname': lastname,
                     'mobilenumber': mobilenumber,
-                    'Role' : Role,
+                    'Role': Role,
+
                 }
 
                 searched_query = Q(username__icontains=username) & \
@@ -491,7 +492,6 @@ def search_box(request):
                 printed_Statement = searched_query.children
                 print("printed_Statement=============>", printed_Statement)
 
-
                 is_empty_query = all(value == '' for field, value in searched_query.children)
 
                 if is_empty_query:
@@ -523,7 +523,7 @@ def search_box(request):
 
                     print("Search_Results================>", users_data)
 
-                    items_perpage = 5
+                    items_perpage = 10
                     paginator = Paginator(users_data, items_perpage)
 
                     page_count = paginator.num_pages
@@ -537,7 +537,11 @@ def search_box(request):
 
                     print("user_data:====================>", page)
 
-                    return render(request, 'Users_Table_View.html', {'search_results_teacher': page ,'Searched_List':Searched_List})
+                    return render(request, 'Users_Table_View.html', {'search_results_teacher': page , 'Searched_List':Searched_List})
 
         else:
             return render(request, '404Errorpage.html')
+
+
+def clear_search(request):
+    return redirect("Table_Users")

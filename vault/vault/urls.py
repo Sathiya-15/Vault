@@ -44,6 +44,7 @@ urlpatterns = [
     path("Attendence/", user_views.attendence, name="attendence"),
     path("books/", user_views.books, name="books"),
     path("Search_Box/", user_views.search_box, name="search_box"),
+    path("clear_search/", user_views.clear_search, name="clear_search"),
 ]
 
 

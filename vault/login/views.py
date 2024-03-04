@@ -25,32 +25,37 @@ def loguser(request):
         print(password)
         try:
             user = userlogin.objects.get(username=username, password=password)
-            userparam = userlogin.objects.get(username=username)
-            print("useruseruser", user)
-            if userparam:
-                user_details = {
-                    'username': userparam.username,
-                    'id': userparam.id,
-                    'Role': userparam.Role,
-                }
+            if user:
+                userparam = userlogin.objects.get(username=username)
+                print("useruseruser", user)
+                if userparam:
+                    user_details = {
+                        'username': userparam.username,
+                        'id': userparam.id,
+                        'Role': userparam.Role,
+                    }
 
-                request.session['cookieToken'] = userparam.username, userparam.id, userparam.Role
+                    request.session['cookieToken'] = userparam.username, userparam.id, userparam.Role
 
-                refresh_token = RefreshToken.for_user(userparam)
-                access_token = refresh_token.access_token
+                    refresh_token = RefreshToken.for_user(userparam)
+                    access_token = refresh_token.access_token
 
-                access_token.payload.update(user_details)
-                print("access_token:", access_token)
-                print("refresh_token:", refresh_token)
+                    access_token.payload.update(user_details)
+                    print("access_token:", access_token)
+                    print("refresh_token:", refresh_token)
 
-                firstname = userparam.firstname
-                lastname = userparam.lastname
-                messages.success(request, f"Successfully Login [ {firstname} {lastname} ]")
-                # return render(request, 'Homepage_3.html', {"access_token": access_token, "refresh_token": refresh_token, "data": user})
-                return redirect('Userhomepage')
+                    firstname = userparam.firstname
+                    lastname = userparam.lastname
+                    messages.success(request, f"Successfully Login [ {firstname} {lastname} ]")
+                    # return render(request, 'Homepage_3.html', {"access_token": access_token, "refresh_token": refresh_token, "data": user})
+                    return redirect('Userhomepage')
 
-        except userlogin.DoesNotExist:
-            messages.error(request, "Invalid Username Password")
+            else:
+                messages.error(request, "Please SIGNIN for LOGIN")
+
+        except:
+            messages.error(request, "Invalid Username or Password")
+            return render(request, 'Login_1.html')
 
 
 
