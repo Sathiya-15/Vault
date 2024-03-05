@@ -80,37 +80,76 @@ def loguser(request):
 
 @csrf_exempt
 def Forgot(request):
-    if request.method == "GET":
-        return render(request, 'Password_Reset.html')
-
-    if request.method == "DELETE":
-        return render(request, 'Password_Reset.html')
-
     if request.method == "POST":
-        username = request.POST.get("username")
+        otp = request.POST.get("otp")
         newpassword = request.POST.get("newpassword")
         retypepassword = request.POST.get("retypepassword")
         try:
-           user = userlogin.objects.get(username=username)
-           if user:
-               check = newpassword == retypepassword
-               if check:
-                   user.password = retypepassword
-                   user.save()
-                   firstname = user.firstname
-                   lastname = user.lastname
+           user = emailotp.objects.get(otp=otp)
+           if user.email:
+               if newpassword == retypepassword:
+                   print("IF++++++++++++++++++++++++++++++++++++++++++++++++")
+                   login_user = userlogin.objects.get(username=user.email)
+                   login_user.password = retypepassword
+                   login_user.save()
+                   firstname = login_user.firstname
+                   lastname = login_user.lastname
                    messages.success(request, f"Password Reset Done for [ {firstname} {lastname} ]")
                    return redirect('Login')
 
                else:
-                   messages.error(request, "Password doesn't Match")
-                   return render(request, 'Password_Reset.html', {'error': 'Passwords do not match'})
+                   print("ELSE++++++++++++++++++++++++++++++++++++++++++++++++")
+                   messages.error(request, "Newpassword and Rertyepassword Should be Same")
+                   return redirect("Forgotpassword")
 
         except userlogin.DoesNotExist:
-            messages.error(request, "User does not Exist")
-            return render(request, 'Password_Reset.html', {'error': 'User does not exist'})
+            print("EXCEPT++++++++++++++++++++++++++++++++++++++++++++++++")
+            messages.error(request, "Invalid OTP")
+            return redirect("Forgotpassword")
 
-    return render(request, 'Password_Reset.html')
+    return render(request, 'Password_Reset_2.html')
+
+
+
+import random
+from .models import emailotp
+def otp_gen(request):
+    if request.method == "POST":
+        username = request.POST.get("username")
+        if username:
+            print("Forgot_Request_Username======================>", username)
+            try:
+                user = userlogin.objects.get(username=username)
+                print("user------------------------------------->", user)
+                if user:
+                    random_integer = random.randint(1000, 9999)
+                    print("random_integer========================>", random_integer)
+                    try:
+                        otp_user = emailotp.objects.get(email=username)
+                        print("otp_user===========================>", otp_user)
+                        if otp_user:
+                            otp_user.otp = random_integer
+                            otp_user.save()
+                            otp = otp_user.otp
+                            messages.success(request, f"YOUR OTP IS {otp}")
+                            return render(request, "Password_Reset_3.html")
+
+                    except:
+                        print("Except_Block==========================>")
+                        otp_user = emailotp.objects.create(email=username, otp=random_integer)
+                        else_otp = otp_user.otp
+                        messages.success(request, f"YOUR OTP IS {else_otp}")
+                        return render(request, "Password_Reset_3.html")
+
+            except:
+                messages.error(request, "User Not Found")
+
+        else:
+            messages.error(request, "Please Provide the Valid Username")
+            return redirect("Forgotpassword")
+
+    if request.method == "GET":
+        return render(request, "404Errorpage.html")
 
 
 

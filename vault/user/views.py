@@ -172,7 +172,14 @@ def Profile_View(request):
 
 
 def Mydashboard(request):
-    return render(request, 'Homepage_3.html')
+    if request.method == "GET":
+        cookieToken = request.session.get("cookieToken")
+        print(cookieToken)
+        if cookieToken:
+            return render(request, 'Homepage_3.html')
+
+        else:
+            return render(request, "404Errorpage.html")
 
 
 
@@ -324,32 +331,41 @@ def Users(request):
 def attendence(request):
     if request.method == "GET":
         cookieToken = request.session.get("cookieToken")
-        print("cookieToken====================>",cookieToken)
-        username , id, Role = cookieToken
-        query_set = userlogin.objects.get(id=id)
-        image = query_set.Profile_image
-        print(image)
-        print("query_set======================>", query_set)
-        # user_data = []
-        # for data in query_set:
-        #     user = {
-        #         'username': data.username,
-        #         'Profile_image': data.Profile_image,
-        #     }
-        #     user_data.append(user)
-        return render(request, "Attendence.html", {"data": query_set})
+        if cookieToken:
+            print("cookieToken====================>",cookieToken)
+            username , id, Role = cookieToken
+            query_set = userlogin.objects.get(id=id)
+            image = query_set.Profile_image
+            print(image)
+            print("query_set======================>", query_set)
+            # user_data = []
+            # for data in query_set:
+            #     user = {
+            #         'username': data.username,
+            #         'Profile_image': data.Profile_image,
+            #     }
+            #     user_data.append(user)
+            return render(request, "Attendence.html", {"data": query_set})
+
+        else:
+            return render(request, "404Errorpage.html")
 
     if request.method == "POST":
-        log_in_at = request.POST.get("login_at")
-        try:
-            user = userlogin.objects.get(id=1)
-            if user:
-                attendance = attendence.objects.create(userlogin=user, log_in_at=log_in_at)
-                print("attendance:=============>", attendance)
-                return render(request, "Attendence.html", {"attendance": attendance})
-        except:
-            messages.error(request, "User Not Found")
-            return render(request, "Attendence.html")
+        cookieToken = request.session.get("cookieToken")
+        if cookieToken:
+            log_in_at = request.POST.get("login_at")
+            try:
+                user = userlogin.objects.get(id=1)
+                if user:
+                    attendance = attendence.objects.create(userlogin=user, log_in_at=log_in_at)
+                    print("attendance:=============>", attendance)
+                    return render(request, "Attendence.html", {"attendance": attendance})
+            except:
+                messages.error(request, "User Not Found")
+                return render(request, "Attendence.html")
+
+        else:
+            return render(request, "404Errorpage.html")
 
 
 
@@ -434,36 +450,42 @@ def search_box(request):
 
                 else:
                     searched_results = userlogin.objects.filter(searched_query)
-                    print("Search_Results================>", searched_results)
-                    users_data = []
+                    if searched_results:
+                        print("Search_Results================>", searched_results)
+                        users_data = []
 
-                    for data in searched_results:
-                        user_data = {
-                            'username': data.username,
-                            'firstname': data.firstname,
-                            'lastname': data.lastname,
-                            'mobilenumber': data.mobilenumber,
-                            'Role': data.Role,
-                        }
-                        users_data.append(user_data)
+                        for data in searched_results:
+                            user_data = {
+                                'username': data.username,
+                                'firstname': data.firstname,
+                                'lastname': data.lastname,
+                                'mobilenumber': data.mobilenumber,
+                                'Role': data.Role,
+                            }
+                            users_data.append(user_data)
 
-                    print("Search_Results================>", users_data)
+                        print("Search_Results================>", users_data)
 
-                    items_perpage = 10
-                    paginator = Paginator(users_data, items_perpage)
+                        items_perpage = 10
+                        paginator = Paginator(users_data, items_perpage)
 
-                    page_count = paginator.num_pages
-                    print("PAGE_COUNT====================>", page_count)
+                        page_count = paginator.num_pages
+                        print("PAGE_COUNT====================>", page_count)
 
-                    page_number = request.GET.get("page")
-                    print("page_number===================>", page_number)
-                    page = paginator.get_page(page_number)
-                    print("Page number:", page.number)
-                    print("Items on this page:", page.object_list)
+                        page_number = request.GET.get("page")
+                        print("page_number===================>", page_number)
+                        page = paginator.get_page(page_number)
+                        print("Page number:", page.number)
+                        print("Items on this page:", page.object_list)
 
-                    print("user_data:====================>", page)
+                        print("user_data:====================>", page)
 
-                    return render(request, 'Users_Table_View.html', {'search_results_admindata': page , 'Searched_List':Searched_List })
+                        return render(request, 'Users_Table_View.html', {'search_results_admindata': page , 'Searched_List':Searched_List })
+
+                    else:
+                        messages.error(request, "Given Combination Does Not Exist")
+                        messages.error(request, "Please Provide the Correct Combination")
+                        return redirect("Table_Users")
 
 
             elif Role == "Teacher":
@@ -537,10 +559,13 @@ def search_box(request):
 
                     print("user_data:====================>", page)
 
-                    return render(request, 'Users_Table_View.html', {'search_results_teacher': page , 'Searched_List':Searched_List})
+                    return render(request, 'Users_Table_View.html', {'search_results_teacher': page, 'Searched_List':Searched_List})
 
         else:
             return render(request, '404Errorpage.html')
+
+    else:
+        return render(request, "404Errorpage.html")
 
 
 def clear_search(request):

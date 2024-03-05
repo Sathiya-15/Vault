@@ -3,8 +3,11 @@ from datetime import datetime
 from django.contrib.auth.models import AbstractUser
 
 
+
 # def filepath(filename):
 #     return os.path.join('userimages/', filename)
+
+
 
 class userlogin(AbstractUser):
     username = models.EmailField(max_length=100, null=True, blank=True, unique=True)
@@ -32,13 +35,19 @@ class attendence(models.Model):
     log_in_at = models.TimeField(null=False, blank=False)
     log_out_at = models.TimeField(null=False, blank=False)
 
-# class emailotp(models.Model):
-#     email = models.EmailField(max_length=100, null=True, blank=True)
-#     otp = models.CharField(max_length=6, null=True, blank=True)
+
+
+class emailotp(models.Model):
+    email = models.EmailField(max_length=100, null=True, blank=True)
+    otp = models.CharField(max_length=6, null=True, blank=True)
+
+
 
 # class userdocuments(models.Model):
 #     pdf = models.FileField(upload_to='pdf/', null=True, blank=True)
 #     image = models.ImageField(upload_to='image/', null=True, blank=True)
+
+
 
 # def constr(request,images):
 #     data = userlogin.objects.get(images=images)

@@ -573,7 +573,9 @@
                         <tr>
                             <form action="{% url 'search_box' %}" method="post">
                                 {% csrf_token %}
-                                <th></th>
+                                <!-- <th><button type="reset"><span class="fa fa-close"
+                                    style="font-size:25px;color: red; text-decoration: none;"></span></button></th> -->
+                                <th><button type="reset"><a class="btn btn-info btn-lg" style="background-color: dodgerblue; font-size: 15px;">Clear</a></button></th>
                                 <th><input name="username"
                                         style="text-align: center; border: 1px solid  #ccc; padding: 5px; border-radius: 5px;" type="search"
                                         placeholder="Search"></th>
@@ -588,20 +590,21 @@
                                 <th><input name="Role" style="text-align: center; border: 1px solid  #ccc; padding: 5px; border-radius: 5px;"
                                         type="search" placeholder="Search"></th>
                                 <!-- <th><button style="border: 1px solid #18191a; color: #707070; background-color: skyblue; font-size: small; border-radius: 5px; padding: 5px;" type="submit">Search</button></th> -->
-                                <th><button type="submit"><i class="fa fa-search" style="font-size:22px; color: blue;"></i></button>&emsp;&emsp;<button type="reset"><span class="fa fa-close"
-                                    style="font-size:25px;color: red; text-decoration: none;"></span></button></th>
+                                <!-- <th><button type="submit"><i class="fa fa-search" style="font-size:22px; color: blue;"></i></button></th> -->
+                                <th><button type="submit"><a class="btn btn-info btn-lg" style="background-color:  forestgreen; font-size: 15px;">Search</a></button></th>
+
                             </form>
                         </tr>
                     </thead>
                     <tbody>
-                        <form method="post">
+                        <form method="post" action="{% url 'Update_User' %}">
                             {% csrf_token %}
                             {% if admindata %}
                             {% for data in admindata.object_list %}
                             <tr>
                                 <td>{{ forloop.counter }}</td>
                                 <td><a style="cursor: pointer; text-align: center;" href="{% url 'list_profile' id=data.username %}"><input
-                                            type="text" name="username" value="{{ data.username}}"></a></td>
+                                            type="text" name="username" value="{{ data.username }}"></a></td>
                                 <td><input style="text-align: center;" type="text" name="firstname" value="{{ data.firstname}}"></td>
                                 <td><input style="text-align: center;" type="text" name="lastname" value="{{ data.lastname}}"></td>
                                 <td><input style="text-align: center;" type="text" name="mobilenumber" value="{{ data.mobilenumber}}"></td>
@@ -628,7 +631,7 @@
                                     </select>
                                 </td>
                                 <td><a href="{% url 'Delete_User' id=data.username %}"><i style="font-size:22px"
-                                            class="fa">&#xf1f8;</i></a>&emsp;&emsp;<button onclick="submit(data)" type="submit" id="pencil"
+                                            class="fa">&#xf1f8;</i></a>&emsp;&emsp;<button value="{{ data.username }}" type="submit" id="pencil"
                                         class="glyphicon glyphicon-pencil"></button>
                                 </td>
                             </tr>
@@ -704,7 +707,7 @@ overflow: auto; width: 100%; padding: 10px; height: 100%;">
                         <tr>
                             <form action="{% url 'search_box' %}" method="post">
                                 {% csrf_token %}
-                                <th></th>
+                                <th><button type="reset"><a class="btn btn-info btn-lg" style="background-color: dodgerblue; font-size: 15px;">Clear</a></button></th>
                                 <th><input name="username"
                                         style="text-align: center; border: 1px solid  #ccc; padding: 5px; border-radius: 5px;"
                                         type="search" placeholder="Search"></th>
@@ -721,9 +724,10 @@ overflow: auto; width: 100%; padding: 10px; height: 100%;">
                                         style="text-align: center; border: 1px solid  #ccc; padding: 5px; border-radius: 5px;"
                                         type="search" placeholder="Search"></th>
                                 <!-- <th><button style="border: 1px solid #18191a; color: #707070; background-color: skyblue; font-size: small; border-radius: 5px; padding: 5px;" type="submit">Search</button></th> -->
-                                <th><button type="submit"><i class="fa fa-search"
+                                <!-- <th><button type="submit"><i class="fa fa-search"
                                             style="font-size:22px; color: blue;"></i></button>&emsp;&emsp;<a href="{% url 'clear_search' %}" class="fa fa-close"
-                                                style="font-size:25px;color: red; text-decoration: none;"></a></th>
+                                                style="font-size:25px;color: red; text-decoration: none;"></a></th> -->
+                                <th><button type="submit"><a class="btn btn-info btn-lg" style="background-color:  forestgreen; font-size: 15px;">Search</a></button></th>
                             </form>
                         </tr>
                     </thead>
@@ -752,7 +756,7 @@ overflow: auto; width: 100%; padding: 10px; height: 100%;">
                                     </select>
                                 </td>
                                 <td><a href="{% url 'Delete_User' id=data.username %}"><i style="font-size:22px"
-                                            class="fa">&#xf1f8;</i></a>&emsp;&emsp;<button type="submit" id="pencil"
+                                            class="fa">&#xf1f8;</i></a>&emsp;&emsp;<button value="{{ data.username }}" type="submit" id="pencil"
                                         class="glyphicon glyphicon-pencil"></button>
                                     </button>
                                 </td>
@@ -827,7 +831,7 @@ overflow: auto; width: 100%; padding: 10px; height: 100%;">
                                 <form action="{% url 'search_box' %}" method="post">
                                     {% csrf_token %}
                                     {% if Searched_List %}
-                                    <th></th>
+                                    <th><button type="reset"><a href="{% url 'clear_search' %}" class="btn btn-info btn-lg" style="background-color: dodgerblue; font-size: 15px;">Clear</a></button></th>
                                     <th><input name="username"
                                             style="text-align: center; border: 1px solid  #ccc; padding: 5px; border-radius: 5px;"
                                             type="search" placeholder="Search" value="{{ Searched_List.username}}"></th>
@@ -844,15 +848,16 @@ overflow: auto; width: 100%; padding: 10px; height: 100%;">
                                             style="text-align: center; border: 1px solid  #ccc; padding: 5px; border-radius: 5px;"
                                             type="search" placeholder="Search" value="{{ Searched_List.Role}}"></th>
                                     <!-- <th><button style="border: 1px solid #18191a; color: #707070; background-color: skyblue; font-size: small; border-radius: 5px; padding: 5px;" type="submit">Search</button></th> -->
-                                    <th><button type="submit"><i class="fa fa-search"
+                                    <!-- <th><button type="submit"><i class="fa fa-search"
                                                 style="font-size:22px; color: blue;"></i></button>&emsp;&emsp;<a href="{% url 'clear_search' %}" class="fa fa-close"
-                                                style="font-size:25px;color: red; text-decoration: none;"></a></th>
+                                                style="font-size:25px;color: red; text-decoration: none;"></a></th> -->
+                                    <th><button type="submit"><a class="btn btn-info btn-lg" style="background-color:  forestgreen; font-size: 15px;">Search</a></button></th>
                                     {% endif %}
                                 </form>
                             </tr>
                         </thead>
                         <tbody>
-                            <form method="post">
+                            <form method="post" action="{% url 'Update_User' %}">
                                 {% csrf_token %}
                                 {% if search_results_admindata %}
                                 {% for data in search_results_admindata.object_list %}
@@ -890,7 +895,7 @@ overflow: auto; width: 100%; padding: 10px; height: 100%;">
                                         </select>
                                     </td>
                                     <td><a href="{% url 'Delete_User' id=data.username %}"><i style="font-size:22px"
-                                                class="fa">&#xf1f8;</i></a>&emsp;&emsp;<button onclick="submit(data)"
+                                                class="fa">&#xf1f8;</i></a>&emsp;&emsp;<button value="{{ data.username}}"
                                             type="submit" id="pencil" class="glyphicon glyphicon-pencil"></button>
                                         </button>
                                     </td>
@@ -975,7 +980,7 @@ overflow: auto; width: 100%; padding: 10px; height: 100%;">
                                 <form action="{% url 'search_box' %}" method="post">
                                     {% csrf_token %}
                                     {% if Searched_List %}
-                                    <th></th>
+                                    <th><button type="reset"><a href="{% url 'clear_search' %}" class="btn btn-info btn-lg" style="background-color: dodgerblue; font-size: 15px;">Clear</a></button></th>
                                     <th><input name="username"
                                             style="text-align: center; border: 1px solid  #ccc; padding: 5px; border-radius: 5px;"
                                             type="search" placeholder="Search" value="{{ Searched_List.username}}"></th>
@@ -992,15 +997,16 @@ overflow: auto; width: 100%; padding: 10px; height: 100%;">
                                             style="text-align: center; border: 1px solid  #ccc; padding: 5px; border-radius: 5px;"
                                             type="search" placeholder="Search" value="{{ Searched_List.Role}}" id="searchBox"></th>
                                     <!-- <th><button style="border: 1px solid #18191a; color: #707070; background-color: skyblue; font-size: small; border-radius: 5px; padding: 5px;" type="submit">Search</button></th> -->
-                                    <th><button type="submit"><i class="fa fa-search"
+                                    <!-- <th><button type="submit"><i class="fa fa-search"
                                                 style="font-size:22px; color: blue;"></i></button>&emsp;&emsp;<a href="{% url 'clear_search' %}" class="fa fa-close"
-                                                style="font-size:25px;color: red; text-decoration: none;"></a></th>
+                                                style="font-size:25px;color: red; text-decoration: none;"></a></th> -->
+                                    <th><button type="submit"><a class="btn btn-info btn-lg" style="background-color:  forestgreen; font-size: 15px;">Search</a></button></th>
                                     {% endif %}
                                 </form>
                             </tr>
                         </thead>
                         <tbody>
-                            <form method="post">
+                            <form method="post" action="{% url 'Update_User' %}">
                                 {% csrf_token %}
                                 {% if search_results_teacher %}
                                 {% for data in search_results_teacher.object_list %}
@@ -1038,7 +1044,7 @@ overflow: auto; width: 100%; padding: 10px; height: 100%;">
                                         </select>
                                     </td>
                                     <td><a href="{% url 'Delete_User' id=data.username %}"><i style="font-size:22px"
-                                                class="fa">&#xf1f8;</i></a>&emsp;&emsp;<button onclick="submit(data)"
+                                                class="fa">&#xf1f8;</i></a>&emsp;&emsp;<button value="{{ data.username}}"
                                             type="submit" id="pencil" class="glyphicon glyphicon-pencil"></button>
                                         </button>
                                     </td>
