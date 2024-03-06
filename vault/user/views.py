@@ -281,8 +281,8 @@ def Users(request):
                     print("Page number:", page.number)
                     print("Items on this page:", page.object_list)
 
-
                     print("user_data:====================>", page)
+
                     return render(request, "Users_Table_View.html", {"admindata": page})
 
 
@@ -443,7 +443,6 @@ def search_box(request):
 
                 is_empty_query = all(value == '' for field, value in searched_query.children)
 
-
                 if is_empty_query:
                     print("++++++++++++++++++++++++++++++++++++++++++", is_empty_query)
                     return redirect("Table_Users")
@@ -568,5 +567,20 @@ def search_box(request):
         return render(request, "404Errorpage.html")
 
 
+
 def clear_search(request):
     return redirect("Table_Users")
+
+
+
+from reportlab.pdfgen import canvas
+from django.http import FileResponse
+def pdf_export(request):
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="example.pdf"'
+    p = canvas.Canvas(response)
+    p.drawString(100, 800, "user")
+    p.showPage()
+    p.save()
+    return response
+
