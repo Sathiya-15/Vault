@@ -79,22 +79,25 @@ def loguser(request):
 
 
 @csrf_exempt
-def Forgot(request):
+async def Forgot(request):
     if request.method == "POST":
         otp = request.POST.get("otp")
         newpassword = request.POST.get("newpassword")
         retypepassword = request.POST.get("retypepassword")
         try:
-           user = emailotp.objects.get(otp=otp)
+           user = await asyncio.to_thread(emailotp.objects.get, otp=otp)
+           print("The_User==================================================>", user)
            if user.email:
                if newpassword == retypepassword:
                    print("IF++++++++++++++++++++++++++++++++++++++++++++++++")
-                   login_user = userlogin.objects.get(username=user.email)
+                   login_user = await asyncio.to_thread(userlogin.objects.get, username=user.email)
                    login_user.password = retypepassword
-                   login_user.save()
+                   await asyncio.to_thread(login_user.save)
                    firstname = login_user.firstname
                    lastname = login_user.lastname
                    messages.success(request, f"Password Reset Done for [ {firstname} {lastname} ]")
+                   user.otp = ''
+                   await asyncio.to_thread(user.save)
                    return redirect('Login')
 
                else:
@@ -102,7 +105,7 @@ def Forgot(request):
                    messages.error(request, "Newpassword and Rertyepassword Should be Same")
                    return redirect("Forgotpassword")
 
-        except userlogin.DoesNotExist:
+        except user.DoesNotExist:
             print("EXCEPT++++++++++++++++++++++++++++++++++++++++++++++++")
             messages.error(request, "Invalid OTP")
             return redirect("Forgotpassword")
@@ -111,32 +114,38 @@ def Forgot(request):
 
 
 
+import string
 import random
+import asyncio
 from .models import emailotp
-def otp_gen(request):
+async def otp_gen(request):
     if request.method == "POST":
         username = request.POST.get("username")
         if username:
             print("Forgot_Request_Username======================>", username)
             try:
-                user = userlogin.objects.get(username=username)
+                user = await asyncio.to_thread(userlogin.objects.get, username=username)
                 print("user------------------------------------->", user)
                 if user:
                     random_integer = random.randint(1000, 9999)
+                    random_letter = random.choice(string.ascii_uppercase)
                     print("random_integer========================>", random_integer)
+                    print("random_letter=========================>", random_letter)
                     try:
-                        otp_user = emailotp.objects.get(email=username)
+                        otp_user = await asyncio.to_thread(emailotp.objects.get, email=username)
                         print("otp_user===========================>", otp_user)
                         if otp_user:
-                            otp_user.otp = random_integer
-                            otp_user.save()
+                            otp_final = random_letter + str(random_integer)
+                            print("FINAL_OTP======================>", otp_final)
+                            otp_user.otp = otp_final
+                            await asyncio.to_thread(otp_user.save)
                             otp = otp_user.otp
                             messages.success(request, f"YOUR OTP IS {otp}")
                             return render(request, "Password_Reset_3.html")
 
-                    except:
+                    except emailotp.DoesNotExist:
                         print("Except_Block==========================>")
-                        otp_user = emailotp.objects.create(email=username, otp=random_integer)
+                        otp_user = await asyncio.to_thread(emailotp.objects.create, email=username, otp=random_integer)
                         else_otp = otp_user.otp
                         messages.success(request, f"YOUR OTP IS {else_otp}")
                         return render(request, "Password_Reset_3.html")

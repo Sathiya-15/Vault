@@ -573,14 +573,90 @@ def clear_search(request):
 
 
 
-from reportlab.pdfgen import canvas
-from django.http import FileResponse
+# from reportlab.pdfgen import canvas
+# from django.http import FileResponse
+# def pdf_export(request):
+#     data_from_db = userlogin.objects.all().order_by('id')
+#
+#     response = HttpResponse(content_type='application/pdf')
+#     response['Content-Disposition'] = 'attachment; filename="data_table.pdf"'
+#     p = canvas.Canvas(response)
+#
+#     table_width = 500
+#     table_height = 300
+#     row_height = 20
+#     col_widths = [150, 110, 100, 100, 100]
+#
+#     x_start = 10
+#     y_start = 750
+#
+#     page_width_start = 20
+#     page_width_ends = 120
+#
+#     page_height_start = 700
+#     page_height_ends = 3000
+#
+#     headers = ['username', 'firstname', 'lastname', 'mobilenumber', 'Role']
+#     for col, header in enumerate(headers):
+#         p.drawString(x_start + sum(col_widths[:col]), y_start, header)
+#
+#     for row, data_row in enumerate(data_from_db):
+#         y_position = y_start - (row + 1) * row_height
+#         for col, col_width in enumerate(col_widths):
+#             col_value = str(getattr(data_row, headers[col].replace(' ', '')))
+#             p.drawString(x_start + sum(col_widths[:col]), y_position, col_value[:col_width])
+#
+#     p.showPage()
+#     p.save()
+#
+#     return response
+
+from django.http import HttpResponse
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import letter
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
+
+
 def pdf_export(request):
+    # Query data from the database
+    data_from_db = userlogin.objects.all()
+
+    # Create PDF response
     response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="example.pdf"'
-    p = canvas.Canvas(response)
-    p.drawString(100, 800, "user")
-    p.showPage()
-    p.save()
+    response['Content-Disposition'] = 'attachment; filename="data_table.pdf"'
+
+    # Create a PDF document
+    pdf_doc = SimpleDocTemplate(response, pagesize=letter)
+
+    # Define data and table styles
+    table_data = []
+    table_style = TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.gray),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+        ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+    ])
+
+    # Add headers to table data
+    headers = ['Username', 'First Name', 'Last Name', 'Mobile Number', 'Role']
+    table_data.append(headers)
+
+    # Add data from the database to table data
+    for user in data_from_db:
+        user_info = [user.username, user.firstname, user.lastname, user.mobilenumber, user.Role]
+        table_data.append(user_info)
+
+    # Create the table
+    table = Table(table_data)
+
+    # Apply table style
+    table.setStyle(table_style)
+
+    # Add table to the PDF document
+    pdf_doc.build([table])
+
     return response
+
 

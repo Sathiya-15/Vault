@@ -46,7 +46,7 @@ urlpatterns = [
     path("Search_Box/", user_views.search_box, name="search_box"),
     path("clear_search/", user_views.clear_search, name="clear_search"),
     path("otp_gen/", login_view.otp_gen, name="otp_gen"),
-    # path("pdf_view/", user_views.pdf_export, name="pdf_export"),
+    path("pdf_view/", user_views.pdf_export, name="pdf_export"),
 ]
 
 
