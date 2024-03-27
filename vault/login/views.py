@@ -101,7 +101,7 @@ async def Forgot(request):
                    return redirect('Login')
 
                else:
-                   print("ELSE++++++++++++++++++++++++++++++++++++++++++++++++")
+                   print("ELSE+++++++++++++++++++++++++++++++++++++++++++++++")
                    messages.error(request, "Newpassword and Rertyepassword Should be Same")
                    return redirect("Forgotpassword")
 

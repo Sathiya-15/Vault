@@ -4,6 +4,7 @@ import urllib.parse
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from login.models import userlogin
+from login.models import attendence
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
 from rest_framework.decorators import api_view, permission_classes
@@ -328,23 +329,17 @@ def Users(request):
 
 
 
+from datetime import datetime
 def attendence(request):
     if request.method == "GET":
         cookieToken = request.session.get("cookieToken")
         if cookieToken:
-            print("cookieToken====================>",cookieToken)
+            print("cookieToken====================>", cookieToken)
             username , id, Role = cookieToken
             query_set = userlogin.objects.get(id=id)
             image = query_set.Profile_image
             print(image)
             print("query_set======================>", query_set)
-            # user_data = []
-            # for data in query_set:
-            #     user = {
-            #         'username': data.username,
-            #         'Profile_image': data.Profile_image,
-            #     }
-            #     user_data.append(user)
             return render(request, "Attendence.html", {"data": query_set})
 
         else:
@@ -352,17 +347,24 @@ def attendence(request):
 
     if request.method == "POST":
         cookieToken = request.session.get("cookieToken")
+        print("*********************** POST_METHOD ***************************")
         if cookieToken:
-            log_in_at = request.POST.get("login_at")
-            try:
-                user = userlogin.objects.get(id=1)
-                if user:
-                    attendance = attendence.objects.create(userlogin=user, log_in_at=log_in_at)
-                    print("attendance:=============>", attendance)
-                    return render(request, "Attendence.html", {"attendance": attendance})
-            except:
+            username, id, Role = cookieToken
+            login_at = datetime.now()
+            print("LOGIN_TIME=============================>", login_at)
+            user = userlogin.objects.filter(username=username)
+            if user:
+                print("user--------------------------------------------->", user)
+                attendance_obj = attendence.objects.create(user=user, log_in_at=login_at)
+                print("attendance:=============>", attendance_obj)
+                query_set = userlogin.objects.get(id=id)
+                image = query_set.Profile_image
+                return render(request, "Attendence.html", {"attendance": attendance_obj, "data": query_set})
+
+            else:
                 messages.error(request, "User Not Found")
-                return render(request, "Attendence.html")
+                query_set = userlogin.objects.get(id=id)
+                return render(request, "Attendence.html", {"data": query_set})
 
         else:
             return render(request, "404Errorpage.html")
@@ -611,14 +613,14 @@ def clear_search(request):
 #
 #     return response
 
+
+
 from django.http import HttpResponse
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
 
-
 def pdf_export(request):
-    # Query data from the database
     data_from_db = userlogin.objects.all()
 
     # Create PDF response

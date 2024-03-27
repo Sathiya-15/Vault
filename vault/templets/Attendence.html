@@ -348,7 +348,7 @@
 
 {% if messages %} {% for message in messages %} {% if message.tags %}
 <script>
-    alert("{{ message }}");
+    alert("{{ message }}")
 </script>
 {% endif %} {% endfor %} {% endif %}
 
@@ -464,10 +464,9 @@
                 </div>
                 <div>
                     <a href="{% url 'Myprofile' %}">{{ data.firstname }} {{ data.lastname }}</a>
-                    <form action="{% url 'attendence' %}">
-                        <button type="button" style="border-radius: 100px; border: none; margin: 20px;"><a
-                                onclick="captureDateTime()"></a>Login</button>
-                    </form>
+                    <div>
+                        <button style="border-radius: 100px; border: none; margin: 20px;" onclick="attendence()">Login</button>
+                    </div>
                 </div>
                 {% if attendance %}
                 <p>login at : {{ attendance.log_in_at }}</p>
@@ -501,9 +500,26 @@
                 modeText.innerText = "Light mode";
             } else {
                 modeText.innerText = "Dark mode";
-
             }
         });
+
+        function attendence() {
+            var form = document.createElement('form');
+            form.method = 'POST';
+            form.action = "{% url 'attendence' %}";
+            var csrfToken = "{{ csrf_token }}";  // Get the CSRF token value from Django template context
+            var csrfInput = document.createElement('input');
+            csrfInput.type = 'hidden';
+            csrfInput.name = 'csrfmiddlewaretoken';
+            csrfInput.value = csrfToken;
+
+            // Append the CSRF token input field to the form
+            form.appendChild(csrfInput);
+
+            // Append the form to the document body and submit it
+            document.body.appendChild(form);
+            form.submit();
+        }
 
     </script>
     
