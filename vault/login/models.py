@@ -30,10 +30,10 @@ class userlogin(AbstractUser):
 
 
 
-class attendence(models.Model):
+class Attendence(models.Model):
     user = models.ForeignKey(userlogin, on_delete=models.CASCADE)
-    log_in_at = models.DateTimeField(null=False, blank=False)
-    log_out_at = models.DateTimeField(null=True, blank=True)
+    login_at = models.DateTimeField(null=False, blank=False)
+    logout_at = models.DateTimeField(null=True, blank=True)
 
 
 

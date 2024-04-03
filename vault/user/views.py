@@ -3,8 +3,7 @@ from vault import settings
 import urllib.parse
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
-from login.models import userlogin
-from login.models import attendence
+from login.models import userlogin, Attendence
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
 from rest_framework.decorators import api_view, permission_classes
@@ -340,7 +339,20 @@ def attendence(request):
             image = query_set.Profile_image
             print(image)
             print("query_set======================>", query_set)
-            return render(request, "Attendence.html", {"data": query_set})
+            users_id = query_set.id
+            print("ID:", id)
+            user = Attendence.objects.get(user=(userlogin.objects.get(id=users_id)))
+            if user:
+                login_value = user.login_at
+
+                if login_value:
+                    return render(request, "Attendence_Logout.html", {"data": query_set, "attendance": user})
+
+                else:
+                    return render(request, "Attendence_Login.html", {"data": query_set})
+
+            elif user.DoesNotExist:
+                return render(request, "Attendence_Login.html", {"data": query_set})
 
         else:
             return render(request, "404Errorpage.html")
@@ -350,21 +362,23 @@ def attendence(request):
         print("*********************** POST_METHOD ***************************")
         if cookieToken:
             username, id, Role = cookieToken
+            print("=====================================>", id)
             login_at = datetime.now()
             print("LOGIN_TIME=============================>", login_at)
-            user = userlogin.objects.filter(username=username)
+            user = userlogin.objects.get(username=username)
+            print("USER_ID==============================>", id)
             if user:
                 print("user--------------------------------------------->", user)
-                attendance_obj = attendence.objects.create(user=user, log_in_at=login_at)
-                print("attendance:=============>", attendance_obj)
+                attendance_obj = Attendence.objects.create(user=user, login_at=login_at)
+                print("attendance:======================>", attendance_obj)
                 query_set = userlogin.objects.get(id=id)
                 image = query_set.Profile_image
-                return render(request, "Attendence.html", {"attendance": attendance_obj, "data": query_set})
+                return render(request, "Attendence_Logout.html", {"attendance": attendance_obj, "data": query_set})
 
             else:
                 messages.error(request, "User Not Found")
                 query_set = userlogin.objects.get(id=id)
-                return render(request, "Attendence.html", {"data": query_set})
+                return render(request, "Attendence_Login.html", {"data": query_set})
 
         else:
             return render(request, "404Errorpage.html")
@@ -432,7 +446,6 @@ def search_box(request):
                     'lastname': lastname,
                     'mobilenumber': mobilenumber,
                     'Role': Role,
-
                 }
 
                 searched_query = Q(username__icontains=username) & \
