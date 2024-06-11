@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+{% load static %}
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" type="image/png" href="{% static 'images/icon2.png' %}">
-    <title>Delete User</title>
+    <title>TRY_FUNCTION</title>
 </head>
 
 {% if messages %}
@@ -17,10 +18,11 @@
 {% endif %}
 
 <body>
-    <h3>Delete User</h3>
-    <form action="" method="POST" name="deleteuser">
+    <h3 style="text-align: center; margin-top: 10%;">TRY_FUNCTION</h3>
+    <form action="" method="POST" name="url_scrapping">
         {% csrf_token %}
-        <input type="text" name="username" placeholder="username">
+        <!-- <input type="text" name="username" placeholder="username"> -->
+        <textarea style="margin-left: 45%;" name="TRY_FUNCTION" placeholder="Enter text Here"></textarea>
         <button type="submit">Submit</button>
     </form>
 </body>

@@ -25,8 +25,11 @@ from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 
+from django.urls import include, path
+
 
 urlpatterns = [
+    path("__debug__/", include('debug_toolbar.urls')),
     path("Logout/", login_view.Logout, name="Logout"),
     path("Admin/", admin.site.urls),
     path("", login_view.Login, name="Login"),
@@ -47,6 +50,10 @@ urlpatterns = [
     path("clear_search/", user_views.clear_search, name="clear_search"),
     path("otp_gen/", login_view.otp_gen, name="otp_gen"),
     path("pdf_view/", user_views.pdf_export, name="pdf_export"),
+    path("Text_to_Speech/", user_views.Text_to_Speech, name="Text_to_Speech"),
+    path("Text_to_Image/", user_views.Text_to_Image, name="Text_to_Image"),
+    path("url_scrapping/", user_views.scrapping_page, name="url_scrapping"),
+    path("try_function/", user_views.try_function, name="try_function"),
 ]
 
 

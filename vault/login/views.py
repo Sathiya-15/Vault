@@ -1,17 +1,19 @@
 # FOR REST_FRAMEWORK_TOKEN
 
+from .models import userlogin
 from django.contrib import messages
+from django.shortcuts import render, redirect
 from django.http import HttpResponseNotAllowed
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework_simplejwt.tokens import RefreshToken
-from django.shortcuts import render, redirect
-from .models import userlogin
 from django.contrib.auth import authenticate, login, logout
+from rest_framework import status
 
 
 @csrf_exempt
 def Login(request):
     if request.method == "GET":
+        # status=status.HTTP_100_CONTINUE
         return render(request, 'Login_1.html')
 
 

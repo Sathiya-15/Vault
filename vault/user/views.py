@@ -1,20 +1,20 @@
 import jwt
-from vault import settings
 import urllib.parse
-from django.contrib import messages
-from django.shortcuts import render, redirect, get_object_or_404
-from login.models import userlogin, Attendence
-from django.views.decorators.csrf import csrf_exempt
+from vault import settings
 from django.db.models import Q
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
-from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
+from django.contrib import messages
 from django.http import HttpResponse
 from django.core.paginator import Paginator
 from rest_framework.response import Response
+from login.models import userlogin, Attendence
 from login.serializer import userloginserializer
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework.permissions import IsAuthenticated
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render, redirect, get_object_or_404
+from rest_framework.decorators import api_view, permission_classes
 
 
 
@@ -97,7 +97,6 @@ def Updateuser(request):
 
 
 
-
 #::::::::::::::::::::::::::::::::::::USING SERIALIZERS YOU NEED CLASS METHOD:::::::::::::::::::::::::::::::::::::
 #
 # def Profile_View(request):
@@ -130,6 +129,7 @@ def Updateuser(request):
 # @permission_classes([IsAuthenticated])
 def Profile_View(request):
     if request.method == "GET":
+        print("Request++++++++++++++++++++++++++++++++++:",request.path)
         cookieToken = request.session.get("cookieToken")
         print("cookieToken========================>", cookieToken)
         try:
@@ -222,7 +222,6 @@ def profileupdate(request):
 
 
 
-
 # @api_view(['GET'])
 # @login_required
 @permission_classes([IsAuthenticated])
@@ -244,7 +243,7 @@ def Users(request):
             print("headers=======================>", headers)
 
             authorization_header = request.headers.get('Authorization')
-            print("authorization_header===========>", authorization_header)
+            print("authorization_header==========>", authorization_header)
 
             # encoded_value = request.COOKIES.get('Vault_Cookie', '')
             # decoded_value = urllib.parse.unquote(encoded_value)
@@ -364,7 +363,7 @@ def attendence(request):
             username, id, Role = cookieToken
             print("=====================================>", id)
             login_at = datetime.now()
-            print("LOGIN_TIME=============================>", login_at)
+            print("LOGIN_TIME===========================>", login_at)
             user = userlogin.objects.get(username=username)
             print("USER_ID==============================>", id)
             if user:
@@ -675,3 +674,438 @@ def pdf_export(request):
     return response
 
 
+
+# import requests
+# from IPython.display import Audio
+
+# def query(data):
+#     API_URL = "https://api-inference.huggingface.co/models/Nithu/text-to-speech"
+#     API_TOKEN = "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"
+#     headers = API_TOKEN
+#     print("HEADERS ======================>", headers)
+#     response = requests.post(API_URL, headers=headers, json=data)
+#     print("RESPONSE ======================>", response)
+    
+#     if response.status_code == 200:
+#         response_data = response.json()
+#         print("Response_Data ======================>", response_data)
+#         audio = response_data.get('audio')
+#         sampling_rate = response_data.get('sampling_rate')
+#         print("Sample_Rate ======================>", sampling_rate)
+#         return audio, sampling_rate
+#     else:
+#         raise Exception(f"Request failed with status code {response.status_code}")
+
+
+# from django.shortcuts import render
+# from django.http import JsonResponse
+
+# def text_to_speech_view(request):
+#     data = {"The answer to the universe is 42"}
+#     try:
+#         audio, rate = query(data)
+#         print("AUDIO, RATE ======================>", audio, rate)
+#         return JsonResponse({"audio": audio, "sampling_rate": rate})
+#     except Exception as e:
+#         print("Value_of_e ======================>", e)
+#         return JsonResponse({"error": str(e)}, status=500)
+    
+
+# <====================================== TEXT-TO-SPEECH GENERATOR =========================================>
+
+import requests
+from IPython.display import Audio
+from django.http import HttpResponse
+from user import token_file
+
+
+def query_T2S(value):
+    print("query block")
+    print("Value ==================>", value)
+    payload = {
+        "inputs": value
+    }
+    print("Payload ====================>", payload)
+    try:
+        response = requests.post(token_file.API_URL_T2S, headers=token_file.value_T2S, json=payload)
+        print("Response ===================>", response)
+        response.raise_for_status()
+        a = response.content
+        print("response.content A ====================>", a)
+        return response.content
+
+    except requests.exceptions.RequestException as e:
+        print(f"Request Exception: {e}")
+        print("Response Content ====================>", e.response.content)
+        raise
+    except Exception as e:
+        print(f"General Exception: {e}")
+        raise
+
+
+
+def Text_to_Speech(request):
+    if request.method == "GET":
+        return render(request, "Text_to_Speech.html")
+
+    if request.method == "POST":
+        value = request.POST.get("Text-To-Speech")
+        print("Value_of_text-to-speech ===================>:", value)
+        try:
+            print("try block")
+            audio_data = query_T2S(value)
+            print("AUDIO_DATA =====================>", audio_data)
+            # audio =Audio(audio_data, rate=22050)
+            response = HttpResponse(audio_data, content_type="audio/wav")
+            response['Content-Disposition'] = 'attachment; filename="output.wav"'
+            return response
+
+        except Exception as e:
+            return HttpResponse(f"An Error Occured: {str(e)}", status=500)
+
+
+
+# <====================================== TEXT-TO-SPEECH GENERATOR =========================================>
+
+
+# <====================================== TEXT-TO-IMAGE GENERATOR =========================================>
+
+import io
+import time
+import base64
+from PIL import Image
+
+
+def query_T2I(value):
+    payload = {
+        "inputs": value
+    }
+    print("Payload =======================>", payload)
+
+    for attempt in range(5):
+        response = requests.post(token_file.API_URL_T2I, headers=token_file.value_T2I, json=payload)
+        print("Query_Response ======================>", response)
+
+        if response.status_code == 503:
+            print("Model is loading, waiting before retrying.....")
+            time.sleep(30)
+            continue
+        response.raise_for_status()
+        return response.content
+
+    response.raise_for_status()
+
+
+
+def Text_to_Image(request):
+    if request.method == "GET":
+        return render(request, "Text_to_Image.html")
+
+    if request.method == "POST":
+        value = request.POST.get("Text-To-Image")
+        print("Image_value ====================>", value)
+        try:
+            image_bytes = query_T2I(value)
+            print("Image_Bytes ========================>", image_bytes)
+            image = Image.open(io.BytesIO(image_bytes))
+
+            buffered = io.BytesIO()
+            image.save(buffered, format="PNG")
+            image_data = base64.b64encode(buffered.getvalue()).decode('utf-8')
+
+            ctx = {"image": image_data}
+            return render(request, "Text_to_Image.html", ctx)
+
+        except requests.exceptions.RequestException as e:
+            error_message = f"Request Exception: {e}. Response Content: {e.response.content.decode()}"
+            print(error_message)
+            return HttpResponse(f"An Error Occurred: {error_message}", status=500)
+
+        except Exception as e:
+            error_message = f"General Exception: {str(e)}"
+            print(error_message)
+            return HttpResponse(f"An Error Occurred: {error_message}", status=500)
+
+
+# <====================================== TEXT-TO-IMAGE GENERATOR =========================================>
+
+
+import requests
+from bs4 import BeautifulSoup
+import csv
+
+
+# def scrapping_page(request):
+#     if request.method == "GET":
+#         return render(request, "url_scrapping.html")
+#
+#     if request.method == "POST":
+#         url_value = request.POST.get("url_scrapping")
+#         print("url_value =========================>", url_value)
+#         url = url_value
+#
+#         try:
+#             response = requests.get(url)
+#             print("Response =============================>", response)
+#             print("Response and Content ========================>", response.content)
+#
+#             if response.status_code == 200:
+#                 soup = BeautifulSoup(response.content, "html.parser")
+#                 raw_html = soup.prettify()
+#                 print(soup.prettify())
+#
+#                 find_value = soup.find("html", class_="content-section1 container mx-auto font-bold py-12")
+#                 if find_value:
+#                     content = find_value.find_all("button")
+#                     print("Content ==========================>", content)
+#
+#                 soup = BeautifulSoup(response.content, 'lxml')
+#                 data = []
+#                 items = soup.find_all('div', class_='item')
+#                 for item in items:
+#                     title = item.find('h2').text if item.find('h2') else 'No Title'
+#                     link = item.find('a').get('href') if item.find('a') else 'No Link'
+#                     data.append([title, link])
+#
+#                 with open('data.csv', 'w', newline='', encoding='utf-8') as file:
+#                     writer = csv.writer(file)
+#                     writer.writerow(['Title', 'URL'])
+#                     writer.writerows(data)
+#
+#                 with open('data.csv', 'r', encoding='utf-8') as file:
+#                     response = HttpResponse(file.read(), content_type='text/csv')
+#                     response['Content-Disposition'] = 'attachment; filename="data.csv"'
+#                     return response
+#
+#             else:
+#                 print(f"Failed to retrieve content: {response.status_code}")
+#
+#         except Exception as e:
+#             print(f"An error occurred: {e}")
+#
+#     return render(request, "url_scrapping.html")
+
+
+
+
+
+from django.shortcuts import render
+from django.http import HttpResponse, JsonResponse
+import requests
+from bs4 import BeautifulSoup
+import csv
+
+def scrapping_page(request):
+    if request.method == "GET":
+        return render(request, "url_scrapping.html")
+
+    if request.method == "POST":
+        url_value = request.POST.get("url_scrapping")
+        if not url_value:
+            return render(request, "url_scrapping.html", {"error": "URL cannot be empty"})
+
+        url = url_value
+
+        try:
+            response = requests.get(url)
+            if response.status_code == 200:
+                soup = BeautifulSoup(response.content, "html.parser")
+
+                # Define the important tags
+                important_tags = {
+                    "headings": [],
+                    "paragraphs": [],
+                    "links": [],
+                    "lists": [],
+                    "tables": []
+                }
+
+                # Extract data for each tag category
+                for level in range(1, 7):
+                    for heading in soup.find_all(f'h{level}'):
+                        important_tags["headings"].append(heading.text.strip())
+
+                for paragraph in soup.find_all('p'):
+                    important_tags["paragraphs"].append(paragraph.text.strip())
+
+                for link in soup.find_all('a', href=True):
+                    important_tags["links"].append(link['href'])
+
+                for list_tag in soup.find_all(['ul', 'ol']):
+                    for list_item in list_tag.find_all('li'):
+                        important_tags["lists"].append(list_item.text.strip())
+
+                for table in soup.find_all('table'):
+                    table_data = []
+                    for row in table.find_all('tr'):
+                        row_data = [cell.text.strip() for cell in row.find_all(['td', 'th'])]
+                        table_data.append(row_data)
+                    important_tags["tables"].append(table_data)
+
+                # Store the data in a variable
+                scraped_data = []
+                for category, contents in important_tags.items():
+                    for content in contents:
+                        scraped_data.append({'category': category, 'content': content})
+
+                # Send the data to the API
+                api_url = "http://localhost:1234/v1/embeddings"
+                headers = {
+                    "Content-Type": "application/json"
+                }
+                response = requests.post(api_url, json=scraped_data, headers=headers)
+
+                print("RESPONSE ===============================>", response)
+
+                # Check API response
+                if response.status_code == 200:
+                    api_response = response.json()
+                    return JsonResponse(api_response)
+                else:
+                    return JsonResponse({"error": "Failed to send data to the API", "status_code": response.status_code})
+
+            else:
+                return render(request, "url_scrapping.html", {"error": f"Failed to retrieve content: {response.status_code}"})
+
+        except Exception as e:
+            return render(request, "url_scrapping.html", {"error": f"An error occurred: {e}"})
+
+    return render(request, "url_scrapping.html")
+
+
+
+
+# CSV FILE EXPORT
+#
+# from django.shortcuts import render
+# from django.http import HttpResponse
+# import requests
+# from bs4 import BeautifulSoup
+# import csv
+#
+# def scrapping_page(request):
+#     if request.method == "GET":
+#         return render(request, "url_scrapping.html")
+#
+#     if request.method == "POST":
+#         url_value = request.POST.get("url_scrapping")
+#         if not url_value:
+#             return render(request, "url_scrapping.html", {"error": "URL cannot be empty"})
+#
+#         url = url_value
+#
+#         try:
+#             response = requests.get(url)
+#             if response.status_code == 200:
+#                 soup = BeautifulSoup(response.content, "html.parser")
+#
+                # Define the important tags
+                # important_tags = {
+                #     "headings": [],
+                #     "paragraphs": [],
+                #     "links": [],
+                #     "lists": [],
+                #     "tables": []
+                # }
+                #
+                # Extract data for each tag category
+                # for level in range(1, 7):
+                #     for heading in soup.find_all(f'h{level}'):
+                #         important_tags["headings"].append(heading.text.strip())
+                #
+                # for paragraph in soup.find_all('p'):
+                #     important_tags["paragraphs"].append(paragraph.text.strip())
+                #
+                # for link in soup.find_all('a', href=True):
+                #     important_tags["links"].append(link['href'])
+                #
+                # for list_tag in soup.find_all(['ul', 'ol']):
+                #     for list_item in list_tag.find_all('li'):
+                #         important_tags["lists"].append(list_item.text.strip())
+                #
+                # for table in soup.find_all('table'):
+                #     table_data = []
+                #     for row in table.find_all('tr'):
+                #         row_data = [cell.text.strip() for cell in row.find_all(['td', 'th'])]
+                #         table_data.append(row_data)
+                #     important_tags["tables"].append(table_data)
+                #
+                # Prepare a list to store tag names
+                # tag = []
+                # print("TAG ===================================>", tag)
+                # for details in important_tags:
+                #     tag.append(details)
+                #
+                # Write the extracted data to a CSV file
+                # with open('important_data.csv', 'w', newline='', encoding='utf-8') as file:
+                #     writer = csv.writer(file)
+                #     writer.writerow(['Category', 'Content'])
+                #
+                #     for category, contents in important_tags.items():
+                #         for content in contents:
+                #             writer.writerow([category, content])
+                #
+                # Create HTTP response for CSV download
+                # with open('important_data.csv', 'r', encoding='utf-8') as file:
+                #     response = HttpResponse(file.read(), content_type='text/csv')
+                #     response['Content-Disposition'] = 'attachment; filename="important_data.csv"'
+                #     return response
+            #
+            # else:
+            #     return render(request, "url_scrapping.html", {"error": f"Failed to retrieve content: {response.status_code}"})
+        #
+        # except Exception as e:
+        #     return render(request, "url_scrapping.html", {"error": f"An error occurred: {e}"})
+    #
+    # return render(request, "url_scrapping.html")
+
+
+# CSV FILE EXPORT
+
+
+
+# import urllib.request
+#
+# # URL of the web page to fetch
+# url = 'https://www.example.com'
+#
+# try:
+#     url_value = request.POST.get("url_scrapping")
+#     # Open the URL and read its content
+#     response = urllib.request.urlopen(url_value)
+#     print("RESPONSE ================================>", response)
+#
+#     # Read the content of the response
+#     data = response.read()
+#     print("DATA ==================>", data)
+#
+#     # Decode the data (if it's in bytes) to a string
+#     html_content = data.decode('utf-8')
+#
+#     # Print the HTML content of the web page
+#     print("HTML_CONTENT ==========================>", html_content)
+#
+# except Exception as e:
+#     print("Error fetching URL:", e)
+
+
+
+def try_function(request):
+    if request.method == "GET":
+        return render(request, "chat.html")
+
+    if request.method == "POST":
+        query = request.POST.get("TRY_FUNCTION")
+        payload = {
+            "inputs": query,
+        }
+        print("Payload ===================================>", payload)
+
+        try:
+            response = requests.post(token_file.API_URL_TF, headers=token_file.value_TF, json=payload)
+            print("Response ==================================>", response)
+            return response.json()
+
+        except Exception as e:
+            variable = str(e)
+            print("Exception_Variable =============================>", variable)

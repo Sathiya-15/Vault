@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/png" href="{% static 'images/icon2.png' %}">
+    <title>Text_to_Speech</title>
+</head>
+
+{% if messages %}
+{% for message in messages%}
+{% if message.tags %}
+<script>alert("{{ message }}")</script>
+{% endif %}
+{% endfor %}
+{% endif %}
+
+<body>
+    <h3 style="text-align: center; margin-top: 10%;">Text_to_Speech</h3>
+    <form action="" method="POST" name="Text_to_Speech">
+        {% csrf_token %}
+        <!-- <input type="text" name="username" placeholder="username"> -->
+        <textarea style="margin-left: 45%;" name="Text-To-Speech" placeholder="Enter Text Here"></textarea>
+        <button type="submit">Submit</button>
+    </form>
+</body>
+
+</html>

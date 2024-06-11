@@ -42,7 +42,7 @@ ALLOWED_HOSTS = []
 
 
 INSTALLED_APPS = [
-    "jazzmin",
+    "jazzmin", "debug_toolbar",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -102,6 +102,7 @@ LOGIN_REDIRECT_URL = 'MyDashBoard/'
 
 
 MIDDLEWARE = [
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -149,9 +150,9 @@ DATABASES = {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": "Vault",
         "USER": "postgres",
-        "PASSWORD": "123456",
+        "PASSWORD": "password123",
         "HOST": "127.0.0.1",
-        "PORT": "5432",
+        "PORT": "5433",
     }
 }
 
